@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Decision Records"
+  short_description: "Create and maintain conservative ADRs linked from work logs"
+  default_prompt: "Evaluate whether this change needs an ADR, maintain the decision record, and link it from today's work log."

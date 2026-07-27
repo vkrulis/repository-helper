@@ -1,0 +1,4 @@
+interface:
+  display_name: "Import Legacy Work Logs"
+  short_description: "Convert dated legacy notes into structured work logs"
+  default_prompt: "Use $import-legacy-work-logs to preserve and convert these historical dated notes into the repository work-log format."
