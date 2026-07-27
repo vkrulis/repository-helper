@@ -1,0 +1,34 @@
+# {{PROJECT_NAME}} – pravidla práce
+
+## Zdroje pravdy
+
+- Vstupní zdroje k analýze: `resources/`
+- Hlavní orientace: `README.md`
+- Kontext projektu: `docs/agent-context/`
+- Chronologická pracovní historie: `.logs/YYYY/MM/YYYY-MM-DD.md`
+
+## Povinný postup
+
+1. Přečtěte relevantní kontext.
+2. Proveďte nejmenší odůvodněnou změnu.
+3. Spusťte předepsané kontroly.
+4. U zdrojů v `resources/` zachovejte původ, licenci a informaci o autoritativnosti.
+5. Aktualizujte dokumentaci při změně chování.
+6. Veškeré skripty, validátory, generátory, CLI wrappery a spustitelné balíčky ukládejte výhradně pod `toolkit/`; nikdy ne do `.agents/`, kořenového `tools/` nebo skillového `scripts/`.
+7. Při architektonicky významném rozhodnutí použijte konzervativní skill `maintain-decision-records`; ADR ukládejte do `docs/agent-context/decisions/`.
+8. Po každé materiální změně použijte skill `maintain-work-log`, přidejte stručný append-only záznam do `.logs/YYYY/MM/YYYY-MM-DD.md` a před předáním jej validujte. Vznik nebo změnu stavu ADR vždy propojte s tímto záznamem.
+
+## Pracovní historie
+
+- Současný autoritativní stav patří do `docs/agent-context/`, chronologie do `.logs/` a fyzická historie do Gitu.
+- Zápis uvádí výsledek, změněné soubory, skutečně provedené validace a otevřenou práci.
+- Nezapisujte secrets, produkční data, skryté uvažování ani celé výpisy nástrojů.
+
+## Build a validace
+
+TODO
+
+## Omezení
+
+- Neupravujte generované soubory přímo.
+- Neukládejte secrets nebo produkční data.

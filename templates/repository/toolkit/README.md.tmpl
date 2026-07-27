@@ -1,0 +1,13 @@
+# Toolkit
+
+Jediný kořen všech exaktních a spustitelných nástrojů projektu.
+
+Doporučené podsložky:
+
+- `agent-infrastructure/` – validace a generování agentní vrstvy;
+- `domain/` – doménové nástroje projektu;
+- `development/` – build, test a vývojová automatizace;
+- `skills/<skill-name>/` – nástroje používané pouze jedním skillem;
+- `runtime/` – generované nebo dodané spustitelné artefakty.
+
+Pokud projekt již `toolkit/` používá, zachovejte jej a významy oddělte vhodnými podsložkami. Nástroje neukládejte do `.agents/`, kořenového `tools/`, kořenového `scripts/` ani do `scripts/` uvnitř skillu.

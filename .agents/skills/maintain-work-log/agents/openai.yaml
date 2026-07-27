@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Work Log"
+  short_description: "Create and search repository work logs"
+  default_prompt: "Use $maintain-work-log to record this material repository change in today's work log."
