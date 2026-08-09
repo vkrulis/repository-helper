@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Documentation Sync"
+  short_description: "Synchronize domain and public documentation"
+  default_prompt: "Use $maintain-documentation-sync to review domain documentation first and then update linked Docusaurus documentation."
