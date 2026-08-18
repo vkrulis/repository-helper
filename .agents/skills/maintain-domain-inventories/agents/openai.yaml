@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Domain Inventories"
+  short_description: "Keep generated maps of current code state"
+  default_prompt: "Use $maintain-domain-inventories to design or update a regenerable domain inventory."

@@ -10,6 +10,11 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 
 ## Konvence
 
+- Každé ADR má povinné pole `Scope: shared|<epic-id>`.
+- `shared` znamená rozhodnutí pro celý projekt; `<epic-id>` označuje rozhodnutí jednoho epiku.
+- Globální číslo se přiděluje při integraci do sdílené větve. Pracovní návrh může mít dočasný název;
+  duplicitní konečné číslo je validační chyba a řeší se před přijetím.
+
 - Název souboru: `NNNN-strucny-nazev.md`; čísla jsou monotónní a znovu se nepoužívají.
 - Jeden ADR popisuje jedno rozhodnutí.
 - Stavy: `proposed`, `accepted`, `rejected`, `superseded`.

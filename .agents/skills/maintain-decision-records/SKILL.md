@@ -24,6 +24,13 @@ Velikost změny sama o sobě není důvodem pro ADR.
 
 ## Postup
 
+### Scope a souběžné návrhy
+
+Použijte globální čtyřmístné číslo ADR a povinné `Scope: shared|<epic-id>`. `shared` patří
+celému projektu; epic-id musí odpovídat existující misi/epiku klientského projektu. Pokud mohou
+autoři pracovat souběžně, ponechte návrhu pracovní název a konečné číslo přidělte při integraci.
+Před přijetím ověřte jedinečnost čísla; přijaté ADR nepřečíslovávejte.
+
 1. Přečtěte `docs/agent-context/decisions/README.md`, relevantní kontext a existující související ADR.
 2. Určete další nepoužité monotónní číslo; čísla nikdy znovu nepoužívejte.
 3. Použijte `references/decision-record-template.md` a vytvořte jeden záznam pro jedno rozhodnutí.

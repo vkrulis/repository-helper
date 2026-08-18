@@ -40,7 +40,7 @@ Nevytvářejte nebo nepřepisujte:
 
 Inicializace musí automaticky distribuovat schopnosti `work-log` a `decision-records`, jejich kanonické skills, `.logs/`, `docs/agent-context/decisions/` a odpovídající pravidla v `AGENTS.md`. Použijte kanonický příkaz `repository_architecture.py init`; nevytvářejte ruční kopie těchto souborů.
 
-1. Přečtěte `docs/agent-context/repository-architecture.md` z této kolekce nebo ekvivalentní přiloženou referenci.
+1. Přečtěte `docs/agent-context/repository-types.md` a `docs/agent-context/repository-architecture.md` z této kolekce nebo ekvivalentní přiložené reference. Určete právě jeden primární typ.
 2. Zkontrolujte stav Git repozitáře a existující kořenové soubory.
 3. Vytvořte minimálně:
 
@@ -63,7 +63,11 @@ resources/README.md
 9. Založte `toolkit/README.md` jako jediný kořen všech exaktních nástrojů. Nevytvářejte `.agents/tools`, kořenové `tools`, kořenové `scripts` ani skillové `scripts`.
 10. Založte `resources/README.md` s pravidly původu, licence, aktualizace a autoritativnosti. Samotné zdroje přidejte jen když jsou známé; nevymýšlejte dekorativní data.
 11. Platformní konektor přidejte jen na přání. Pokud práce probíhá v Codexu a není uvedena jiná preference, lze zvolit Codex; v jiném nebo neznámém prostředí se zeptejte a připusťte variantu bez konektoru.
-12. Spusťte `validate-repository-architecture`.
+12. Pro typ `authoring` nainstalujte capability `authoring-repository`; ta založí autoritativní `product/`, potřebné testovací a produktové capability a vyžádá určení role `specialist` nebo `orchestrator`.
+13. Pokud je z kontextu zřejmé, že jde o vývoj webu samotného (ne o authoring, ne o dokumentaci, ne o binární/desktopovou aplikaci — viz „Rozšíření pro webový vývoj" v `repository-architecture.md`), založte navíc kořenovou `public/` a do `AGENTS.md` zapište stručně její konkrétní účel v tomto projektu (zdroj pravdy vs. generovaný výstup). Pokud uživatel výslovně požaduje Product Repository Sync, místo toho nainstalujte capability `product-repository` a postupujte skillem `manage-product-repository`; `public/` a `product/` nesmějí existovat současně.
+14. Pro typ `client-project` nainstalujte capability `client-project`; o `client-offers` jej rozšiřte jen tehdy, když skutečně bude vytvářet klientské HTML nabídky.
+15. Pro typ `documentation` vymezte zdrojové repozitáře, původ a revizní stav znalostí a použijte `documentation-sync`; nevytvářejte v něm náhradní runtime nebo authoring zdroj pravdy.
+16. Spusťte `validate-repository-architecture`.
 
 ## Doporučený nástroj
 

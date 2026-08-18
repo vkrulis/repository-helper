@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Client Offers"
+  short_description: "Create and validate client offer workspaces"
+  default_prompt: "Use $maintain-client-offers to create or update a traceable HTML client offer."

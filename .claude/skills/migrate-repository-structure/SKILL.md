@@ -43,6 +43,26 @@ Použijte `references/migration-plan-template.md` nebo existující schválený 
 
 Nejdříve vytvořte cílové adresáře a orientační README bez přesouvání aplikačního kódu.
 
+Primární typ určete podle `docs/agent-context/repository-types.md`. Pro typ `authoring`
+nainstalujte capability `authoring-repository` a migrujte publikovatelný produkt do
+`product/` až podle schválené mapy. Produktové skills pak udržujte pouze v
+`product/skills/`; kořenové `.agents/skills/` ponechte pro údržbu workspace. Pro typ
+`client-project` použijte capability `client-project`, pro `documentation`
+`documentation-sync` a pro běžný runtime vývoj zachovejte standardní projektové cesty.
+
+Pokud je z auditu zřejmé, že jde o vývoj webu samotného (ne o authoring, ne o
+dokumentaci, ne o binární/desktopovou aplikaci — viz „Rozšíření pro webový vývoj"
+v `repository-architecture.md`) a repozitář zatím nemá kořenovou `public/`, založte
+ji a existující nasazovaný/publikovaný obsah do ní přesuňte přes `git mv`. Do
+`AGENTS.md` zapište stručně konkrétní účel `public/` v tomto projektu. Pokud
+repozitář už vlastní obdobný web-root vzor pod jiným názvem se zavedeným významem,
+nepřejmenovávejte jej bez explicitního schválení.
+
+Jestliže uživatel výslovně požaduje Product Repository Sync, použijte místo tohoto
+postupu capability `product-repository` a skill `manage-product-repository`.
+Před přesunem ověřte, že v cíli nevznikne souběh `public/` a `product/`; tyto dvě
+hranice jsou vzájemně výlučné.
+
 Nainstalujte kanonické repository schopnosti:
 
 ```bash

@@ -9,6 +9,7 @@ import os
 import re
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 from typing import Iterable
 
@@ -59,6 +60,93 @@ CAPABILITY_BUNDLES = {
         ".agents/skills/maintain-decision-records/agents/openai.yaml",
         ".agents/skills/maintain-decision-records/references/decision-record-template.md",
     ],
+    "domain-inventories": [
+        "docs/agent-context/domain/README.md",
+        ".agents/skills/maintain-domain-inventories/SKILL.md",
+        ".agents/skills/maintain-domain-inventories/agents/openai.yaml",
+        "toolkit/domain/README.md",
+    ],
+    "client-project": [
+        "docs/project/README.md",
+        "docs/project/assignment.md",
+        "docs/project/analysis/README.md",
+        "docs/project/design/README.md",
+        "docs/project/client/README.md",
+        "docs/project/traceability.md",
+        "docs/project/epics/README.md",
+        "resources/client-inputs/README.md",
+        "resources/diagnostics/README.md",
+        "resources/epics/README.md",
+        "definitions/README.md",
+        "definitions/data/README.md",
+        "definitions/temps/README.md",
+        "definitions/print-temps/README.md",
+        "definitions/site-files/README.md",
+        "artifacts/README.md",
+        "artifacts/epics/README.md",
+        "toolkit/epics/README.md",
+        ".agents/skills/maintain-client-project-dimension/SKILL.md",
+        ".agents/skills/maintain-client-project-dimension/agents/openai.yaml",
+    ],
+    "client-offers": [
+        "docs/project/offers/README.md",
+        "resources/offers/README.md",
+        "resources/offers/_template/README.md",
+        "resources/offers/_template/meetings/README.md",
+        "resources/offers/_template/client-files/README.md",
+        "resources/offers/_template/images/README.md",
+        "resources/offers/_template/references/README.md",
+        "public/offers/README.md",
+        "artifacts/offers/README.md",
+        "toolkit/offers/README.md",
+        "toolkit/offers/offer_tools.py",
+        ".agents/skills/maintain-client-offers/SKILL.md",
+        ".agents/skills/maintain-client-offers/agents/openai.yaml",
+        ".agents/skills/maintain-client-offers/references/offer-manifest-template.md",
+        "docs/agent-context/client-offers-capability.md",
+    ],
+    "missions": [
+        "docs/missions/README.md",
+        ".agents/skills/maintain-missions/SKILL.md",
+        ".agents/skills/maintain-missions/agents/openai.yaml",
+        ".agents/skills/maintain-missions/references/mission-template.md",
+    ],
+    "documentation-sync": [
+        "docs/agent-context/documentation-sync-capability.md",
+        ".agents/skills/maintain-documentation-sync/SKILL.md",
+        ".agents/skills/maintain-documentation-sync/agents/openai.yaml",
+        "toolkit/agent-infrastructure/validate_documentation_metadata.py",
+    ],
+    "development-testing": [
+        "docs/agent-context/development-testing-capability.md",
+        ".agents/skills/maintain-development-testing/SKILL.md",
+        ".agents/skills/maintain-development-testing/agents/openai.yaml",
+    ],
+    "product-repository": [
+        "docs/agent-context/product-repository-sync-capability.md",
+        ".agents/skills/manage-product-repository/SKILL.md",
+        ".agents/skills/manage-product-repository/agents/openai.yaml",
+    ],
+    "authoring-repository": [
+        "docs/agent-context/repository-types.md",
+        "docs/agent-context/authoring-repository-capability.md",
+        ".agents/skills/maintain-authoring-repository/SKILL.md",
+        ".agents/skills/maintain-authoring-repository/agents/openai.yaml",
+    ],
+}
+
+CAPABILITY_DEPENDENCIES = {
+    "authoring-repository": ("product-repository", "development-testing"),
+}
+
+CAPABILITY_TEMPLATES = {
+    "authoring-repository": {
+        "templates/capabilities/authoring-repository/product/README.md": "product/README.md",
+        "templates/capabilities/authoring-repository/product/skills/README.md": "product/skills/README.md",
+        "templates/capabilities/authoring-repository/product/tools/README.md": "product/tools/README.md",
+        "templates/capabilities/authoring-repository/product/contracts/README.md": "product/contracts/README.md",
+        "templates/capabilities/authoring-repository/product/tests/README.md": "product/tests/README.md",
+    },
 }
 
 CAPABILITY_RULES = {
@@ -74,6 +162,117 @@ CAPABILITY_RULES = {
         "ADR ukládejte do `docs/agent-context/decisions/` a jeho vznik nebo změnu stavu "
         "vždy propojte s dnešním záznamem v `.logs/`.",
     ),
+    "domain-inventories": (
+        "maintain-domain-inventories",
+        "Pro opakované mapovací průzkumy a sledování aktuálního stavu kódu použijte "
+        "skill `maintain-domain-inventories`. Generované inventáře ukládejte do "
+        "`docs/agent-context/domain/`, generátory do `toolkit/domain/` a aktualizujte "
+        "je spolu se sledovanou změnou.",
+    ),
+    "client-project": (
+        "maintain-client-project-dimension",
+        "Pro klientský implementační projekt udržujte zadání, analýzy, návrhy, potvrzené "
+        "závěry a trasovatelnost v `docs/project/`; aktuální technickou a doménovou pravdu "
+        "v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční model "
+        "(projektová XDS a *.xcf) v `definitions/`, povinně s podsložkami `definitions/data/`, "
+        "`definitions/temps/`, `definitions/print-temps/` a `definitions/site-files/`. Pokud "
+        "projektová XDS nebo *.xcf ještě nejsou k dispozici, upozorněte uživatele, že je třeba "
+        "je dodat dodatečně. Použijte skill `maintain-client-project-dimension` při založení "
+        "nebo materiální změně této struktury.",
+    ),
+    "client-offers": (
+        "maintain-client-offers",
+        "Capability `client-offers` je volitelné rozšíření klientského projektu. Pro každou nabídku "
+        "oddělte původní podklady v `resources/offers/<offer-id>/`, ověřené závěry a trasovatelnost "
+        "v `docs/project/offers/<offer-id>/`, explicitně publikovatelný HTML obsah v "
+        "`public/offers/<offer-id>/` a odvozené reporty v `artifacts/offers/<offer-id>/`. "
+        "Použijte skill `maintain-client-offers`; do repozitáře neukládejte příjemce, Access policy "
+        "ani secrets. Publikace používá URL `/{project-slug}/{offer-slug}/` a je izolovaná po nabídce.",
+    ),
+    "missions": (
+        "maintain-missions",
+        "Když práce narazí na cíl přesahující jednu materiální změnu nebo s uživatelem "
+        "zatím nesladěný rozsah, aktivně navrhněte založení mise skillem `maintain-missions`. "
+        "Mise ukládejte do `docs/missions/NN-<slug>.md` dle "
+        "`.agents/skills/maintain-missions/references/mission-template.md`, se stavem "
+        "(`draft`/`reviewed`/`in-progress`/`done`/`deferred`/`rejected`) a polem `ADR:` "
+        "propojeným na výsledný záznam v `docs/agent-context/decisions/`, jakmile z mise "
+        "vzejde architektonicky významné rozhodnutí.",
+    ),
+}
+
+CAPABILITY_RULES["documentation-sync"] = (
+    "maintain-documentation-sync",
+    "Pri zmene chovani nebo technickych detailu nejprve aktualizujte domenovou dokumentaci "
+    "v `docs/agent-context/`, teprve potom obecnou dokumentaci v sourozeneckem Docusaurus "
+    "repozitari. Pouzivejte vazby `general_documentation`, metadata `revised_by`/`revised_at` "
+    "a pred predanim uzivatele upozornete na stav domenove revize, revize obecne dokumentace "
+    "a publikace.",
+)
+
+CAPABILITY_RULES["development-testing"] = (
+    "maintain-development-testing",
+    "Pro zavedení nebo rozšíření automatického testování a diagnostiky použijte skill "
+    "`maintain-development-testing`. Konkrétní runner, prostředí a CI dokumentujte v "
+    "`docs/agent-context/testing.md`; izolovaná vývojová automatizace patří do "
+    "`toolkit/development/`. Credentials, produkční data a generované testovací artefakty "
+    "se necommitují; mutující scénáře vyžadují explicitní opt-in a resetovatelná data.",
+)
+
+CAPABILITY_RULES["product-repository"] = (
+    "manage-product-repository",
+    "Produktovou projekci zavádějte pouze na výslovné přání pomocí skillu "
+    "`manage-product-repository`. Pracovní repozitář smí mít právě jednu z hranic "
+    "`public/` nebo `product/`; pro synchronizovaný Product repository použijte `product/` "
+    "a nikdy ji nekombinujte s `public/`. Nastavení cílového GitHub repository, branch mapping "
+    "a oprávnění musí být explicitní; bez nich nevytvářejte automatické cross-repository workflow.",
+)
+
+CAPABILITY_RULES["decision-records"] = (
+    "maintain-decision-records",
+    "Při architektonicky významném rozhodnutí použijte skill `maintain-decision-records`. "
+    "ADR ukládejte do `docs/agent-context/decisions/`, s globálním číslem a povinným polem "
+    "`Scope: shared|<epic-id>`; jeho vznik nebo změnu stavu vždy propojte s dnešním záznamem v `.logs/`.",
+)
+
+CAPABILITY_RULES["client-project"] = (
+    "maintain-client-project-dimension",
+    "Pro klientský implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a "
+    "trasovatelnost v `docs/project/`; epiky v `docs/project/epics/<epic-id>/`; aktuální technickou "
+    "a doménovou pravdu v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční "
+    "model v `definitions/`. `definitions/` je do přijatého rozhodnutí o jiné strategii jediný zdroj "
+    "pravdy. Obsah specifický pro epik patří do `resources/epics/<epic-id>/`, "
+    "`artifacts/epics/<epic-id>/` nebo `toolkit/epics/<epic-id>/`; definiční soubory přesouvejte jen "
+    "když se nezmění jejich runtime cesta. Použijte skill `maintain-client-project-dimension` při "
+    "založení nebo materiální změně této struktury.",
+)
+
+CAPABILITY_RULES["missions"] = (
+    "maintain-missions",
+    "Když práce narazí na dlouhodobý cíl, použijte skill `maintain-missions`. V klientském projektu "
+    "mise představuje epik a její `Epic: <epic-id>` určuje podpůrnou vrstvu. Mise ukládejte do "
+    "`docs/missions/NN-<epic-id>.md` dle šablony, se stavem a polem `ADR:` propojeným na výsledná "
+    "rozhodnutí v `docs/agent-context/decisions/`.",
+)
+
+CAPABILITY_RULES["authoring-repository"] = (
+    "maintain-authoring-repository",
+    "Pro repozitář typu `authoring` používejte skill `maintain-authoring-repository`. "
+    "Uveďte roli `specialist` nebo `orchestrator`; publikovatelný authoring produkt vytvářejte "
+    "autoritativně přímo v `product/`, zatímco kořenové `.agents/skills/` slouží pouze údržbě "
+    "workspace. Produktové skills neduplikujte mezi `product/skills/` a `.agents/skills/`. "
+    "Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny aplikace "
+    "napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.",
+)
+
+CAPABILITY_SKILLS = {
+    "client-project": "maintain-client-project-dimension",
+    "client-offers": "maintain-client-offers",
+    "missions": "maintain-missions",
+    "documentation-sync": "maintain-documentation-sync",
+    "development-testing": "maintain-development-testing",
+    "product-repository": "manage-product-repository",
+    "authoring-repository": "maintain-authoring-repository",
 }
 
 SCAFFOLD = {
@@ -111,8 +310,10 @@ def command_init(args: argparse.Namespace) -> int:
         print("Existing files were preserved. Use --force only after reviewing them.")
     install_capability_bundle(target, "work-log", args.force)
     install_capability_bundle(target, "decision-records", args.force)
+    install_capability_bundle(target, "documentation-sync", args.force)
     ensure_capability_rule(target, "work-log")
     ensure_capability_rule(target, "decision-records")
+    ensure_capability_rule(target, "documentation-sync")
     return 0
 
 
@@ -121,7 +322,9 @@ def install_capability_bundle(target: Path, name: str, force: bool) -> list[tupl
     for rel in CAPABILITY_BUNDLES[name]:
         source = HELPER_ROOT / rel
         destination = target / rel
-        if destination.exists() and not force:
+        if source.resolve() == destination.resolve():
+            status = "present"
+        elif destination.exists() and not force:
             status = "skipped"
         else:
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -129,7 +332,48 @@ def install_capability_bundle(target: Path, name: str, force: bool) -> list[tupl
             status = "written"
         changes.append((rel, status))
         print(f"{status:7} {rel}")
+    for source_rel, destination_rel in CAPABILITY_TEMPLATES.get(name, {}).items():
+        source = HELPER_ROOT / source_rel
+        destination = target / destination_rel
+        # Product files become target-owned authoring sources after installation.
+        # Even a capability refresh must not overwrite their repository-specific content.
+        if destination.exists():
+            status = "present"
+        else:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+            status = "written"
+        changes.append((destination_rel, status))
+        print(f"{status:7} {destination_rel}")
     return changes
+
+
+def sync_existing_claude_skill(target: Path, name: str) -> int:
+    """Synchronize a marked Claude skill copy with its canonical source."""
+    claude_skills = target / ".claude/skills"
+    source = target / ".agents/skills" / name
+    if not claude_skills.is_dir() or not source.is_dir():
+        return 0
+    destination = claude_skills / name
+    if destination.exists():
+        marker = destination / ".generated-from"
+        if not marker.is_file():
+            print(
+                f"ACTION: Refusing to overwrite manual Claude skill copy {destination}; "
+                "review it and use the platform renderer explicitly.",
+                file=sys.stderr,
+            )
+            return 1
+        if destination.is_symlink() or destination.is_file():
+            destination.unlink()
+        else:
+            shutil.rmtree(destination)
+    shutil.copytree(source, destination)
+    (destination / ".generated-from").write_text(
+        f".agents/skills/{name}\n", encoding="utf-8"
+    )
+    print(f"synced   {destination}")
+    return 0
 
 
 def ensure_capability_rule(target: Path, name: str) -> int:
@@ -148,13 +392,62 @@ def ensure_capability_rule(target: Path, name: str) -> int:
     return 0
 
 
+def check_client_project_definitions(target: Path) -> None:
+    """Warn when the project's own XDS/*.xcf files still need to be supplied."""
+    definitions = target / "definitions"
+    missing = []
+    if not any(definitions.glob("*.xds")):
+        missing.append("*.xds")
+    if not any(definitions.glob("*.xcf")):
+        missing.append("*.xcf")
+    if missing:
+        print(
+            "ACTION: definitions/ has no project "
+            + " and no ".join(missing)
+            + " file(s) yet. Supply the real project file(s) and tell the user they still "
+            "need to be added."
+        )
+
+
+def validate_offers(target: Path) -> list[str]:
+    """Delegate offer-content checks to the portable client-offers tool."""
+    tool = target / "toolkit/offers/offer_tools.py"
+    if not tool.is_file():
+        return []
+    result = subprocess.run(
+        [sys.executable, str(tool), "validate", "--quiet"],
+        cwd=target,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode == 0:
+        return []
+    details = (result.stderr or result.stdout).strip().splitlines()
+    return [f"Client-offers: {line}" for line in details] or ["Client-offers validation failed"]
+
+
 def command_install_capability(args: argparse.Namespace) -> int:
     target = Path(args.target).resolve()
     if not target.is_dir():
         print(f"Not a directory: {target}", file=sys.stderr)
         return 2
-    install_capability_bundle(target, args.name, args.force)
-    return ensure_capability_rule(target, args.name)
+    names = (*CAPABILITY_DEPENDENCIES.get(args.name, ()), args.name)
+    status = 0
+    for name in names:
+        install_capability_bundle(target, name, args.force)
+        status = ensure_capability_rule(target, name) or status
+        status = sync_existing_claude_skill(
+            target, CAPABILITY_SKILLS.get(name, name)
+        ) or status
+    if args.name == "client-project":
+        check_client_project_definitions(target)
+    if args.name == "client-offers" and not (target / "docs/project/README.md").is_file():
+        print(
+            "ACTION: client-offers extends a client project. Install client-project before using offers.",
+            file=sys.stderr,
+        )
+    return status
 
 
 def command_install_work_log(args: argparse.Namespace) -> int:
@@ -196,6 +489,8 @@ def classify_path(rel: str) -> str:
         return "tool candidate outside toolkit"
     if p.startswith("resources/"):
         return "analysis resource"
+    if p.startswith("product/"):
+        return "authoritative product source"
     if p.startswith((".claude/", ".codex/", ".gemini/", ".github/")) or p in {"CLAUDE.md", "GEMINI.md"}:
         return "platform adapter/config"
     if p.startswith(("docs/", "documentation/", "manual/", "wiki/")):
@@ -289,6 +584,121 @@ def command_validate(args: argparse.Namespace) -> int:
         warnings.append("No project skills found; acceptable for a new repository.")
     if not any((root / ".agents/profiles").glob("*.agent.md")):
         warnings.append("No canonical profiles found; acceptable if no specialized role is needed.")
+    client_skill = root / ".agents/skills/maintain-client-project-dimension/SKILL.md"
+    client_project = root / "docs/project"
+    if client_skill.exists() or client_project.exists():
+        for rel in (
+            "docs/project/README.md",
+            "docs/project/assignment.md",
+            "docs/project/analysis/README.md",
+            "docs/project/design/README.md",
+            "docs/project/client/README.md",
+            "docs/project/traceability.md",
+            "docs/project/epics/README.md",
+            "resources/client-inputs/README.md",
+            "resources/diagnostics/README.md",
+            "resources/epics/README.md",
+            "definitions/README.md",
+            "definitions/data/README.md",
+            "definitions/temps/README.md",
+            "definitions/print-temps/README.md",
+            "definitions/site-files/README.md",
+            "artifacts/README.md",
+            "artifacts/epics/README.md",
+            "toolkit/epics/README.md",
+        ):
+            if not (root / rel).is_file():
+                errors.append(f"Client-project capability is missing {rel}")
+        if not client_skill.is_file():
+            errors.append("Client-project capability is missing maintain-client-project-dimension/SKILL.md")
+        if agents_path.is_file() and "maintain-client-project-dimension" not in agents_path.read_text(encoding="utf-8", errors="replace"):
+            errors.append("AGENTS.md does not make client-project handling explicit")
+        definitions_dir = root / "definitions"
+        if definitions_dir.is_dir():
+            if not any(definitions_dir.glob("*.xds")):
+                warnings.append("definitions/ has no project *.xds file yet; supply it and notify the user.")
+            if not any(definitions_dir.glob("*.xcf")):
+                warnings.append("definitions/ has no project *.xcf file yet; supply it and notify the user.")
+    offers_skill = root / ".agents/skills/maintain-client-offers/SKILL.md"
+    offers_root = root / "docs/project/offers"
+    if offers_skill.exists() or offers_root.exists():
+        if not client_project.exists():
+            errors.append("Client-offers capability requires the client-project capability")
+        for rel in (
+            "docs/project/offers/README.md",
+            "resources/offers/README.md",
+            "resources/offers/_template/README.md",
+            "resources/offers/_template/meetings/README.md",
+            "resources/offers/_template/client-files/README.md",
+            "resources/offers/_template/images/README.md",
+            "resources/offers/_template/references/README.md",
+            "public/offers/README.md",
+            "artifacts/offers/README.md",
+            "toolkit/offers/README.md",
+            "toolkit/offers/offer_tools.py",
+            "docs/agent-context/client-offers-capability.md",
+        ):
+            if not (root / rel).is_file():
+                errors.append(f"Client-offers capability is missing {rel}")
+        if not offers_skill.is_file():
+            errors.append("Client-offers capability is missing maintain-client-offers/SKILL.md")
+        if agents_path.is_file() and "maintain-client-offers" not in agents_path.read_text(encoding="utf-8", errors="replace"):
+            errors.append("AGENTS.md does not make client-offers handling explicit")
+        offers_errors = validate_offers(root)
+        errors.extend(offers_errors)
+    testing_skill = root / ".agents/skills/maintain-development-testing/SKILL.md"
+    testing_context = root / "docs/agent-context/development-testing-capability.md"
+    if testing_skill.exists() or testing_context.exists():
+        for rel in (
+            "docs/agent-context/development-testing-capability.md",
+            ".agents/skills/maintain-development-testing/SKILL.md",
+        ):
+            if not (root / rel).is_file():
+                errors.append(f"Development-testing capability is missing {rel}")
+        if agents_path.is_file() and "maintain-development-testing" not in agents_path.read_text(encoding="utf-8", errors="replace"):
+            errors.append("AGENTS.md does not make development-testing handling explicit")
+    authoring_skill = root / ".agents/skills/maintain-authoring-repository/SKILL.md"
+    authoring_context = root / "docs/agent-context/authoring-repository-capability.md"
+    agents_text = (
+        agents_path.read_text(encoding="utf-8", errors="replace")
+        if agents_path.is_file()
+        else ""
+    )
+    authoring_active = (root / "product").exists() and (
+        authoring_skill.exists() or authoring_context.exists()
+    )
+    if authoring_active:
+        for rel in (
+            "docs/agent-context/repository-types.md",
+            "docs/agent-context/authoring-repository-capability.md",
+            ".agents/skills/maintain-authoring-repository/SKILL.md",
+            ".agents/skills/manage-product-repository/SKILL.md",
+            ".agents/skills/maintain-development-testing/SKILL.md",
+            "product/README.md",
+            "product/skills/README.md",
+            "product/tools/README.md",
+            "product/contracts/README.md",
+            "product/tests/README.md",
+        ):
+            if not (root / rel).is_file():
+                errors.append(f"Authoring-repository capability is missing {rel}")
+        if (root / "public").exists():
+            errors.append("Authoring repository cannot contain both public/ and product/")
+        if agents_path.is_file() and "maintain-authoring-repository" not in agents_text:
+            errors.append("AGENTS.md does not make authoring-repository handling explicit")
+        product_skills = {
+            path.parent.name
+            for path in (root / "product/skills").glob("*/SKILL.md")
+        }
+        workspace_skills = {
+            path.parent.name
+            for path in (root / ".agents/skills").glob("*/SKILL.md")
+        }
+        for duplicate in sorted(product_skills & workspace_skills):
+            errors.append(
+                "Authoring product skill is duplicated in product/skills and .agents/skills: "
+                + duplicate
+            )
     decisions_dir = root / "docs/agent-context/decisions"
     decision_skill = root / ".agents/skills/maintain-decision-records/SKILL.md"
     if decisions_dir.exists() or decision_skill.exists():
@@ -312,6 +722,9 @@ def command_validate(args: argparse.Namespace) -> int:
             status_match = re.search(r"(?m)^- Stav:\s*(proposed|accepted|rejected|superseded)\s*$", adr_text)
             if not status_match:
                 errors.append(f"Missing or invalid ADR status: {adr.relative_to(root).as_posix()}")
+            scope_match = re.search(r"(?m)^- Scope:\s*(shared|[a-z0-9]+(?:-[a-z0-9]+)*)\s*$", adr_text)
+            if not scope_match:
+                errors.append(f"Missing or invalid ADR Scope: {adr.relative_to(root).as_posix()}")
             for field in ("Nahrazuje", "Nahrazeno"):
                 match = re.search(rf"(?m)^- {field}:\s*(.+)$", adr_text)
                 if not match:
@@ -326,6 +739,43 @@ def command_validate(args: argparse.Namespace) -> int:
                     errors.append(f"Superseded ADR must link to its replacement: {adr.name}")
             if adr.name not in log_text:
                 errors.append(f"ADR is not linked from a daily work log: {adr.name}")
+    missions_dir = root / "docs/missions"
+    mission_skill = root / ".agents/skills/maintain-missions/SKILL.md"
+    if missions_dir.exists() or mission_skill.exists():
+        if not (missions_dir / "README.md").is_file():
+            errors.append("Missions capability is missing docs/missions/README.md")
+        if not mission_skill.is_file():
+            errors.append("Missions capability is missing maintain-missions/SKILL.md")
+        if agents_path.is_file() and "maintain-missions" not in agents_path.read_text(encoding="utf-8", errors="replace"):
+            errors.append("AGENTS.md does not make missions handling explicit")
+        mission_files = sorted(p for p in missions_dir.glob("[0-9][0-9]-*.md"))
+        mission_numbers: set[str] = set()
+        for mission in mission_files:
+            number = mission.name[:2]
+            if number in mission_numbers:
+                errors.append(f"Duplicate mission number: {number}")
+            mission_numbers.add(number)
+            mission_text = mission.read_text(encoding="utf-8", errors="replace")
+            if not mission_text.startswith("# Mise:"):
+                continue
+            status_match = re.search(
+                r"(?m)^- Stav:\s*(draft|reviewed|in-progress|done|deferred|rejected)\s*$",
+                mission_text,
+            )
+            if not status_match:
+                errors.append(f"Missing or invalid mission Stav: {mission.relative_to(root).as_posix()}")
+            epic_match = re.search(r"(?m)^- Epic:\s*([a-z0-9]+(?:-[a-z0-9]+)*)\s*$", mission_text)
+            if not epic_match:
+                errors.append(f"Missing or invalid mission Epic: {mission.relative_to(root).as_posix()}")
+            elif client_project.exists() and not (root / "docs/project/epics" / epic_match.group(1) / "README.md").is_file():
+                errors.append(f"Mission epic has no project context: {epic_match.group(1)}")
+            adr_field = re.search(r"(?m)^- ADR:\s*(.+)$", mission_text)
+            if not adr_field:
+                errors.append(f"Missing mission ADR field: {mission.relative_to(root).as_posix()}")
+            else:
+                for link in re.findall(r"\[[^]]+\]\(([^)]+)\)", adr_field.group(1)):
+                    if not (mission.parent / link).resolve().is_file():
+                        errors.append(f"Broken mission ADR link in {mission.name}: {link}")
     for message in errors:
         print(f"ERROR: {message}")
     for message in warnings:

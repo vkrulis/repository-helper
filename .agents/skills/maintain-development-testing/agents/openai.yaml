@@ -1,0 +1,4 @@
+interface:
+  display_name: "Development Testing"
+  short_description: "Set up durable, safe test foundations."
+  default_prompt: "Set up or improve the testing foundation for this development repository."

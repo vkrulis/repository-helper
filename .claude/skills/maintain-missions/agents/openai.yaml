@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Missions"
+  short_description: "Propose, create and maintain long-term repository missions linked to ADRs and the work log"
+  default_prompt: "Evaluate whether this goal needs a mission, maintain the mission record and its index, and link it to an ADR or the work log as appropriate."

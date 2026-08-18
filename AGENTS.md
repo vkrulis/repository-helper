@@ -7,6 +7,7 @@ Tento repozitář je kanonickým zdrojem přenositelných skills, profilů, doku
 ## Zdroje pravdy
 
 - Cílová architektura: `docs/agent-context/repository-architecture.md`
+- Základní typy repozitářů: `docs/agent-context/repository-types.md`
 - Migrační politika: `docs/agent-context/migration-policy.md`
 - Platformní scénáře: `docs/agent-context/platform-connector-scenarios.md`
 - Neutrální profilový formát: `docs/agent-context/profile-schema.md`
@@ -26,6 +27,34 @@ Tento repozitář je kanonickým zdrojem přenositelných skills, profilů, doku
 10. Při architektonicky významném rozhodnutí použijte konzervativní skill `maintain-decision-records`; ADR ukládejte do `docs/agent-context/decisions/` a nevytvářejte jej pro běžné lokální změny.
 11. Po každé materiální změně kódu, dokumentace, konfigurace, pravidel, struktury nebo nástrojů použijte skill `maintain-work-log` a přidejte stručný záznam do `.logs/YYYY/MM/YYYY-MM-DD.md`. Vznik nebo změnu stavu ADR vždy propojte s tímto záznamem. Existující historii nepřepisujte; pozdější předělávku zachyťte novým záznamem. Aktuální autoritativní znalost patří do `docs/agent-context/`, chronologická historie do `.logs/` a fyzická historie do Gitu.
 12. Před předáním práce ověřte dnešní log a spusťte validaci celé kolekce.
+
+## Repository capability: client-project
+
+Klientský projekt vede epiky jako mise: jedna mise má `Epic: <epic-id>` a rozcestník
+`docs/project/epics/<epic-id>/README.md`. Zdroje, artefakty a nástroje specifické pro epik patří
+do odpovídajících `*/epics/<epic-id>/`; společný obsah zůstává v kořenech. `definitions/` je
+jediný ručně spravovaný zdroj pravdy pro XDS, XCF a definiční obsah, dokud přijaté ADR neurčí jinak.
+
+## ADR scope
+
+ADR mají globální čtyřmístné číslo a povinné `Scope: shared|<epic-id>`. Pracovní návrhy mohou
+vznikat souběžně pod dočasným názvem; konečné číslo se přiděluje při integraci a validátor odmítne
+duplicitní číslo.
+
+Pro klientský implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a trasovatelnost v `docs/project/`; aktuální technickou a doménovou pravdu v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční model (projektová XDS a *.xcf) v `definitions/`, povinně s podsložkami `definitions/data/`, `definitions/temps/`, `definitions/print-temps/` a `definitions/site-files/`. Pokud projektová XDS nebo *.xcf ještě nejsou k dispozici, upozorněte uživatele, že je třeba je dodat dodatečně. Použijte skill `maintain-client-project-dimension` při založení nebo materiální změně této struktury.
+
+Capability `domain-inventories` poskytuje skill `maintain-domain-inventories` pro
+repozitáře, které potřebují živé inventáře aktuálního stavu kódu. Instalujte jej
+do cíle přes `repository_architecture.py install-capability`; při aktualizaci
+nejprve zkontrolujte lokální změny a teprve potom použijte `--force`.
+
+## Repository capability: documentation-sync
+
+Při změně chování nebo technických detailů nejprve aktualizujte doménovou dokumentaci v `docs/agent-context/`, teprve potom obecnou dokumentaci v sourozeneckém Docusaurus repozitáři. Používejte skill `maintain-documentation-sync`, vazby `general_documentation`, metadata `revised_by`/`revised_at` a validator `toolkit/agent-infrastructure/validate_documentation_metadata.py`. Před předáním vždy uživatele upozorněte, zda byla provedena doménová revize, revize obecné dokumentace a publikace.
+
+## Repository capability: development-testing
+
+Pro vývojový repozitář, který zavádí nebo rozšiřuje automatické testování a diagnostiku, použijte `maintain-development-testing`. Capability je volitelná a frameworkově neutrální: konkrétní runner, testovací prostředí a CI dokumentujte v `docs/agent-context/testing.md`. Izolovaná vývojová automatizace patří do `toolkit/development/`; credentials, produkční data a generované testovací artefakty se necommitují. Mutující scénáře vyžadují explicitní opt-in a resetovatelná testovací data.
 
 ## Povinné kontroly
 
@@ -54,3 +83,23 @@ Změna je hotová pouze tehdy, když:
 - validační příkazy skončí úspěšně,
 - README nebo kontextová dokumentace popisují uživatelsky významnou změnu.
 - materiální změna je stručně zaznamenána v dnešním pracovním logu včetně změněných souborů, skutečně provedených validací a otevřené práce.
+
+## Repository capability: client-offers
+
+`client-offers` je volitelné rozšíření `client-project`, nikoli epik a nikoli povinná součást každé klientské implementace. U nabídky oddělte převzaté podklady v `resources/offers/`, ověřené závěry a trasovatelnost v `docs/project/offers/`, explicitně publikovatelný HTML obsah v `public/offers/` a odvozené reporty v `artifacts/offers/`. Použijte `maintain-client-offers` a `toolkit/offers/offer_tools.py`; příjemce, Access policy a secrets do repozitáře nepatří.
+
+## Repository capability: missions
+
+V klientském projektu mise představuje epik, nikoli izolovaný úkol. Použijte název
+`NN-<epic-id>.md`, metadata `Epic`, `Stav`, `Priorita`, `ADR` a společný append-only denní log.
+
+Když práce narazí na cíl přesahující jednu materiální změnu nebo s uživatelem zatím nesladěný rozsah, aktivně navrhněte založení mise skillem `maintain-missions`. Mise ukládejte do `docs/missions/NN-<slug>.md` dle `.agents/skills/maintain-missions/references/mission-template.md`, se stavem (`draft`/`reviewed`/`in-progress`/`done`/`deferred`/`rejected`) a polem `ADR:` propojeným na výsledný záznam v `docs/agent-context/decisions/`, jakmile z mise vzejde architektonicky významné rozhodnutí.
+
+## Repository capability: authoring-repository
+
+Pro repozitář typu `authoring` používejte skill `maintain-authoring-repository`. Uveďte
+roli `specialist` nebo `orchestrator`; publikovatelný authoring produkt vytvářejte
+autoritativně přímo v `product/`, zatímco kořenové `.agents/skills/` slouží pouze údržbě
+workspace. Produktové skills neduplikujte mezi `product/skills/` a `.agents/skills/`.
+Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny aplikace
+napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.

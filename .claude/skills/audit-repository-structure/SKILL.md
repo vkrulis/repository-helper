@@ -27,7 +27,10 @@ Zjistěte:
 
 - Git root a aktivní větev,
 - stav pracovního stromu,
-- velikost a typ repozitáře,
+- velikost a primární typ repozitáře podle `docs/agent-context/repository-types.md`:
+  `development`, `authoring`, `client-project` nebo `documentation`,
+- u authoringu roli `specialist` nebo `orchestrator`, autoritativní produktovou hranici
+  a případné duplicity mezi `product/skills/` a `.agents/skills/`,
 - monorepo/submodule/worktree vlastnosti,
 - hlavní jazyky a build systémy,
 - CI/CD a deployment konfiguraci.
@@ -72,7 +75,8 @@ Rozlište:
 
 ### 4. Sémantická klasifikace
 
-Každý významný kandidát zařaďte podle cílové architektury:
+Nejprve doložte primární typ podle autoritativního výstupu repozitáře. Každý významný
+kandidát pak zařaďte podle cílové architektury:
 
 ```text
 README

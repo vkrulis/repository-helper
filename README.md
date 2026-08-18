@@ -8,6 +8,11 @@ Balíček vychází z principů:
 >
 > **Znalost orientuje agenta, agent volí skill, skill řídí nástroj a nástroj provádí práci.**
 
+Repository-helper rozlišuje čtyři primární typy repozitářů: `development`, `authoring`,
+`client-project` a `documentation`. Authoring dále rozlišuje specializovanou roli a
+nadřazený orchestrátor; referenčním orchestrátorem Flexideo je `Flexideo-orchestrator`.
+Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
+
 ## Co sada obsahuje
 
 | Skill | Účel |
@@ -20,6 +25,13 @@ Balíček vychází z principů:
 | `maintain-work-log` | Vytváří a prohledává povinnou chronologickou historii materiálních změn. |
 | `import-legacy-work-logs` | Převádí historická podtémata do jednotného logu bez ztráty originálu a bez domýšlení faktů. |
 | `maintain-decision-records` | Konzervativně spravuje ADR a propojuje je s pracovním logem. |
+| `maintain-domain-inventories` | Udržuje regenerovatelné mapy aktuálního stavu kódu v `docs/agent-context/domain/`. |
+| `maintain-documentation-sync` | Synchronizuje doménovou dokumentaci s obecnou Docusaurus dokumentací a eviduje revize. |
+| `maintain-development-testing` | Zavádí bezpečný, vrstvený a frameworkově neutrální základ testování a diagnostiky. |
+| `manage-product-repository` | Zavádí bezpečnou hranici a volitelnou synchronizaci `product/` do Product repository. |
+| `maintain-authoring-repository` | Zakládá a udržuje specializovaný nebo orchestrační authoring repository s autoritativním produktem v `product/`. |
+| `maintain-client-project-dimension` | Zakládá a udržuje dokumentační rozměr klientské implementace: zadání, analýzy, návrhy, potvrzené závěry a trasovatelnost. |
+| `maintain-client-offers` | Volitelně zakládá a udržuje dohledatelné klientské HTML nabídky včetně validace a preview. |
 
 ## Cílová struktura repozitáře
 
@@ -100,10 +112,23 @@ python toolkit/agent-infrastructure/repository_architecture.py init /path/to/new
 python toolkit/agent-infrastructure/repository_architecture.py validate /path/to/repository
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name work-log
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name decision-records
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-project
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-offers
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name documentation-sync
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name development-testing
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name product-repository
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name authoring-repository
+# aktualizace již instalované capability po kontrole lokálních změn:
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories --force
 python toolkit/agent-infrastructure/render_platform_connectors.py /path/to/repository --platform codex
 python toolkit/agent-infrastructure/validate_skill_collection.py .
 python toolkit/work-log/work-log.py validate .
 ```
+
+Pokud cílový repozitář už obsahuje `.claude/skills/`, instalace capability
+automaticky udržuje označenou Claude kopii synchronní s `.agents/skills/`.
+Ručně upravené neoznačené kopie se nepřepisují.
 
 Nástroje neřeší doménová rozhodnutí za uživatele. Automatizují pouze bezpečné a deterministické části práce.
 

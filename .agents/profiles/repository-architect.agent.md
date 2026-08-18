@@ -6,6 +6,8 @@ skills:
   - initialize-agent-ready-repository
   - audit-repository-structure
   - validate-repository-architecture
+  - maintain-authoring-repository
+  - maintain-client-offers
 capabilities:
   - repository:read
   - repository:search
@@ -20,7 +22,10 @@ context:
   required:
     - AGENTS.md
     - docs/agent-context/repository-architecture.md
+    - docs/agent-context/repository-types.md
+    - docs/agent-context/authoring-repository-capability.md
     - docs/agent-context/repository-readme-guidelines.md
+    - docs/agent-context/client-offers-capability.md
 outputs:
   - repository-blueprint
   - repository-structure

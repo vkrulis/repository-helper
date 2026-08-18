@@ -15,7 +15,14 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 ## Obsah
 
 - `repository-architecture.md` – cílový model repozitáře.
+- `repository-types.md` – autoritativní taxonomie development, authoring, client-project a documentation repozitářů.
+- `authoring-repository-capability.md` – produktová hranice a role specializovaného a orchestračního authoringu.
 - `migration-policy.md` – zásady bezpečné reorganizace.
 - `platform-connector-scenarios.md` – předdefinované tenké konektory.
 - `profile-schema.md` – kanonický formát `.agent.md` profilů.
 - `repository-readme-guidelines.md` – minimální orientační dokumentace pro člověka.
+- `domain-capability.md` – přenositelný skill a postup pro živé inventáře aktuálního stavu kódu.
+- `documentation-sync-capability.md` – pořadí revize doménové a obecné Docusaurus dokumentace a metadata revizí.
+- `development-testing-capability.md` – volitelný, frameworkově neutrální základ vývojových testů a diagnostiky.
+- `client-project-capability.md` – struktura a udržování klientského implementačního projektu.
+- `client-offers-capability.md` – volitelná vrstva klientských HTML nabídek a jejich izolované publikace.

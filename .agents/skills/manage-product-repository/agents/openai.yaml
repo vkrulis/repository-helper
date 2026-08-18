@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Product Repository"
+  short_description: "Set up a safe product/ repository boundary"
+  default_prompt: "Use $manage-product-repository to introduce product/ and prepare Product Repository Sync."

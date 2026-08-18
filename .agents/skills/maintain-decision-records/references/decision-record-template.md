@@ -2,6 +2,7 @@
 
 - Stav: proposed
 - Datum: YYYY-MM-DD
+- Scope: shared
 - Vlastník:
 - Nahrazuje: —
 - Nahrazeno: —

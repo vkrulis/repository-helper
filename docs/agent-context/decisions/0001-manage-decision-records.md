@@ -2,6 +2,7 @@
 
 - Stav: accepted
 - Datum: 2026-07-22
+- Scope: shared
 - Vlastník: správci repository-helper
 - Nahrazuje: —
 - Nahrazeno: —

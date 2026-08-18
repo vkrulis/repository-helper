@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Authoring Repository"
+  short_description: "Structure and productize authoring repositories"
+  default_prompt: "Use $maintain-authoring-repository to create or align an authoring repository and its product boundary."

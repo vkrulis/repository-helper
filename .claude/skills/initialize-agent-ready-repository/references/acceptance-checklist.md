@@ -1,5 +1,6 @@
 # Akceptační checklist nového repozitáře
 
+- [ ] Primární typ je právě jeden z `development`, `authoring`, `client-project`, `documentation` a odpovídá autoritativnímu výstupu.
 - [ ] Hlavní `README.md` vysvětluje účel a rychlý start.
 - [ ] `AGENTS.md` obsahuje společná pravidla, ne kopii celé dokumentace.
 - [ ] `docs/agent-context/README.md` vysvětluje znalostní vrstvu.
@@ -13,4 +14,8 @@
 - [ ] Codex konektor nepřidává zbytečné soubory; ostatní konektory bez požadavku nevznikly.
 - [ ] V repozitáři nejsou credentials nebo lokální osobní nastavení.
 - [ ] Všechny známé příkazy lze spustit nebo jsou označené jako `TODO`.
+- [ ] Jde-li o vývoj webu samotného, existuje kořenová `public/` a `AGENTS.md` uvádí její konkrétní účel v tomto projektu.
+- [ ] Jde-li o authoring, je uvedena role `specialist`/`orchestrator`, existuje autoritativní `product/{skills,tools,contracts,tests}` a produktové skills nejsou duplicitně v `.agents/skills/`.
+- [ ] Jde-li o klientský projekt, je nainstalována capability `client-project` a `definitions/` je jediným projektovým definičním zdrojem pravdy.
+- [ ] Jde-li o dokumentační repozitář, jsou popsány zdroje, původ a revizní stav konsolidovaných znalostí.
 - [ ] Validace architektury skončila bez chyb.

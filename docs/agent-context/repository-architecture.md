@@ -184,6 +184,10 @@ Deterministické nástroje určené výhradně ke správě agentní infrastruktu
 - pomocníci pro migraci agentní architektury,
 - příkazy pro CI.
 
+#### `toolkit/development/`
+
+Vývojová automatizace projektu: build, testy, diagnostické pomocné balíčky a jejich lokální konfigurace. Izolovaný testovací balíček může být například `toolkit/development/browser-tests/`; jeho credentials a generované artefakty musí být ignorované Gitem. Konkrétní strukturu a framework neurčuje architektura, ale capability `development-testing` a dokumentace cílového projektu.
+
 ### `resources/`
 
 Doporučené projektové úložiště vstupů, které lidé, agenti nebo nástroje čtou, prohledávají či analyzují, ale které nejsou běhovou logikou repozitáře. Typicky jde o:
@@ -286,3 +290,80 @@ Cílová struktura není samoúčelná. Odchylka je přípustná, pokud:
 3. nevytváří duplicitní zdroj pravdy,
 4. platformní konektor zůstává tenký,
 5. validační nástroj ji umí rozpoznat nebo ignorovat záměrně.
+
+## Primární typ repozitáře
+
+Každý repozitář má právě jeden primární typ: `development`, `authoring`,
+`client-project` nebo `documentation`. Typ určuje autoritativní výstup, odpovědnost a
+instalované capability; úplná taxonomie a rozhodovací pravidlo jsou v
+`repository-types.md`.
+
+## Rozšíření pro authoring repository
+
+Authoring repository vytváří přenositelný produkt pro tvorbu nebo změny aplikací. Jeho
+jediným autoritativním produktovým stromem je `product/` s `skills/`, `tools/`,
+`contracts/` a `tests/`; kořenové `.agents/skills/` slouží pouze údržbě workspace.
+Capability `authoring-repository` podporuje roli `specialist` pro jednu vrstvu i roli
+`orchestrator` pro koordinaci napříč vrstvami a zahrnuje produktovou hranici i vývojové
+testování. Podrobný kontrakt je v `authoring-repository-capability.md`.
+
+Flexideo-orchestrator je nadřazená authoring entita ekosystému: načítá registry
+specializovaných authoring produktů a koordinuje finální tvorbu a úpravy aplikací, aniž
+by kopíroval jejich detailní skills nebo implementaci.
+
+## Rozšíření pro klientský implementační projekt
+
+Projekt, který zavádí konkrétní aplikaci pro jednoho klienta, potřebuje vedle
+základní architektury i čitelnou stopu zadání, analýzy, návrhu a akceptace.
+Tato vrstva nevytváří druhý zdroj technické nebo doménové pravdy: tu nadále drží
+`docs/agent-context/`. Podrobný strom, pravidla zdrojů pravdy a instalační postup
+popisuje `client-project-capability.md`.
+
+## Rozšíření pro klientské nabídky
+
+Klientský projekt, který skutečně připravuje nabídky, může volitelně nainstalovat capability `client-offers`. Nabídka není implementační epik: její originální vstupy jsou v `resources/offers/`, ověřená interpretace a trasovatelnost v `docs/project/offers/`, jediný publikovatelný HTML obsah v `public/offers/` a reprodukovatelné reporty v `artifacts/offers/`. Podrobné stavové modely, manifest a kontrakt izolované centrální publikace popisuje `client-offers-capability.md`.
+
+## Rozšíření pro mise (dlouhodobé cíle)
+
+Repozitář může vedle základní architektury vést `docs/missions/` — návrhy střednědobých
+a dlouhodobých cílů, dřív než se stanou architektonickým rozhodnutím (ADR) nebo
+proběhlou prací (`.logs/`). Agent má misi aktivně navrhnout, jakmile práce narazí na cíl,
+který přesahuje jednu materiální změnu a jehož rozsah nebo přístup ještě není s uživatelem
+sladěný. Standardizovaný formát, stavový model a instalační postup popisuje
+`mission-capability.md`.
+
+## Rozšíření pro webový vývoj
+
+Pokud je z kontextu repozitáře zřejmé, že jde o **vývoj webu samotného** — ne o
+authoring nástroj produkující definice (viz `client-project-capability.md`), ne o
+čistě dokumentační repozitář a ne o vývoj binární/desktopové aplikace — patří vedle
+základní struktury i kořenová složka `public/`: místo, kde leží skutečný nasazovaný
+nebo publikovaný obsah webu (HTML, styly, skripty, obrázky — vše, co se dostává na
+webserver nebo je z něj konzumováno).
+
+`public/` zakládejte při inicializaci (`initialize-agent-ready-repository`) i při
+dodatečném zavádění pravidel helperu do existujícího webového repozitáře
+(`migrate-repository-structure`), pokud tam ještě chybí a repozitář webový obsah
+skutečně má nebo bude mít.
+
+Přesný význam `public/` se mezi repozitáři liší — bývá to deterministicky
+generovaný build výstup, nebo naopak ručně spravovaný či zděděný provozovaný obsah —
+a tato společná reference jej proto nesjednocuje. Závazné je pouze toto: každý
+webový repozitář musí mít v `AGENTS.md` (případně doplněně v `README.md`) stručně
+zapsáno, čím `public/` v jeho konkrétním kontextu je (zdroj pravdy vs. generovaný
+výstup, co generuje/plní, zda a jak se commituje). Tento zápis je součástí projektové
+znalosti, ne rozhodnutí (ADR), pokud nejde o změnu tohoto uspořádání.
+
+## Rozšíření pro Product repository sync
+
+Je-li na výslovné přání potřeba oddělit soukromý pracovní repozitář od oficiálního
+produktového repozitáře, nainstalujte capability `product-repository` a postupujte
+skillem `manage-product-repository`. Jeho hranicí je kořenové `product/`, které se
+mapuje na root Product repository. `product/` je allowlist: do produktu se nikdy
+nepublikuje nic mimo tento strom.
+
+`product/` a běžné webové `public/` jsou vzájemně výlučné. `public/` zůstává
+vhodné pro samostatný běžný webový repozitář (např. správu webu), kde se neprovádí
+obousměrná Product synchronizace. Podrobnosti, včetně explicitního mapování větví,
+GitHub App oprávnění, PR režimu, provenance a prevence smyček, jsou v
+`product-repository-sync-capability.md`.
