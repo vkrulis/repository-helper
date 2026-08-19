@@ -23,6 +23,10 @@ product/
 - Build produktu validuje a balí obsah `product/`; Product Repository Sync pouze
   synchronizuje tuto hranici do samostatného Product repository. Registr dovedností
   spotřebovává ověřené vydání, nikoli interní kořen authoring workspace.
+- Cloudová distribuce registrů používá výchozí
+  [current-state kontrakt](authoring-registry-current-state-contract.md): Git uchovává
+  historii, cloud vystavuje aktuální validovaný stav na stabilních cestách a SHA-256
+  je kontrolou obsahu, nikoli fyzickou adresou.
 
 ## Specializovaný authoring
 
@@ -42,6 +46,9 @@ Orchestrátor je nadřazená authoring entita pro změny celé aplikace. Jeho pr
 Nevlastní a nekopíruje produktové skills specialistů. `Flexideo-orchestrator` je
 referenční orchestrátor: z registrovaných authoring produktů jednotlivých vrstev si
 aktualizuje dostupné schopnosti a sestavuje vlastní orchestrační produkt.
+
+Orchestrátor čte descriptory specialistů podle current-state kontraktu, stahuje pouze
+změněné artefakty, ověřuje jejich digesty a zapisuje je do resolution locku.
 
 ## Instalace a ověření
 

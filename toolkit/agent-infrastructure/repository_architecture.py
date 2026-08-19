@@ -130,6 +130,7 @@ CAPABILITY_BUNDLES = {
     "authoring-repository": [
         "docs/agent-context/repository-types.md",
         "docs/agent-context/authoring-repository-capability.md",
+        "docs/agent-context/authoring-registry-current-state-contract.md",
         ".agents/skills/maintain-authoring-repository/SKILL.md",
         ".agents/skills/maintain-authoring-repository/agents/openai.yaml",
     ],
@@ -262,7 +263,9 @@ CAPABILITY_RULES["authoring-repository"] = (
     "autoritativně přímo v `product/`, zatímco kořenové `.agents/skills/` slouží pouze údržbě "
     "workspace. Produktové skills neduplikujte mezi `product/skills/` a `.agents/skills/`. "
     "Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny aplikace "
-    "napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.",
+    "napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je. "
+    "Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`: "
+    "stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.",
 )
 
 CAPABILITY_SKILLS = {
@@ -671,6 +674,7 @@ def command_validate(args: argparse.Namespace) -> int:
         for rel in (
             "docs/agent-context/repository-types.md",
             "docs/agent-context/authoring-repository-capability.md",
+            "docs/agent-context/authoring-registry-current-state-contract.md",
             ".agents/skills/maintain-authoring-repository/SKILL.md",
             ".agents/skills/manage-product-repository/SKILL.md",
             ".agents/skills/maintain-development-testing/SKILL.md",

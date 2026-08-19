@@ -10,6 +10,8 @@ description: Zakládá, klasifikuje, migruje a udržuje authoring repozitáře, 
 1. Přečtěte `docs/agent-context/repository-types.md` a
    `docs/agent-context/authoring-repository-capability.md` z helperu nebo jejich
    instalované kopie v cílovém repozitáři.
+   Při návrhu nebo revizi registry načtěte také
+   `docs/agent-context/authoring-registry-current-state-contract.md`.
 2. Určete primární typ repozitáře. Authoring repozitář vytváří a ověřuje přenositelné
    definice, konfigurace, skills, kontrakty nebo authoring nástroje; není runtime
    implementací ani jednou klientskou aplikací.
@@ -43,6 +45,10 @@ python toolkit/agent-infrastructure/repository_architecture.py install-capabilit
 Capability instaluje i lokální product boundary a potřebný kontext. Cílový Product
 repository, credentials a synchronizační workflow nevymýšlejte; doplňte je až při
 výslovném požadavku pomocí `manage-product-repository`.
+
+Registry standardně publikuje pouze aktuální validovaný stav na stabilních cestách.
+Digest slouží k detekci změny, ověření integrity a resolution locku, nikoli jako
+cloudový adresář. Odchylku od current-state kontraktu doložte samostatným ADR.
 
 ## Hranice rolí
 

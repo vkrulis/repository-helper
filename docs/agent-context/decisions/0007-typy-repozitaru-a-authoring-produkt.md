@@ -56,6 +56,9 @@ nenahrazuje zdroje pravdy runtime, authoringu nebo klientského projektu.
 
 ## Důsledky
 
+Výchozí cloudovou distribuci registrů těchto authoring produktů upřesňuje
+[ADR-0008](0008-current-state-distribuce-authoring-registru.md).
+
 - Repository-helper distribuuje capability `authoring-repository` a skill
   `maintain-authoring-repository` včetně produktové kostry a validace.
 - Authoring capability závisí na `product-repository` a `development-testing`.

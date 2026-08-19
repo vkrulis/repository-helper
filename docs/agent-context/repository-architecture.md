@@ -310,6 +310,10 @@ testování. Podrobný kontrakt je v `authoring-repository-capability.md`.
 Flexideo-orchestrator je nadřazená authoring entita ekosystému: načítá registry
 specializovaných authoring produktů a koordinuje finální tvorbu a úpravy aplikací, aniž
 by kopíroval jejich detailní skills nebo implementaci.
+Specialisté i orchestrátor používají společný
+[current-state distribuční kontrakt](authoring-registry-current-state-contract.md):
+Git uchovává historii, cloud vystavuje aktuální validovaný obsah na stabilních cestách
+a resolver ověřuje SHA-256 digests do resolution locku.
 
 ## Rozšíření pro klientský implementační projekt
 

@@ -17,6 +17,7 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 - `repository-architecture.md` – cílový model repozitáře.
 - `repository-types.md` – autoritativní taxonomie development, authoring, client-project a documentation repozitářů.
 - `authoring-repository-capability.md` – produktová hranice a role specializovaného a orchestračního authoringu.
+- `authoring-registry-current-state-contract.md` – společná stabilní cloudová topologie, digestová semantika a publish/resolve pravidla authoring registrů.
 - `migration-policy.md` – zásady bezpečné reorganizace.
 - `platform-connector-scenarios.md` – předdefinované tenké konektory.
 - `profile-schema.md` – kanonický formát `.agent.md` profilů.

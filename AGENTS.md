@@ -103,3 +103,5 @@ autoritativně přímo v `product/`, zatímco kořenové `.agents/skills/` slou�
 workspace. Produktové skills neduplikujte mezi `product/skills/` a `.agents/skills/`.
 Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny aplikace
 napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.
+Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`:
+stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.
