@@ -106,3 +106,26 @@ transport není archivem release.
 Referenční první implementací kontraktu je XDS registry. Převzetí v Intranet, Comex
 nebo dalším authoring repozitáři má zachovat tento kontrakt, ale publisher, publish plán,
 obsah a validační evidence zůstávají ve vlastnictví daného specialisty.
+
+## Ověření v praxi: XDS private-preview 0.1.0-preview.4
+
+K 2026-08-20 byl kontrakt ověřen prvním soukromým XDS registry pilotem. Publisher v
+`Flexideo-XDS-authoring` sestavil a ověřil immutable lokální release s digestem
+`94177e6af73affbf678174f06b20cb51197f117787619bd05f8cf4e3fd036b3f`; odmítá přepsání již
+vytvořeného výstupu. Publikovaná je pouze rodina `xds-authoring` pro `domain.xds` v režimech
+`assess` a `plan`. `application.document` je správně deklarována jako `CAPABILITY_GAP`, nikoli
+jako dostupná capability.
+
+Pilot nemá tool/MCP interface, identity ani produkční data. Descriptor vede budoucí cloudovou
+URL, ale dokud není obsah skutečně nahrán a ověřen, má pravdivý `registry_state: UNAVAILABLE` a
+lifecycle `private-preview`. Tento výsledek potvrzuje zejména tyto invariants:
+
+- release se nejprve ověřuje lokálně; cloud není druhý build ani historický archiv;
+- SHA-256 slouží k ověření obsahu, cache a resolution locku, nikoli jako cloudová cesta;
+- publisher nahrává obsah před `registry.json`, aby descriptor nikdy neodkazoval na chybějící
+  objekt;
+- skutečná cloudová publikace může používat jeden sdílený R2 bucket a výhradně vlastní prefix
+  registry, například `/registries/xds/**`.
+
+Podrobný kontext referenční implementace je v
+[`Flexideo-XDS-authoring/docs/agent-context/xds-registry-pilot.md`](../../../Flexideo-XDS-authoring/docs/agent-context/xds-registry-pilot.md).
