@@ -1,5 +1,10 @@
 # Klientské nabídky
 
+Tato capability je pro helper-native klientský layout. Project Memory přijímá schválený
+immutable offer release přes řízenou MCP promotion do `imports/offers/`; není to živá
+nabídka a nevyžaduje instalaci zdejšího HTML/publikačního stromu. Viz
+[kompatibilita](client-project-memory-compatibility.md).
+
 ## Účel a zdroje pravdy
 
 `client-offers` je volitelné rozšíření `client-project`. Odděluje obchodní nabídku od implementačních epiků, takže klientský projekt může nabídky používat, ale nemusí.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Maintain Client Project"
-  short_description: "Keep client implementation work traceable"
-  default_prompt: "Use $maintain-client-project-dimension to add or maintain the client-project structure."
+  short_description: "Understand native projects and Project Memory"
+  default_prompt: "Use $maintain-client-project-dimension to identify the client-project layout and maintain context within its ownership rules."

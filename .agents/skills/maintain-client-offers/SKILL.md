@@ -5,6 +5,13 @@ description: "Zakládá a udržuje volitelný kontext klientských HTML nabídek
 
 # Udržování klientských nabídek
 
+## Hranice Project Memory
+
+Tato HTML offer capability je určena helper-native layoutu. V Project Memory nevytvářejte
+`docs/project/offers/` ani publikační strom jako náhradu MCP promotion. Schválený immutable
+offer release přenáší autorizovaná operace do `imports/offers/` se zdrojem a potvrzením;
+import není živou nabídkou. Použijte kontrakt projektu a příslušný offer nástroj.
+
 ## Hranice capability
 
 `client-offers` rozšiřuje již založený `client-project`; není povinnou součástí každého klientského projektu. Nabídka není epik a její `implementation_epic` je volitelná vazba, nikoli její identita.

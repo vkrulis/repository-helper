@@ -5,6 +5,14 @@ description: Konzervativně vyhodnocuje, vytváří, přijímá, odmítá a nahr
 
 # Maintain decision records
 
+## Project Memory
+
+Před volbou registru zkontrolujte `project.yaml` a `.project-memory/`. Analytická
+rozhodnutí Memory 0.2 jsou `DEC-*` v `project/epics/EPIC-NNNN/decisions/` a zapisují
+se sémantickou MCP operací; Memory 0.1 má historické `decisions/`. Nezrcadlete je do
+`docs/agent-context/decisions/`. Technické aplikační ADR ukládejte jen podle doloženého
+kontraktu projektu. Globální čísla a `Scope` níže jsou konvencí helper-native registru.
+
 ## Rozhodovací brána
 
 ADR navrhněte pouze tehdy, když existují alespoň dvě rozumné možnosti a rozhodnutí je současně dlouhodobé, průřezové, obtížně vratné nebo významně omezuje budoucí práci.

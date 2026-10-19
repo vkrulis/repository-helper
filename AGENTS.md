@@ -30,7 +30,14 @@ Tento repozitář je kanonickým zdrojem přenositelných skills, profilů, doku
 
 ## Repository capability: client-project
 
-Klientský projekt vede epiky jako mise: jedna mise má `Epic: <epic-id>` a rozcestník
+Nejprve rozlište helper-native layout a existující Flexideo Project Memory podle
+`project.yaml` a `.project-memory/`. Project Memory zakládá MCP a verzovaná šablona;
+helper poskytuje orientaci podle `docs/agent-context/client-project-memory-compatibility.md`.
+Nevytvářejte v ní druhé `docs/project/`, mise ani globální analytický ADR registr.
+Obecná pravidla znalostí v `docs/agent-context/` a klientské konvence níže platí pro
+helper-native repozitáře; Current Truth Project Memory zůstává v jejím kontraktu.
+
+Helper-native klientský projekt vede epiky jako mise: jedna mise má `Epic: <epic-id>` a rozcestník
 `docs/project/epics/<epic-id>/README.md`. Zdroje, artefakty a nástroje specifické pro epik patří
 do odpovídajících `*/epics/<epic-id>/`; společný obsah zůstává v kořenech. `definitions/` je
 jediný ručně spravovaný zdroj pravdy pro XDS, XCF a definiční obsah, dokud přijaté ADR neurčí jinak.
@@ -90,7 +97,7 @@ Změna je hotová pouze tehdy, když:
 
 ## Repository capability: missions
 
-V klientském projektu mise představuje epik, nikoli izolovaný úkol. Použijte název
+V helper-native klientském projektu mise představuje epik, nikoli izolovaný úkol. Použijte název
 `NN-<epic-id>.md`, metadata `Epic`, `Stav`, `Priorita`, `ADR` a společný append-only denní log.
 
 Když práce narazí na cíl přesahující jednu materiální změnu nebo s uživatelem zatím nesladěný rozsah, aktivně navrhněte založení mise skillem `maintain-missions`. Mise ukládejte do `docs/missions/NN-<slug>.md` dle `.agents/skills/maintain-missions/references/mission-template.md`, se stavem (`draft`/`reviewed`/`in-progress`/`done`/`deferred`/`rejected`) a polem `ADR:` propojeným na výsledný záznam v `docs/agent-context/decisions/`, jakmile z mise vzejde architektonicky významné rozhodnutí.

@@ -88,7 +88,11 @@ Agent má při založení nebo materiální změně mise použít skill `maintai
 
 ## Epiky v klientském projektu
 
-V klientském projektu představuje jedna mise jeden epik. Název souboru má tvar
+Tato konvence platí pouze pro helper-native layout. Flexideo Project Memory používá
+vlastní `project/epics/EPIC-NNNN/` a `project/visions/` přes sémantické MCP operace;
+nevytvářejte souběžné `docs/missions/` pro stejné cíle.
+
+V helper-native klientském projektu představuje jedna mise jeden epik. Název souboru má tvar
 `NN-<epic-id>.md` a povinné metadata jsou `Epic`, `Stav`, `Priorita` a `ADR`. Ke každému epiku
 založte rozcestník `docs/project/epics/<epic-id>/README.md`; obsah specifický pro epik patří do
 `resources/epics/<epic-id>/`, `artifacts/epics/<epic-id>/` nebo `toolkit/epics/<epic-id>/`.

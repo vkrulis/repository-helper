@@ -1,11 +1,25 @@
 ---
 name: maintain-client-project-dimension
-description: "Zakládá a dlouhodobě udržuje klientský rozměr konkrétního implementačního projektu: živé zadání, analýzy, návrhy layoutů, potvrzení klienta, trasovatelnost, zdrojový XDS nebo obdobný definiční model a odvozené artefakty. Použijte při založení klientské implementace, při jejím rozšíření o dokumentační a klientskou vrstvu nebo když je třeba zachovat tuto strukturu při automatizované práci agentem."
+description: "Rozpoznává a udržuje klientský projektový kontext: helper-native implementaci nebo existující Flexideo Project Memory. Použijte pro orientaci, trasovatelnost a posouzení vlastnictví; Project Memory nezakládá ani nenahrazuje jeho MCP operace."
 ---
 
 # Udržování klientského rozměru projektu
 
-## Základní rozlišení
+## Nejprve rozpoznejte layout
+
+Přečtěte `project.yaml` a `.project-memory/schema-version`, pokud existují. Přítomnost
+`.project-memory/` nebo Flexideo Project kontraktu znamená Project Memory či jeho neúplný
+stav; samotný obecný `project.yaml` nestačí. Nejasnou nebo budoucí verzi nereorganizujte.
+
+- **Project Memory 0.2 / Project 2 / template 2.0.0:** načtěte
+  [references/project-memory.md](references/project-memory.md) a pokračujte pouze podle ní.
+  Nevytvářejte `docs/project/`, mise ani druhou Current Truth; zakládá MCP a jeho šablona.
+- **Project Memory 0.1:** stejná reference popisuje čtecí kompatibilitu; migrace je samostatná
+  řízená operace vlastníka kontraktu.
+- **Helper-native:** níže uvedený postup zůstává pro dosavadní klientské implementace.
+  Žádný projekt automaticky nepřevádějte na Project Memory.
+
+## Základní rozlišení — pouze helper-native
 
 - `docs/project/` je kurátorovaná stopa zadání, analýzy, návrhu, potvrzení a akceptace.
 - `docs/agent-context/` je aktuální technická a doménová pravda.

@@ -38,6 +38,12 @@ Realizuje jednu konkrétní klientskou aplikaci. Vlastní zadání, projektový 
 akceptaci, trasovatelnost a jediný aktuální projektový definiční model v `definitions/`.
 Používá produkty authoring repozitářů, ale nevydává obecný platformní authoring produkt.
 
+Typ zahrnuje helper-native implementační layout i existující Flexideo Project Memory.
+U Memory se zadání a analytika řídí verzovaným kontraktem Orchestrátoru, nikoli
+`docs/project/` a misemi helperu. `definitions/` může vzniknout až při technické práci;
+vlastnictví zdrojů a generovaných výstupů určuje producent. Zakládání zajišťuje MCP
+a jeho šablona. Viz [kompatibilita](client-project-memory-compatibility.md).
+
 ## Documentation repository
 
 Konsoliduje ověřenou technickou a doménovou dokumentaci z jednotlivých vrstev a může

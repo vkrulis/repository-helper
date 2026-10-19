@@ -9,6 +9,13 @@ description: Vede stručnou, dohledatelnou a append-only pracovní historii repo
 
 Zaznamenávejte, co se v repozitáři skutečně změnilo, jak byla změna ověřena a co zůstává otevřené. Log je chronologická pracovní paměť; současný autoritativní stav patří do `docs/agent-context/` a fyzická historie změn do Gitu.
 
+## Project Memory
+
+Každá úspěšná sémantická MCP mutace už zapisuje `.logs/` ve stejném commitu.
+Pro tutéž mutaci nepřidávejte duplicitní ruční záznam; tento skill použijte pro
+materiální práci mimo MCP. Log nenahrazuje epic Session, Checkpoint ani Milestone
+a neuděluje právo měnit `.project-memory/` revizi nebo serverové indexy.
+
 ## Kdy zapisovat
 
 Zápis je povinný po materiální změně repozitáře, zejména po úpravě kódu, dokumentace, pravidel, konfigurace, struktury, nástrojů nebo veřejného chování. Více těsně souvisejících úprav shrňte jedním zápisem. Nezapisujte pouhé čtení bez výsledku, triviální diagnostiku ani každou jednotlivou editaci.

@@ -33,6 +33,11 @@ Nad celým tokem stojí `AGENTS.md`, který stanoví společná pravidla prostř
 
 ## Normativní cílová struktura
 
+Tento obecný strom je helper-native základ. Pro existující klientskou Project Memory
+má přednost její verzovaný kontrakt Orchestrátoru a
+[kompatibilitní pravidla](client-project-memory-compatibility.md). Audit její oblasti
+rozpoznává; helper nevynucuje další agent-context ani analytický strom.
+
 ```text
 repository/
 ├── README.md
@@ -320,7 +325,9 @@ a resolver ověřuje SHA-256 digests do resolution locku.
 Projekt, který zavádí konkrétní aplikaci pro jednoho klienta, potřebuje vedle
 základní architektury i čitelnou stopu zadání, analýzy, návrhu a akceptace.
 Tato vrstva nevytváří druhý zdroj technické nebo doménové pravdy: tu nadále drží
-`docs/agent-context/`. Podrobný strom, pravidla zdrojů pravdy a instalační postup
+`docs/agent-context/` v helper-native layoutu. Project Memory místo toho zachovává
+Current Truth a epiky podle svého kontraktu a vzniká výhradně přes MCP/šablonu.
+Podrobný strom, pravidla zdrojů pravdy a instalační postup
 popisuje `client-project-capability.md`.
 
 ## Rozšíření pro klientské nabídky

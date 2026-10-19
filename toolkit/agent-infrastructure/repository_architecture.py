@@ -87,6 +87,7 @@ CAPABILITY_BUNDLES = {
         "toolkit/epics/README.md",
         ".agents/skills/maintain-client-project-dimension/SKILL.md",
         ".agents/skills/maintain-client-project-dimension/agents/openai.yaml",
+        ".agents/skills/maintain-client-project-dimension/references/project-memory.md",
     ],
     "client-offers": [
         "docs/project/offers/README.md",
@@ -238,7 +239,10 @@ CAPABILITY_RULES["decision-records"] = (
 
 CAPABILITY_RULES["client-project"] = (
     "maintain-client-project-dimension",
-    "Pro klientský implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a "
+    "Nejprve rozlište helper-native layout a Project Memory podle project.yaml a .project-memory/. "
+    "Memory zakládá MCP/šablona; její Current Truth a project/epics/EPIC-NNNN respektujte podle "
+    "reference skillu, nevytvářejte druhé docs/project ani mise. Pro helper-native klientský "
+    "implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a "
     "trasovatelnost v `docs/project/`; epiky v `docs/project/epics/<epic-id>/`; aktuální technickou "
     "a doménovou pravdu v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční "
     "model v `definitions/`. `definitions/` je do přijatého rozhodnutí o jiné strategii jediný zdroj "
@@ -250,7 +254,7 @@ CAPABILITY_RULES["client-project"] = (
 
 CAPABILITY_RULES["missions"] = (
     "maintain-missions",
-    "Když práce narazí na dlouhodobý cíl, použijte skill `maintain-missions`. V klientském projektu "
+    "Když práce narazí na dlouhodobý cíl, použijte skill `maintain-missions`. V helper-native klientském projektu "
     "mise představuje epik a její `Epic: <epic-id>` určuje podpůrnou vrstvu. Mise ukládejte do "
     "`docs/missions/NN-<epic-id>.md` dle šablony, se stavem a polem `ADR:` propojeným na výsledná "
     "rozhodnutí v `docs/agent-context/decisions/`.",
@@ -298,8 +302,29 @@ def write_file(path: Path, content: str, force: bool) -> str:
     return "written"
 
 
+def project_memory_layout(root: Path) -> str | None:
+    """Conservative routing hint, not a semantic YAML/schema validator.
+
+    Any server metadata or Flexideo contract hint protects even incomplete and
+    future repositories from the generic scaffold. Ordinary project.yaml files
+    alone do not opt into Project Memory handling.
+    """
+    marker = root / ".project-memory/schema-version"
+    identity = root / "project.yaml"
+    identity_text = identity.read_text(encoding="utf-8-sig", errors="replace") if identity.is_file() else ""
+    if not (root / ".project-memory").exists() and not any(
+        hint in identity_text for hint in ("flexideo-project/", "flexideo-project-memory/")
+    ):
+        return None
+    version = marker.read_text(encoding="utf-8-sig", errors="replace").strip() if marker.is_file() else ""
+    return {"flexideo-project-memory/0.1": "0.1", "flexideo-project-memory/0.2": "0.2"}.get(version, "unknown")
+
+
 def command_init(args: argparse.Namespace) -> int:
     target = Path(args.target).resolve()
+    if project_memory_layout(target) is not None:
+        print("ACTION: Project Memory is provisioned by MCP and its versioned template; init refuses to change it, including with --force.", file=sys.stderr)
+        return 2
     target.mkdir(parents=True, exist_ok=True)
     purpose = args.purpose or "TODO: Doplňte jednovětý účel projektu."
     changes: list[tuple[str, str]] = []
@@ -435,6 +460,17 @@ def command_install_capability(args: argparse.Namespace) -> int:
     if not target.is_dir():
         print(f"Not a directory: {target}", file=sys.stderr)
         return 2
+    layout = project_memory_layout(target)
+    if layout is not None:
+        if layout == "unknown" or args.name != "client-project":
+            print("ACTION: Project Memory supports only the client-project orientation bundle here. Check its versioned contract before installing other capabilities; no files changed.", file=sys.stderr)
+            return 2
+        # No docs/project, missions, ADR registry, definitions scaffold, AGENTS
+        # rules or server metadata: the MCP template owns the target structure.
+        for rel in CAPABILITY_BUNDLES["client-project"]:
+            if rel.startswith(".agents/skills/maintain-client-project-dimension/"):
+                print(f"{write_file(target / rel, (HELPER_ROOT / rel).read_text(encoding='utf-8'), args.force):7} {rel}")
+        return sync_existing_claude_skill(target, "maintain-client-project-dimension")
     names = (*CAPABILITY_DEPENDENCIES.get(args.name, ()), args.name)
     status = 0
     for name in names:
@@ -467,9 +503,27 @@ def iter_files(root: Path) -> Iterable[Path]:
             yield path
 
 
-def classify_path(rel: str) -> str:
+def classify_path(rel: str, project_memory: bool = False) -> str:
     p = rel.replace("\\", "/")
     name = Path(p).name
+    if project_memory:
+        if p == "project.yaml":
+            return "Project Memory identity and lifecycle"
+        for prefix, classification in (
+            (".project-memory/", "server-owned Project Memory metadata"),
+            ("project/epics/", "epic-local analytical memory"),
+            ("project/visions/", "shared future intent; not Current Truth"),
+            ("context/", "shared application Current Truth"),
+            ("application/", "application identity and technical references"),
+            ("definitions/", "source definitions; check producer ownership"),
+            ("docs/reference/", "generated reference candidate; verify manifest and scope"),
+            ("docs/architecture/", "shared application architecture documentation"),
+            ("imports/", "pinned imports with provenance"),
+        ):
+            if p.startswith(prefix):
+                return classification
+        if p.split("/", 1)[0] in {"baseline", "analysis", "evidence", "decisions", "questions", "architecture", "reviews", "sessions", "checkpoints", "artifacts"}:
+            return "legacy 0.1 semantic area; check declared contract"
     if p == "README.md":
         return "README"
     if name in {"AGENTS.md", "AGENTS.override.md"}:
@@ -503,11 +557,14 @@ def classify_path(rel: str) -> str:
 
 def audit_markdown(root: Path) -> str:
     files = sorted(iter_files(root))
+    layout = project_memory_layout(root)
     lines = [
         "# Repository structure inventory",
         "",
         f"- Root: `{root}`",
         f"- File count: {len(files)}",
+        f"- Layout: {'Project Memory ' + layout if layout else 'helper-native / other (semantic review required)'}",
+        "- Project Memory: MCP/template owns provisioning and semantic writes; helper inventory does not validate semantic state." if layout else "- Project Memory markers: not detected.",
         "",
         "This is a mechanical inventory. Semantic conclusions require reading the content.",
         "",
@@ -518,7 +575,7 @@ def audit_markdown(root: Path) -> str:
     ]
     for path in files:
         rel = path.relative_to(root).as_posix()
-        lines.append(f"| `{rel}` | {classify_path(rel)} | {path.stat().st_size} |")
+        lines.append(f"| `{rel}` | {classify_path(rel, layout is not None)} | {path.stat().st_size} |")
     lines += ["", "## Known instruction files", ""]
     found = []
     for path in files:
@@ -549,8 +606,30 @@ def command_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def validate_project_memory_orientation(root: Path, layout: str) -> int:
+    """Check routing prerequisites only; MCP owns document/index/state validity."""
+    errors = []
+    if layout == "unknown":
+        errors.append("Unknown or missing Project Memory schema marker; consult the owning MCP/template, do not scaffold or migrate automatically")
+    for rel in ("README.md", "project.yaml", ".project-memory/schema-version"):
+        if not (root / rel).is_file() or (root / rel).stat().st_size == 0:
+            errors.append(f"Missing or empty Project Memory orientation file: {rel}")
+    for message in errors:
+        print(f"ERROR: {message}")
+    print("INFO: Project Memory semantic validation NOT RUN; use the owning MCP or the matching Orchestrator project_memory_repository.py validate command.")
+    if layout == "0.1":
+        print("WARN: Legacy Project Memory 0.1 is readable; migration requires a reviewed manifest and pinned head/blob SHA.")
+    if (root / "docs/project").exists() or (root / "docs/missions").exists():
+        print("WARN: Helper-native project/missions content coexists with Project Memory; review ownership without automatic moves.")
+    print("FAIL: Project Memory orientation checks" if errors else f"PASS: Project Memory {layout} orientation checks only")
+    return 1 if errors else 0
+
+
 def command_validate(args: argparse.Namespace) -> int:
     root = Path(args.target).resolve()
+    layout = project_memory_layout(root)
+    if layout is not None:
+        return validate_project_memory_orientation(root, layout)
     errors: list[str] = []
     warnings: list[str] = []
     for rel in REQUIRED_FILES:

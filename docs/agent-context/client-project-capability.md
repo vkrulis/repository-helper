@@ -1,5 +1,18 @@
 # Klientský projekt s epiky
 
+## Dva podporované layouty
+
+Primární typ zůstává `client-project`. Níže popsaný strom je **helper-native** layout
+podle ADR-0003, zachovaný pro dosavadní implementace. Existující Flexideo **Project Memory**
+má jiný kontrakt: analytika Memory 0.2 patří do `project/epics/EPIC-NNNN/`, sdílená
+Current Truth do `context/`. Helper ji nezakládá ani nepřevádí na zdejší strom.
+
+Před instalací, auditem nebo změnou přečtěte
+[kompatibilitu s Project Memory](client-project-memory-compatibility.md). Ta vyhodnocuje
+návrhy integrace Replicatoru, mapuje autority a popisuje hranice helperu.
+Přenositelnou čtecí pomůcku obsahuje
+[reference skillu](../../.agents/skills/maintain-client-project-dimension/references/project-memory.md).
+
 ## Model
 
 Klientský implementační projekt je jeden repozitář, jedna historie Git, jedna aplikace a jeden

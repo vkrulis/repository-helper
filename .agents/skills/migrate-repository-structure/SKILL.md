@@ -9,6 +9,14 @@ metadata:
 
 # Migrace struktury existujícího repozitáře
 
+## Hranice Project Memory
+
+Před obecnou migrací zkontrolujte `project.yaml` a `.project-memory/`. Strukturu Project
+Memory řídí kontrakt Orchestrátoru; tento skill nepřesouvá její analytiku do
+`docs/project/`, nezakládá paralelní mise ani nekonsoliduje Current Truth do
+`docs/agent-context/`. Přechod Memory 0.1 → 0.2 patří řízenému migračnímu nástroji
+s reviewed manifestem a připnutým head/blob SHA. Nejasnou budoucí verzi pouze zdokumentujte.
+
 ## Vstupní podmínky
 
 Před změnami musí existovat:

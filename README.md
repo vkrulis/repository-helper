@@ -13,6 +13,12 @@ Repository-helper rozlišuje čtyři primární typy repozitářů: `development
 nadřazený orchestrátor; referenčním orchestrátorem Flexideo je `Flexideo-orchestrator`.
 Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
 
+U klientských projektů rozlišuje dosavadní helper-native layout a existující Flexideo
+Project Memory. Tu zakládá MCP s verzovanou šablonou; helper poskytuje orientaci a
+respektuje její epiky, Current Truth a vlastnictví oblastí. Rozsah, instalaci čtecího
+skillu a vyhodnocení integračních návrhů popisuje
+[kompatibilita s Project Memory](docs/agent-context/client-project-memory-compatibility.md).
+
 ## Co sada obsahuje
 
 | Skill | Účel |
@@ -30,7 +36,7 @@ Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
 | `maintain-development-testing` | Zavádí bezpečný, vrstvený a frameworkově neutrální základ testování a diagnostiky. |
 | `manage-product-repository` | Zavádí bezpečnou hranici a volitelnou synchronizaci `product/` do Product repository. |
 | `maintain-authoring-repository` | Zakládá a udržuje specializovaný nebo orchestrační authoring repository s autoritativním produktem v `product/`. |
-| `maintain-client-project-dimension` | Zakládá a udržuje dokumentační rozměr klientské implementace: zadání, analýzy, návrhy, potvrzené závěry a trasovatelnost. |
+| `maintain-client-project-dimension` | Rozpoznává helper-native klientský projekt nebo Project Memory a udržuje kontext podle vlastnictví jejich oblastí. |
 | `maintain-client-offers` | Volitelně zakládá a udržuje dohledatelné klientské HTML nabídky včetně validace a preview. |
 
 ## Cílová struktura repozitáře

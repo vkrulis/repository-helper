@@ -13,6 +13,14 @@ metadata:
 
 Prokázat, že repozitář odpovídá dohodnuté struktuře a že platformní adaptéry nevytvářejí nové zdroje pravdy.
 
+## Volba kontraktu
+
+U `.project-memory/` nebo Flexideo Project kontraktu validujte proti vlastněnému Project
+Memory layoutu. Obecné povinné soubory níže platí pro helper-native repozitáře; nesmějí
+vynutit další `docs/project/`, mise, ADR registry nebo prázdné definitions v Memory.
+Helper zde hlásí pouze orientační kontrolu; sémantickou validaci spusťte samostatně
+přes matching MCP/nástroj Orchestrátoru a její výsledek uveďte odděleně.
+
 ## Kontroly
 
 Součástí kontroly je `.logs/README.md`, skill `.agents/skills/maintain-work-log/SKILL.md`, nástroj `toolkit/work-log/work-log.py` a explicitní povinnost `.logs/YYYY-MM/YYYY-MM-DD.md` v `AGENTS.md`.

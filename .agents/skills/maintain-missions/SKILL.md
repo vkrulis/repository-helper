@@ -5,6 +5,13 @@ description: Konzervativně navrhuje, zakládá a udržuje mise (střednědobé 
 
 # Maintain missions
 
+## Project Memory
+
+V existující Flexideo Project Memory použijte její kontrakt a sémantické operace pro
+`project/visions/` a `project/epics/EPIC-NNNN/`. Nevytvářejte `docs/missions/` jako
+druhé řízení stejných epiků. Pravidlo mise = epik níže platí pouze pro helper-native
+klientské projekty; Memory 0.1 neproměňujte bez řízené migrace.
+
 ## Kdy misi navrhnout
 
 Misi navrhněte, jakmile je z kontextu práce zřejmé něco velkého nebo nejasného. Posuďte čtyři otázky:

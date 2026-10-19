@@ -35,6 +35,13 @@ Zjistěte:
 - hlavní jazyky a build systémy,
 - CI/CD a deployment konfiguraci.
 
+U klientského projektu nejprve zkontrolujte `project.yaml` a `.project-memory/`.
+Project Memory 0.2 má analytiku v `project/epics/EPIC-NNNN/`; 0.1 v historických
+kořenových oblastech. Přečtěte kontrakt projektu a případně referenci
+`maintain-client-project-dimension/references/project-memory.md`. Zmapujte vlastnictví,
+Current Truth, generované reference a externí snapshoty. Nenavrhujte přesun do
+`docs/project/` ani převod epiku na misi jen kvůli obecné struktuře helperu.
+
 ### 2. Inventura agentní vrstvy
 
 Vyhledejte zejména:

@@ -12,6 +12,13 @@ metadata:
 
 Vytvořit čistý a srozumitelný základ, který je nezávislý na poskytovateli modelu a připravený pro tenké platformní konektory.
 
+## Hranice Project Memory
+
+Flexideo Project Memory zakládá MCP s verzovanou šablonou, nikoli tento skill.
+Při požadavku na takový projekt použijte jeho provisioning; helperem jej neinicializujte
+ani následně nedoplňujte obecným scaffoldem. Existující `.project-memory/` nebo Flexideo
+Project kontrakt nejprve auditujte. Níže uvedené klientské založení platí jen pro helper-native layout.
+
 ## Vstupy
 
 Zjistěte nebo rozumně odvoďte:
