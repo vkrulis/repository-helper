@@ -55,6 +55,16 @@ repozitáře, které potřebují živé inventáře aktuálního stavu kódu. In
 do cíle přes `repository_architecture.py install-capability`; při aktualizaci
 nejprve zkontrolujte lokální změny a teprve potom použijte `--force`.
 
+## Repository capability: project-documentation
+
+Pro aktuální dokumentaci klientské aplikace používejte skill `maintain-project-documentation`.
+V Project Memory je `docs/` sdílená dokumentace současného stavu mimo epiky:
+`project/epics/` drží zadání, analýzu, evidence, rozhodnutí a historii změny. Generovanou
+FDT referenci pod `docs/reference/fdt/` ručně neupravujte. XDS, intranetové settings,
+action registry ani COMEX jsou samostatné autority a dokumentační nález sám není povolením
+je změnit. Capability lze instalovat i do rozpoznané Project Memory; installer tam přidá
+jen skill, jeho referenci a read-only validační nástroj, nikoli druhý scaffold.
+
 ## Repository capability: documentation-sync
 
 Při změně chování nebo technických detailů nejprve aktualizujte doménovou dokumentaci v `docs/agent-context/`, teprve potom obecnou dokumentaci v sourozeneckém Docusaurus repozitáři. Používejte skill `maintain-documentation-sync`, vazby `general_documentation`, metadata `revised_by`/`revised_at` a validator `toolkit/agent-infrastructure/validate_documentation_metadata.py`. Před předáním vždy uživatele upozorněte, zda byla provedena doménová revize, revize obecné dokumentace a publikace.

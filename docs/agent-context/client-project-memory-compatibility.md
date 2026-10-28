@@ -81,9 +81,13 @@ bez těchto stop zůstává v obecném režimu.
 - `install-capability --name client-project`: u rozpoznané Memory 0.1/0.2 instaluje pouze
   klientský čtecí skill, UI metadata a jeho referenci, případně synchronizuje již používanou
   označenou Claude kopii. Nemění AGENTS, analytiku, definitions ani metadata serveru.
-- Ostatní instalace capability do Memory a instalace při neznámém markeru jsou v tomto
-  řezu odmítnuty bez zápisu; žádný fallback do helper-native layoutu. Jde o hranici
-  kompatibility instalačního nástroje, ne o zákaz budoucích capability schválených vlastníkem.
+- Capability `project-documentation` je po [ADR-0010](decisions/0010-project-documentation-capability.md)
+  druhou explicitně povolenou instalací do rozpoznané Memory. Instaluje pouze
+  `maintain-project-documentation`, jeho reference a read-only nástroj pod `toolkit/skills/`;
+  nevytváří `docs/` obsah, nemění AGENTS ani sémantické soubory.
+- Ostatní instalace capability do Memory a instalace při neznámém markeru jsou odmítnuty
+  bez zápisu; žádný fallback do helper-native layoutu. Jde o hranici kompatibility
+  instalačního nástroje, ne o zákaz budoucích capability schválených vlastníkem.
 
 Z kořene helperu, pro existující projekt:
 
@@ -91,6 +95,7 @@ Z kořene helperu, pro existující projekt:
 python toolkit/agent-infrastructure/repository_architecture.py audit <project-repository>
 python toolkit/agent-infrastructure/repository_architecture.py validate <project-repository>
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name client-project
+python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name project-documentation
 ```
 
 Samostatně použijte matching MCP nebo validátor vlastníka:

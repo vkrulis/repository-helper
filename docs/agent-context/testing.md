@@ -5,7 +5,9 @@
 Runner: standardní Python 3 `unittest`, bez sítě, credentials a klientských dat.
 Regrese používají dočasné adresáře s minimálními syntetickými orientačními soubory;
 nejsou to plně validní FAAM projekty. Testy ověřují ochranu proti scaffoldingu,
-neměnnost sémantických souborů, klasifikaci a výslovné omezení orientační kontroly.
+neměnnost sémantických souborů, klasifikaci, výslovné omezení orientační kontroly a
+bezpečnou instalaci `project-documentation` bez vzniku dokumentačního nebo analytického
+obsahu.
 Nativní klientský scaffold se testuje v odděleném dočasném repozitáři.
 
 ```bash
@@ -21,3 +23,12 @@ python toolkit/development/tests/project_memory_contract_smoke.py ../Flexideo-or
 
 Oba scénáře odstraňují pouze vlastní `TemporaryDirectory`, žádný klientský ani pracovní
 repozitář. CI zde nepřibývá. Povinné kontroly kolekce, architektury a logu jsou v AGENTS.md.
+
+
+## Project documentation capability
+
+Samostatný read-only validátor a inventura mají regresi v
+`toolkit/development/tests/test_project_documentation_tool.py`. Testuje prázdný repozitář,
+syntetickou Project Memory s FDT referencí, volitelnou explicitní klasifikaci
+`data/view/pseudo`, neplatnou klasifikaci a zákaz helper-native `docs/project/` uvnitř
+Project Memory.

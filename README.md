@@ -18,6 +18,9 @@ Project Memory. Tu zakládá MCP s verzovanou šablonou; helper poskytuje orient
 respektuje její epiky, Current Truth a vlastnictví oblastí. Rozsah, instalaci čtecího
 skillu a vyhodnocení integračních návrhů popisuje
 [kompatibilita s Project Memory](docs/agent-context/client-project-memory-compatibility.md).
+Pro aktuální dokumentaci aplikace lze do Project Memory bezpečně instalovat také
+`project-documentation`; tato capability nepřidává druhý analytický strom a nemění MCP
+stavy ani provisioning.
 
 ## Co sada obsahuje
 
@@ -38,6 +41,7 @@ skillu a vyhodnocení integračních návrhů popisuje
 | `maintain-authoring-repository` | Zakládá a udržuje specializovaný nebo orchestrační authoring repository s autoritativním produktem v `product/`. |
 | `maintain-client-project-dimension` | Rozpoznává helper-native klientský projekt nebo Project Memory a udržuje kontext podle vlastnictví jejich oblastí. |
 | `maintain-client-offers` | Volitelně zakládá a udržuje dohledatelné klientské HTML nabídky včetně validace a preview. |
+| `maintain-project-documentation` | Udržuje aktuální dokumentaci klientské aplikace, odděluje ji od epiků a propojuje XDS/FDT/DAD, intranet a COMEX. |
 
 ## Cílová struktura repozitáře
 
@@ -120,6 +124,7 @@ python toolkit/agent-infrastructure/repository_architecture.py install-capabilit
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name decision-records
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-project
+python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name project-documentation
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-offers
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name documentation-sync
 python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name development-testing
