@@ -94,6 +94,40 @@ class ProjectDocumentationTool(unittest.TestCase):
         self.assertEqual(result.returncode, 1, result.stdout)
         self.assertIn("must not contain helper-native docs/project", result.stdout)
 
+    def test_proposal_reference_family_is_visible_but_not_claimed_implemented(self):
+        self.memory()
+        self.write("docs/index.md", "# Dokumentace\n")
+        self.write("docs/reference/application/index.md", "# Application reference\n")
+        result = run_tool(self.root, "inventory", "--json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        report = json.loads(result.stdout)
+        self.assertTrue(report["reference_families"]["application"]["present"])
+        self.assertEqual(report["reference_families"]["application"]["status"], "proposal")
+        self.assertTrue(
+            any("proposal-stage" in item for item in report["warnings"]),
+            report["warnings"],
+        )
+
+    def test_curated_page_without_provenance_is_warning(self):
+        self.write("docs/index.md", "# Dokumentace\n")
+        self.write("docs/aplikace/funkce/fakturace.md", "# Fakturace\n\nPopis.\n")
+        result = run_tool(self.root, "inventory", "--json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        report = json.loads(result.stdout)
+        missing = report["curated_areas"]["aplikace"]["missing_provenance"]
+        self.assertIn("docs/aplikace/funkce/fakturace.md", missing)
+
+    def test_curated_page_with_provenance_passes_without_that_warning(self):
+        self.write("docs/index.md", "# Dokumentace\n")
+        self.write(
+            "docs/aplikace/funkce/fakturace.md",
+            "# Fakturace\n\n## Zdroje a aktuálnost\n\n- Ověřeno: 2026-10-28\n",
+        )
+        result = run_tool(self.root, "inventory", "--json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["curated_areas"]["aplikace"]["missing_provenance"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

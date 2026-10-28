@@ -32,3 +32,15 @@ Samostatný read-only validátor a inventura mají regresi v
 syntetickou Project Memory s FDT referencí, volitelnou explicitní klasifikaci
 `data/view/pseudo`, neplatnou klasifikaci a zákaz helper-native `docs/project/` uvnitř
 Project Memory.
+
+## Revize project documentation podle XDS authoring návrhu
+
+Regrese `test_project_documentation_tool.py` nově pokrývá:
+
+- report proposal-stage rodiny `docs/reference/application/`;
+- zachování stavu `proposal` místo tvrzení o implementaci;
+- varování u kurátorované věcné stránky bez `## Zdroje a aktuálnost`;
+- průchod stránky s uvedenou provenance sekcí.
+
+Project Memory instalační regrese zároveň ověřuje distribuci obou přenositelných referencí
+skillu bez vytvoření `docs/` nebo zásahu do analytické struktury.

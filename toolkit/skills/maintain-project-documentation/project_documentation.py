@@ -6,9 +6,15 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import sys
 
-CORE_AREAS = ("aplikace", "datovy-model", "procesy", "integrace", "provoz", "reference")
+CURATED_AREAS = ("aplikace", "datovy-model", "procesy", "integrace", "provoz")
+REFERENCE_FAMILIES = {
+    "fdt": "implemented",
+    "application": "proposal",
+    "comex": "proposal",
+    "usage": "proposal",
+    "indexes": "proposal",
+}
 ANALYTICAL_NAMES = {
     "epics", "visions", "evidence", "decisions", "questions",
     "sessions", "checkpoints", "analysis", "baseline",
@@ -21,11 +27,11 @@ FDT_REQUIRED = (
     "indexes/fdt/by-xds-id.json",
 )
 DOCUMENT_CLASSES = {"data", "view", "pseudo"}
+PROVENANCE_HEADING = "## Zdroje a aktuálnost"
 
 
 def is_project_memory(root: Path) -> bool:
-    marker = root / ".project-memory/schema-version"
-    return marker.is_file()
+    return (root / ".project-memory/schema-version").is_file()
 
 
 def read_memory_version(root: Path) -> str | None:
@@ -110,6 +116,60 @@ def validate_fdt_reference(root: Path, errors: list[str], warnings: list[str]) -
     return info
 
 
+def validate_proposed_reference_families(
+    root: Path, warnings: list[str]
+) -> dict[str, dict]:
+    reference_root = root / "docs/reference"
+    result: dict[str, dict] = {}
+    for family, status in REFERENCE_FAMILIES.items():
+        path = reference_root / family
+        present = path.is_dir()
+        entry = {
+            "present": present,
+            "status": status,
+            "markdown_files": len(list(path.rglob("*.md"))) if present else 0,
+            "json_files": len(list(path.rglob("*.json"))) if present else 0,
+            "jsonl_files": len(list(path.rglob("*.jsonl"))) if present else 0,
+        }
+        result[family] = entry
+        if not present or family == "fdt":
+            continue
+        warnings.append(
+            f"docs/reference/{family}/ is a proposal-stage generated reference family; "
+            "do not treat it as canonical without an accepted producer/packager/manifest contract."
+        )
+        if family in {"application", "comex", "usage"} and not (path / "index.md").is_file():
+            warnings.append(f"docs/reference/{family}/ exists but index.md is missing")
+    return result
+
+
+def validate_curated_pages(root: Path, warnings: list[str]) -> dict[str, dict]:
+    docs = root / "docs"
+    result: dict[str, dict] = {}
+    for area in CURATED_AREAS:
+        area_root = docs / area
+        files = list(area_root.rglob("*.md")) if area_root.is_dir() else []
+        missing_provenance: list[str] = []
+        for page in files:
+            if page.name.lower() in {"index.md", "readme.md"}:
+                continue
+            text = page.read_text(encoding="utf-8", errors="replace")
+            if PROVENANCE_HEADING not in text:
+                missing_provenance.append(page.relative_to(root).as_posix())
+        if missing_provenance:
+            for rel in missing_provenance:
+                warnings.append(
+                    f"{rel} has no '{PROVENANCE_HEADING}' section; current-state claims "
+                    "should expose scope, source, verification date and limitations."
+                )
+        result[area] = {
+            "present": area_root.is_dir(),
+            "markdown_files": len(files),
+            "missing_provenance": missing_provenance,
+        }
+    return result
+
+
 def validate(root: Path) -> tuple[list[str], list[str], dict]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -136,29 +196,23 @@ def validate(root: Path) -> tuple[list[str], list[str], dict]:
                     f"docs/{name}/ looks analytical; verify that it does not duplicate Project Memory."
                 )
 
+    curated = validate_curated_pages(root, warnings)
     fdt = validate_fdt_reference(root, errors, warnings)
+    references = validate_proposed_reference_families(root, warnings)
+
     report = {
         "project_memory": memory,
         "memory_version": version,
         "docs_present": docs.is_dir(),
+        "curated_areas": curated,
+        "reference_families": references,
         "fdt_reference": fdt,
     }
     return errors, warnings, report
 
 
 def inventory(root: Path) -> dict:
-    root = root.resolve()
-    docs = root / "docs"
-    errors, warnings, report = validate(root)
-    areas = {}
-    if docs.is_dir():
-        for name in CORE_AREAS:
-            area = docs / name
-            areas[name] = {
-                "present": area.is_dir(),
-                "markdown_files": len(list(area.rglob("*.md"))) if area.is_dir() else 0,
-            }
-    report["areas"] = areas
+    errors, warnings, report = validate(root.resolve())
     report["errors"] = errors
     report["warnings"] = warnings
     return report
@@ -197,8 +251,19 @@ def main() -> int:
     else:
         print(f"Project Memory: {report['project_memory']} ({report['memory_version'] or '-'})")
         print(f"docs/: {report['docs_present']}")
-        for name, area in report["areas"].items():
-            print(f"{name:14} present={area['present']} markdown={area['markdown_files']}")
+        print("Curated areas:")
+        for name, area in report["curated_areas"].items():
+            print(
+                f"  {name:14} present={area['present']} markdown={area['markdown_files']} "
+                f"missing-provenance={len(area['missing_provenance'])}"
+            )
+        print("Reference families:")
+        for name, family in report["reference_families"].items():
+            print(
+                f"  {name:14} status={family['status']} present={family['present']} "
+                f"md={family['markdown_files']} json={family['json_files']} "
+                f"jsonl={family['jsonl_files']}"
+            )
         fdt = report["fdt_reference"]
         print(
             "FDT reference: "

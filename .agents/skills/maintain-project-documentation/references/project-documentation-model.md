@@ -10,7 +10,7 @@ Project Memory epik odpovídá na jinou otázku:
 
 > **Proč jsme změnu otevřeli, co jsme zjistili, rozhodli, provedli a ověřili?**
 
-Proto je v Project Memory 0.2 základní hranice:
+Proto je v Project Memory základní hranice:
 
 ~~~text
 project/
@@ -27,13 +27,76 @@ docs/
 ├── integrace/
 ├── provoz/
 └── reference/
-    └── fdt/
 ~~~
 
 `docs/` je sdílená aktuální dokumentace celé aplikace napříč epiky. Není to archiv etap.
 Historii drží Git a Project Memory.
 
-## 2. Matice autorit
+## 2. Integrační rozhodnutí po revizi návrhu z XDS authoringu
+
+Zdrojový návrh `client-application-documentation-proposal.md` z 28. 10. 2026 byl
+obsahově zrevidován proti tomuto modelu. Přijímají se jeho významové hranice, identity,
+karty, typed relations, coverage a refresh pravidla. Nepřebírá se však bez dalšího jeho
+pracovní umístění ručního výkladu do `docs/agent-context/application/`, protože v cílovém
+Project Memory modelu už je pro klientskou dokumentaci vyhrazeno `docs/`.
+
+Mapování je:
+
+| Zdrojový návrh | Cílový model Project Memory |
+| --- | --- |
+| ruční funkční výklad `docs/agent-context/application/functions/` | `docs/aplikace/funkce/` |
+| ruční scénáře `docs/agent-context/application/scenarios/` | `docs/aplikace/scenare/` |
+| datová reference FDT | `docs/reference/fdt/` |
+| navržená aplikační reference | budoucí `docs/reference/application/` |
+| navržená prezentační reference | budoucí `docs/reference/comex/` |
+| navržená usage reference | budoucí `docs/reference/usage/` |
+| navržené indexy | budoucí `docs/reference/indexes/` |
+
+Tím se zachová jedna publikovatelná projektová dokumentace a současně nevznikne druhá
+Current Truth v helperovém `docs/agent-context/`.
+
+## 3. Dvě dokumentační vrstvy v `docs/`
+
+### 3.1 Kurátorovaný lidský výklad
+
+~~~text
+docs/
+├── index.md
+├── aplikace/
+├── datovy-model/
+├── procesy/
+├── integrace/
+└── provoz/
+~~~
+
+Tato část vysvětluje účel, business význam, scénáře, odpovědnosti, výjimky,
+akceptaci a provozní souvislosti. Ruční text se váže na stabilní identity technických
+prvků, ale při refreshi technické reference se nepřepisuje.
+
+### 3.2 Generované nebo odvozené technické reference
+
+Dnes je potvrzená a produkovaná rodina:
+
+~~~text
+docs/reference/fdt/
+~~~
+
+Obsahový návrh dále počítá s rodinami:
+
+~~~text
+docs/reference/
+├── application/
+├── comex/
+├── usage/
+└── indexes/
+~~~
+
+Tyto rodiny jsou **návrh k implementaci, nikoli současný hotový kontrakt**. Dokud jejich
+producenti, společný packager a manifest nepotvrdí formát, nevytvářejte je ručně jako
+kanonickou reference. Pilotní nebo pracovní výstupy držte ve stagingu mimo
+`docs/reference/`.
+
+## 4. Matice autorit
 
 | Otázka | Primární autorita | Dokumentace |
 | --- | --- | --- |
@@ -41,14 +104,16 @@ Historii drží Git a Project Memory.
 | Jaká je současná Current Truth? | `context/` + potvrzené promotion | shrnuje ji pro publikum aplikace |
 | Jaké FDT a segmenty existují? | XDS | používá generovanou FDT referenci |
 | Jak jsou XDS segmenty mapovány do DB? | DAD odvozený Replicatorem | vysvětluje významné fyzické mapování |
-| Jak je složen intranet? | x-item + saved settings + registry | vytváří karty komponent a mapu aplikace |
-| Jaké UI se generuje? | COMEX/CXD + nasazené artefakty | popisuje uživatelský obraz |
-| Co je opravdu nasazeno? | konkrétní instance/release | uvádí prostředí a datum ověření |
+| Jak je složen intranet? | x-item + saved settings + registry/buildy | odvozuje aplikační technickou referenci |
+| Jaké UI se skládá? | COMEX/CXD + registry komponent | odvozuje prezentační technickou referenci |
+| Co je opravdu nasazeno? | konkrétní instance/release/runtime | uvádí prostředí a datum ověření |
 | Jak se aplikace provozuje? | deployment/runtime konfigurace vlastníků | provozní návod bez secrets |
+| Jaký je business účel? | potvrzené projektové zadání a doménová revize | ručně udržovaný funkční výklad |
 
-## 3. Definition-driven osa Flexidea
+Významy platformních XML uzlů zůstávají u příslušných authoringů. Projektová dokumentace
+popisuje jejich **konkrétní použití v klientské aplikaci**, nikoli znovu platformní syntaxi.
 
-Flexideo aplikace se nechápe jako ručně sestavený soubor formulářů. Základní osa je:
+## 5. Definition-driven osa Flexidea
 
 ~~~text
 XDS
@@ -65,22 +130,29 @@ Intranet
  ├── x-item hlavičky a strom
  ├── saved settings
  ├── přehledy / tabulky
+ ├── UI nástroje
  ├── akce / transformace
  └── procesní uzly a vazby
         │
         ▼
 COMEX/CXD
+ ├── stránky a rámce
  ├── komponenty
- ├── nástroje
- └── stránky / výsledné UI
+ ├── modifikátory
+ ├── šablony
+ └── navigace / event connections
+        │
+        ▼
+runtime konkrétní role / prostředí
 ~~~
 
-Tento tok určuje dokumentační strategii: každá vrstva má svého vlastníka a `docs/`
-je spojuje do čitelného současného obrazu.
+Základ projektové dokumentace je proto propojená mapa:
 
-## 4. Generovaná FDT reference
+> **data → aplikační funkce → použití v UI**
 
-Replicator vlastní balík pod:
+## 6. Generovaná FDT reference
+
+Replicator vlastní současný balík pod:
 
 ~~~text
 docs/reference/fdt/
@@ -95,29 +167,23 @@ docs/reference/fdt/
     └── documents.jsonl        # volitelné/cílové doplnění producenta
 ~~~
 
-Dnešní potvrzené minimum je manifest, Markdowny FDT a segmentové indexy. `documents.jsonl`
-je vhodné cílové rozšíření pro explicitní klasifikaci dokumentových typů; skill nesmí jeho
-existenci předstírat.
+Dnešní potvrzené minimum je manifest, Markdowny FDT a segmentové indexy.
+`documents.jsonl` je vhodné cílové rozšíření pro explicitní klasifikaci typů;
+skill nesmí jeho existenci předstírat.
 
-Reference je odvozená. Obsahuje technický výklad a DAD vazby, ale nenahrazuje autorské XDS
-ani nezávislý business kontext.
+Reference je odvozená. Nenahrazuje autorské XDS ani nezávislý business kontext.
 
 ### Datový FDT
 
 Současný Replicator má technickou klasifikaci databázového dokumentu: finální
-`DocumentDef`, který:
+`DocumentDef`, který je ve `Definition_Group`, nemá neprázdné `view-of` a není
+pseudo typem.
 
-- je v `Definition_Group`;
-- nemá neprázdné `view-of`;
-- není pseudo typem.
+Tuto klasifikaci má publikovat producent nebo ji má dodat ověřený XDS specialista.
+Projektová dokumentace ji nesmí znovu heuristicky odvozovat jen z jména, tabulky nebo
+labelu.
 
-Tuto klasifikaci má publikovat producent nebo ji má dodat ověřený XDS specialista. Projektová
-dokumentace ji nesmí znovu heuristicky odvozovat jen z jména, tabulky nebo labelu.
-
-Pohledové FDT a pseudo typy jsou důležité, ale obvykle představují projekce/pomocné vrstvy,
-nikoli primární business datové entity.
-
-## 5. `docs/datovy-model/`
+## 7. `docs/datovy-model/`
 
 Tato oblast není ruční kopií XDS.
 
@@ -135,14 +201,14 @@ docs/datovy-model/
 
 ### Datové objekty
 
-Kurátorovaný seznam významných business objektů odkazuje na FDT reference:
+Kurátorovaný seznam významných business objektů odkazuje na FDT reference a může uvést:
 
 - business název;
 - FDT name;
 - XDS ID;
 - účel;
 - životní cyklus;
-- citlivost/retence, pokud je relevantní;
+- citlivost/retenci podle relevance;
 - odkaz do `reference/fdt/`.
 
 Technické segmenty a pole se neopisují ručně.
@@ -151,16 +217,14 @@ Technické segmenty a pole se neopisují ručně.
 
 Rozlišujte:
 
-1. **business vztah** – význam potvrzený doménou;
-2. **technickou XDS referenci** – zdroj/foreign/source vztah;
-3. **DAD/databázovou vazbu** – fyzické nebo logické mapování;
-4. **UI použití** – přehled či akce, která typ čte/zapisuje.
+1. business vztah potvrzený doménou;
+2. technickou XDS referenci;
+3. DAD/databázovou vazbu;
+4. použití aplikační funkcí nebo UI.
 
 Join nebo shodný DAD path sám neprokazuje business kardinalitu.
 
 ### Fyzické mapování
-
-Vysvětlujte tok:
 
 ~~~text
 business objekt
@@ -172,41 +236,13 @@ business objekt
 
 DAD je databázový obraz, ne nezávislý zdroj návrhu.
 
-## 6. Intranetová vrstva a `docs/aplikace/`
+## 8. `docs/aplikace/`
 
-Intranet definuje aplikační kompozici nad datovými typy.
+Tato oblast je **ručně kurátorovaný výklad aktuální aplikace**. Technické karty, které
+mají být regenerovatelné z instance, patří po implementaci producenta do
+`docs/reference/application/`.
 
-Základní x-item druhy relevantní pro klientskou dokumentaci:
-
-- `f` – složka;
-- `t` – přehled/tabulka; často také nosič akce/transformace;
-- `p` – procesní kontejner;
-- další typy existují a dokumentují se podle potřeby, ne plošným zjednodušením.
-
-Jedna funkční entita může vyžadovat společné čtení:
-
-1. identity instance/role;
-2. x-item hlavičky a rodičovské cesty;
-3. owning saved setting;
-4. případného settings linku;
-5. MTP parent/child přehledů;
-6. `table/transformation`, akce, registrace a buildů;
-7. access metadata a COMEX příznaku.
-
-Jeden table XML soubor proto nemusí popsat celou funkci.
-
-### Oddělené grafy
-
-Nikdy neslučujte do jedné „vazby“:
-
-- navigační rodičovství (`fdk1`);
-- procesní členství (`to_process_id` / odpovídající compiled pole);
-- settings link;
-- procesní výstupní hrany;
-- action-call graph;
-- UI nástroje/přechody.
-
-### Doporučené členění
+Doporučené členění:
 
 ~~~text
 docs/aplikace/
@@ -215,69 +251,161 @@ docs/aplikace/
 ├── strom-aplikace.md
 ├── uzivatelske-rozhrani.md
 ├── role-a-pristupy.md
-└── komponenty/
-    └── <stabilni-slug>.md
+├── funkce/
+│   └── <stable-key>.md
+└── scenare/
+    └── <stable-key>.md
 ~~~
 
-Nejde o povinné scaffoldované soubory; jde o preferované rozdělení, pokud je projekt potřebuje.
+### Funkce
 
-### Karta komponenty
+Funkce vysvětluje business cíl a používá odkazy na technické identity:
 
-Karta může mít:
+- role a odpovědnosti;
+- vstupní místo/stránku;
+- používané přehledy a akce;
+- vstupní/výstupní FDT;
+- běžný průchod a výjimky;
+- akceptační příklady;
+- odpovědného člověka a datum doménového potvrzení.
 
-- **Účel a uživatelský význam**
-- **Typ komponenty**: složka / přehled / akce / procesní uzel / jiný
-- **Identita**: oblast, scope shared/user, PDK, auto_id
-- **Navigace**: rodič a cesta
-- **Zdroj settings**: type, tb-id, user/role; případný link
-- **Data**: čtené/zapisované FDT a významné segmenty
-- **Přehled**: hlavní selecty, filtry, grouping a MTP
-- **Akce**: transformace, registry, vstupy/výstupy, dostupná prostředí
-- **Proces**: membership, output edges, automatické registrace
-- **COMEX**: stránka, komponenty, nástroje a přechody
-- **Viditelnost**: raw metadata + stav ověření
-- **Zdroje a aktuálnost**
+### Scénář
 
-Technická karta může být částečně generovaná v budoucnu. Ruční business výklad má zůstat
-oddělený od regenerovaných bloků.
+Scénář je uživatelský nebo provozní průchod konkrétní funkcí. Nemá nahrazovat technickou
+kartu přehledu, akce ani COMEX stránky.
 
-## 7. COMEX: projekce uživatelského rozhraní
+## 9. Technická aplikační reference — návrhový směr
 
-COMEX není druhý autorský strom. Vzniká z XDS/intranetových nastavení a obsahuje provozní
-popis potřebný pro formuláře, komponenty, přehledy, filtry, akce a stránky.
+Navržená budoucí rodina:
 
-Dokumentace rozlišuje:
+~~~text
+docs/reference/application/
+├── index.md
+├── tree.md
+├── folders/<key>.md
+├── views/<key>.md
+├── tools/<key>.md
+├── actions/<key>.md
+├── processes/<key>.md
+└── projections/<key>.md
+~~~
+
+Má být odvozena z aktuálních hlaviček, settings, registrací a doložených buildů.
+Nesmí se ručně udržovat jako druhý katalog.
+
+Jedna funkční entita může zahrnovat:
+
+1. x-item hlavičku a předky;
+2. owning saved setting;
+3. linkovaný zdroj settingu;
+4. MTP parent/child;
+5. transformaci nebo akci;
+6. registraci a build;
+7. procesní členství;
+8. access metadata;
+9. projekci do COMEXu.
+
+Jeden XML setting nebo jedna hlavička proto nejsou úplnou kartou funkce.
+
+## 10. Technická COMEX reference — návrhový směr
+
+Navržená budoucí rodina:
+
+~~~text
+docs/reference/comex/
+├── index.md
+├── pages/<key>.md
+├── components/<key>.md
+├── modifiers/<key>.md
+└── templates/<key>.md
+~~~
+
+COMEX je Presentation Composition Layer. Skládá existující aplikační schopnosti do
+stránek, navigace, layoutu a komponent; nerefunduje jejich doménový model ani business
+pravidla.
+
+`on_comex=true` je kandidátní metadata, nikoli důkaz existence stránky, úspěšného
+vygenerování, role-based visibility nebo spustitelnosti.
+
+Pro tvrzení o skutečném UI je třeba rozlišit:
 
 ~~~text
 autorský stav        → x-item + saved settings + registr
 odvozená UI projekce → COMEX/CXD
-skutečný uživatelský stav → nasazený runtime + role
+skutečný stav        → nasazená definice + runtime + role
 ~~~
 
-Důsledky:
+Podrobné kontrakty aplikačních a COMEX karet jsou v
+[application-comex-reference.md](application-comex-reference.md).
 
-- `on_comex=true` neznamená, že je prvek viditelný všem uživatelům;
-- uložený setting není důkaz totožné nasazené CXD;
-- administrátorský snapshot neprokazuje UI běžné role;
-- explicitní tool není jediná cesta k editaci/náhledu; existují defaultní a legacy cesty.
+## 11. Usage a společný index — návrhový směr
 
-Pro tvrzení „uživatel v roli X vidí Y“ potřebujete odpovídající roli/runtime nebo jiný
-doložený důkaz.
+Zdrojový návrh i Replicator počítají se společnou odvozenou mapou použití. Projektová
+capability nevytváří konkurenční databázi ani parser.
 
-## 8. `docs/procesy/`
+Budoucí rodiny mohou být:
+
+~~~text
+docs/reference/usage/
+docs/reference/indexes/
+~~~
+
+Index má podporovat obousměrné hledání, například:
+
+- FDT/segment → přehledy, sloupce, akce, procesy a COMEX stránky;
+- x-item/větev → settings, MTP, nástroje, akce, FDT a UI projekce;
+- akce → vyvolávající UI, další volání, čtené/zapisované typy a proces;
+- stránka/komponenta → backend, FDT, nástroje, modifikátory, šablony a konzumenti.
+
+SQLite nebo jiná databáze je obnovitelná projekce; není zdrojem pravdy a nepatří automaticky
+do Gitu.
+
+## 12. Oddělené grafy a typované vztahy
+
+Nikdy neslučujte do jedné vazby:
+
+- navigační rodičovství;
+- settings link;
+- záložku;
+- MTP členství;
+- procesní členství;
+- procesní výstup;
+- UI otevření;
+- UI vyvolání akce;
+- deklarované volání akce;
+- staticky nalezené volání;
+- typové čtení/zápis/matching;
+- segmentové použití;
+- projekci intranet → COMEX;
+- složení stránky;
+- použití šablony.
+
+Každá hrana má mít zdrojovou a cílovou identitu, druh, podmínku, stav rozlišení a
+důkaz. Stavy typu `resolved`, `ambiguous`, `dynamic`, `missing` nebo
+`out-of-scope` se nesmějí převést na jednoduché true/false bez evidence.
+
+## 13. Identity, které se nesmějí sloučit
+
+- **X-item:** instance + document scope + oblast + PDK; `auto_id` zvlášť.
+- **Setting:** instance + type/oblast + tb-id + user + language.
+- **Akce:** PDK registrace, technické jméno transformace, autorský setting a build jsou
+  samostatné identity.
+- **Proces:** kontejner má vlastní auto_id; procesní uzel vlastní auto_id; matching na
+  procesní uzel není PDK kontejneru.
+- **COMEX:** stránka, instance komponenty a plný component source jsou různé entity.
+- **Data:** dokumentový typ, DAD/SQL tabulka a intranetový přehled jsou různé entity.
+
+Popisek ani pozice ve stromu nejsou stabilní identity.
+
+## 14. `docs/procesy/`
 
 Tato oblast dokumentuje business a uživatelské procesy, ne pouze x-item `p`.
 
-Jeden business proces může používat:
+Jeden business proces může používat více FDT, přehledů, akcí, procesních uzlů, COMEX
+stránek i integrací. Vztah mezi business procesem a technickým procesním kontejnerem
+musí být explicitní, nikoli předpokládaný 1:1.
 
-- více FDT;
-- více přehledů;
-- ruční i automatické akce;
-- několik procesních uzlů;
-- COMEX stránky;
-- externí integraci.
-
-Stránka procesu má typicky:
+Typická stránka procesu obsahuje:
 
 - účel a trigger;
 - role/aktéry;
@@ -285,19 +413,16 @@ Stránka procesu má typicky:
 - hlavní kroky;
 - alternativy a výjimky;
 - stavové přechody;
-- používaná data/FDT;
-- komponenty UI;
+- FDT/data;
+- UI komponenty;
 - akce a automatizace;
 - integrace;
 - výsledný stav;
-- odkazy na technické zdroje.
+- odkazy na technické reference.
 
-X-item procesní kontejner je technická implementační entita. Business proces je dokumentační
-koncept; vztah mezi nimi má být explicitní, nikoli předpokládaný 1:1.
+## 15. `docs/integrace/`
 
-## 9. `docs/integrace/`
-
-Každá integrace má uvádět:
+Každá integrace má podle doložené implementace uvést:
 
 - účel a vlastníka protistrany;
 - směr/trigger;
@@ -306,15 +431,15 @@ Každá integrace má uvádět:
 - vstupní/výstupní FDT a mapování;
 - konkrétní akci/službu/registraci;
 - synchronní/asynchronní režim;
-- timeout/retry/idempotenci podle doložené implementace;
+- timeout/retry/idempotenci;
 - chybové stavy;
 - testovací/provozní prostředí;
 - monitoring a odpovědnost.
 
-Pokud přesný kontrakt vlastní OpenAPI, XML schéma nebo jiný strojový artefakt, Markdown jej
-vysvětluje a odkazuje na něj; neopisuje jej ručně.
+Přesný kontrakt vlastní strojově čitelný artefakt, pokud existuje; Markdown jej
+vysvětluje a odkazuje na něj.
 
-## 10. `docs/provoz/`
+## 16. `docs/provoz/`
 
 Doporučené oblasti:
 
@@ -328,64 +453,66 @@ Doporučené oblasti:
 - rollback;
 - externí provozní závislosti.
 
-Dokumentace musí rozlišit „definováno“, „vydáno“ a „nasazeno“.
+Dokumentace musí rozlišit **definováno**, **vydáno** a **nasazeno**.
 
-## 11. `docs/index.md`
+## 17. Společná hlavička technické karty
 
-Vstupní stránka má rychle vysvětlit:
+Generovaná nebo odvozená technická karta má nést alespoň:
 
-- účel aplikace;
-- hlavní uživatelské role;
-- hlavní funkční oblasti;
-- hlavní business datové objekty;
-- hlavní procesy;
-- externí systémy;
-- provozní prostředí;
-- mapu dokumentace;
-- datum/scope poslední věcné revize.
+- stabilní identitu;
+- popisek;
+- účel, pokud je potvrzen;
+- scope aplikace/instance/role/jazyka;
+- revize/otisky zdrojů;
+- čas sběru;
+- stav aktuálnosti;
+- stav ověření;
+- coverage;
+- odkazy na zdroje;
+- známé mezery.
 
-Není to changelog ani seznam epiků.
+Ruční business účel má vlastní revizi a nesmí být při regeneraci technické karty ztracen.
 
-## 12. Aktualizace po změně
+## 18. Aktuálnost a coverage
 
-Při ukončení nebo promotion epiku:
+Verze aplikace, hash zdroje a čas sběru jsou rozdílné údaje.
 
-1. identifikovat dotčené současné chování;
-2. ověřit výslednou Current Truth;
-3. regenerovat technické reference vlastněné producenty;
-4. znovu načíst dotčené intranetové settings/registry, pokud se měnily;
-5. ověřit COMEX/runtime tam, kde dokumentace tvrdí skutečné UI;
-6. změnit jen dotčené části `docs/`;
-7. odkazy na původní epic/Decision ponechat jako provenance, ne jako současný výklad;
-8. spustit validační/inventory nástroj.
+Pravidla:
 
-## 13. Generované reference a budoucí rozšíření
+- změna settingu může změnit dokumentaci bez nové replikace;
+- změna registrace/buildů může změnit akce bez změny XDS;
+- COMEX regenerace/PageEdit může změnit UI bez změny datového modelu;
+- změna parseru/resolveru může vyžadovat nové vyhodnocení nezměněných zdrojů;
+- smazání lze potvrdit až po úplném úspěšném sběru stejného scope;
+- nedostupný zdroj se nesmí vyhodnotit jako „nepoužívá se“;
+- více čtecích dávek není automaticky transakční snapshot.
 
-Dnes je potvrzená generovaná oblast:
+Z „nenalezeno“ lze udělat „v tomto scope nepoužito“ pouze při doloženém úplném pokrytí.
 
-~~~text
-docs/reference/fdt/
-~~~
+## 19. Aktualizace po epiku nebo provozní změně
 
-Budoucí oblasti:
+Při ukončení/promotion epiku:
 
-~~~text
-docs/reference/intranet/
-docs/reference/comex/
-~~~
+1. identifikujte dotčené současné chování;
+2. ověřte výslednou Current Truth;
+3. regenerujte producentem vlastněné FDT reference, pokud se změnily definice;
+4. obnovte dotčené intranetové zdroje, pokud se měnily settings/registry/buildy;
+5. obnovte COMEX projekci, pokud se měnilo UI;
+6. ověřte runtime jen tam, kde dokumentace tvrdí skutečné chování/viditelnost;
+7. změňte kurátorovaný výklad v `docs/`;
+8. historii ponechte epiku a Gitu.
 
-jsou **rezervovaný návrhový směr**, nikoli povinný současný kontrakt. Nezakládejte je, dokud
-existující authoring/producer neurčí formát, manifest, úplnost a aktualizační pravidlo.
+Refresh aplikační nebo COMEX reference nemusí čekat na novou replikaci.
 
-## 14. Minimální kvalita stránky
+## 20. Minimální kvalita kurátorované stránky
 
 Každá věcná stránka má umožnit zjistit:
 
 - co popisuje;
 - komu/čemu slouží;
-- jaké zdroje ji podporují;
-- zda jde o kurátorovaný nebo generovaný obsah;
-- jaký projekt/aplikaci/prostředí/verzi popisuje, pokud je to relevantní;
+- jaké technické identity/reference podporují tvrzení;
+- jaký projekt/aplikaci/prostředí/verzi popisuje;
+- kdy byla věcně ověřena;
 - co nebylo ověřeno.
 
 Doporučená závěrečná sekce:
@@ -399,50 +526,30 @@ Doporučená závěrečná sekce:
 - Omezení: <co tento zdroj nedokazuje>
 ~~~
 
-## 15. Co do `docs/` nepatří
+## 21. Co do `docs/` nepatří
 
 - pracovní otázky a hypotézy;
 - syrové důkazy;
 - úplné FAAM Decision Records;
 - checkpointy a session logy;
 - credentials a produkční osobní data;
-- ručně upravená kopie generované FDT reference;
-- „runtime pravda“ odvozená pouze z `on_comex`, access atributu nebo existence settingu;
-- generovaný katalog bez provenance a bez známého producenta.
+- ručně upravená kopie generované reference;
+- runtime tvrzení odvozené pouze z `on_comex`, access atributu nebo existence settingu;
+- generovaný katalog bez provenance a známého producenta.
 
-## 16. Validace
+## 22. Zdrojové podklady a jejich stav
 
-Přenositelný nástroj capability je read-only:
+Tento model byl revidován 2026-10-28 proti:
 
-~~~bash
-python toolkit/skills/maintain-project-documentation/project_documentation.py validate .
-python toolkit/skills/maintain-project-documentation/project_documentation.py inventory .
-~~~
+- `Flexideo-XDS-authoring-workspace/docs/agent-context/client-application-documentation-proposal.md`
+  z větve `develop`, blob `d604e20506ee333137b252d85eb0c20b2a3d6eb4`;
+- jeho ADR-0027, který je nadále `proposed`;
+- Replicator `application-documentation-index-architecture.md` a ADR-0046, rovněž proposal
+  pro společný usage/index kontrakt;
+- Intranet authoring application-tree/action dokumentaci;
+- COMEX authoring architekturu a kanonický validační skill;
+- existující FDT reference kontrakt a epic-first Project Memory kontrakt.
 
-Potom se vždy spouští validace vlastníka Project Memory nebo cílového repozitáře.
-
-
-## 17. Zdrojové podklady modelu
-
-Tato reference byla sestavena z aktuálně dostupných autoritativních a expertních podkladů
-k 2026-10-28:
-
-- `Flexideo-orchestrator-workspace/docs/agent-context/decisions/0065-epic-first-project-memory.md`
-  a `docs/agent-context/domain/project-memory-repository-contract.md` – hranice epiků,
-  sdíleného kontextu a `docs/`.
-- `Flexideo-replicator-workspace/docs/agent-context/fdt-reference-package.md` – generovaný
-  FDT/DAD referenční balík, manifest, indexy a jejich vlastnictví.
-- `Flexideo-replicator-workspace/product/CReplicXdsUtilities.vb` – současná technická
-  klasifikace databázového dokumentového typu versus view/pseudo.
-- `flexideo-public-documentation/supp-fxd-concept-cz/Definition-driven/index.md` –
-  definition-driven vztah XDS → FDT → DAD → Replicator → Intranet → COMEX.
-- `Flexideo-intranet-authoring/docs/agent-context/application-tree/` – x-item topologie,
-  saved settings, MTP, procesní vazby, viditelnost a analytické workflow.
-- `Flexideo-intranet-authoring/docs/agent-context/action-settings/` a registry – akce,
-  vstupy/výstupy, prostředí a vazby na UI.
-- `Flexideo-orchestrator-workspace/docs/agent-context/application-reference-usage-proposal.md`
-  – role FDT reference jako technického slovníku a hranice business výkladu.
-
-Konkrétní klientská dokumentace musí vždy ověřit, že použité reference, instance, role a
-verze patří ke stejnému aplikačnímu scope. Shodný název nebo číslo verze samo o sobě
-neprokazuje shodu obsahu.
+Proto se obsahové principy přijímají do této capability, ale **nové generované rodiny
+`application/comex/usage/indexes` se nevydávají za implementované ani za již přijatý
+packager kontrakt**.
