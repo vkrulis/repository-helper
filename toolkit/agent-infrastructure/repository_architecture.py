@@ -71,6 +71,7 @@ CAPABILITY_BUNDLES = {
         ".agents/skills/maintain-project-documentation/SKILL.md",
         ".agents/skills/maintain-project-documentation/agents/openai.yaml",
         ".agents/skills/maintain-project-documentation/references/project-documentation-model.md",
+        ".agents/skills/maintain-project-documentation/references/application-comex-reference.md",
         "toolkit/skills/maintain-project-documentation/README.md",
         "toolkit/skills/maintain-project-documentation/project_documentation.py",
     ],
@@ -733,6 +734,7 @@ def command_validate(args: argparse.Namespace) -> int:
             ".agents/skills/maintain-project-documentation/SKILL.md",
             ".agents/skills/maintain-project-documentation/agents/openai.yaml",
             ".agents/skills/maintain-project-documentation/references/project-documentation-model.md",
+            ".agents/skills/maintain-project-documentation/references/application-comex-reference.md",
             "toolkit/skills/maintain-project-documentation/README.md",
             "toolkit/skills/maintain-project-documentation/project_documentation.py",
         ):
