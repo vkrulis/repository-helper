@@ -80,6 +80,15 @@ definitions/                   # jedna XDS/XCF větev; neklonuje se podle epiků
 
 ## Validace
 
+## Volitelná projektová dokumentace
+
+Klientský projekt může nainstalovat capability `project-documentation`. V Project Memory
+používá existující sdílenou oblast `docs/` pro aktuální popis aplikace a nesmí vytvářet
+druhý analytický strom vedle `project/epics/`. V helper-native projektu je dokumentace
+aktuálního systému rovněž oddělená od `docs/project/`, které zůstává stopou zadání a
+realizace. Podrobný kontrakt je v
+[project-documentation-capability.md](project-documentation-capability.md).
+
 ## Volitelné nabídky
 
 Nabídka není epik. Projekt, který ji skutečně potřebuje, instaluje samostatnou capability `client-offers`; ta přidává `docs/project/offers/`, `resources/offers/`, `public/offers/`, `artifacts/offers/` a `toolkit/offers/`. Nabídka může později odkázat na epik, ale epik ani definiční model se kvůli tomu nekopíruje ani nepřesouvá.

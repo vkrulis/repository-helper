@@ -92,6 +92,29 @@ class ProjectMemoryCompatibility(unittest.TestCase):
         self.assertEqual(run_cli(self.root, "install-capability", "--name", "client-project").returncode, 0)
         self.assertEqual(snapshot(self.root), before_retry)
 
+    def test_project_documentation_capability_is_non_semantic_and_portable(self):
+        self.memory()
+        before = snapshot(self.root)
+        result = run_cli(self.root, "install-capability", "--name", "project-documentation")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        after = snapshot(self.root)
+        for relative, data in before.items():
+            self.assertEqual(after[relative], data, relative)
+        additions = set(after) - set(before)
+        self.assertEqual(additions, {
+            ".agents/skills/maintain-project-documentation/SKILL.md",
+            ".agents/skills/maintain-project-documentation/agents/openai.yaml",
+            ".agents/skills/maintain-project-documentation/references/project-documentation-model.md",
+            "toolkit/skills/maintain-project-documentation/README.md",
+            "toolkit/skills/maintain-project-documentation/project_documentation.py",
+        })
+        self.assertFalse((self.root / "docs/index.md").exists())
+        self.assertFalse((self.root / "docs/project").exists())
+        self.assertEqual(
+            run_cli(self.root, "install-capability", "--name", "project-documentation").returncode,
+            0,
+        )
+
     def test_incompatible_capabilities_cannot_write_even_with_force(self):
         self.memory()
         before = snapshot(self.root)
@@ -122,6 +145,7 @@ class ProjectMemoryCompatibility(unittest.TestCase):
                 before = snapshot(self.root)
                 self.assertEqual(run_cli(self.root, "validate").returncode, 1)
                 self.assertEqual(run_cli(self.root, "install-capability", "--name", "client-project", "--force").returncode, 2)
+                self.assertEqual(run_cli(self.root, "install-capability", "--name", "project-documentation", "--force").returncode, 2)
                 self.assertEqual(run_cli(self.root, "init", "--name", "Wrong", "--force").returncode, 2)
                 self.assertEqual(snapshot(self.root), before)
 

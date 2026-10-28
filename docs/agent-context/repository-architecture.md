@@ -328,7 +328,10 @@ Tato vrstva nevytváří druhý zdroj technické nebo doménové pravdy: tu nad�
 `docs/agent-context/` v helper-native layoutu. Project Memory místo toho zachovává
 Current Truth a epiky podle svého kontraktu a vzniká výhradně přes MCP/šablonu.
 Podrobný strom, pravidla zdrojů pravdy a instalační postup
-popisuje `client-project-capability.md`.
+popisuje `client-project-capability.md`. Aktuální dokumentaci skutečné klientské aplikace
+lze přidat samostatnou capability `project-documentation`; ta v Project Memory respektuje
+sdílené `docs/` mimo epiky a v helper-native projektu neplete současný stav systému s
+`docs/project/`.
 
 ## Rozšíření pro klientské nabídky
 

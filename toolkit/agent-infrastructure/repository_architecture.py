@@ -66,6 +66,14 @@ CAPABILITY_BUNDLES = {
         ".agents/skills/maintain-domain-inventories/agents/openai.yaml",
         "toolkit/domain/README.md",
     ],
+    "project-documentation": [
+        "docs/agent-context/project-documentation-capability.md",
+        ".agents/skills/maintain-project-documentation/SKILL.md",
+        ".agents/skills/maintain-project-documentation/agents/openai.yaml",
+        ".agents/skills/maintain-project-documentation/references/project-documentation-model.md",
+        "toolkit/skills/maintain-project-documentation/README.md",
+        "toolkit/skills/maintain-project-documentation/project_documentation.py",
+    ],
     "client-project": [
         "docs/project/README.md",
         "docs/project/assignment.md",
@@ -139,6 +147,7 @@ CAPABILITY_BUNDLES = {
 
 CAPABILITY_DEPENDENCIES = {
     "authoring-repository": ("product-repository", "development-testing"),
+    "project-documentation": ("client-project",),
 }
 
 CAPABILITY_TEMPLATES = {
@@ -170,6 +179,14 @@ CAPABILITY_RULES = {
         "skill `maintain-domain-inventories`. Generované inventáře ukládejte do "
         "`docs/agent-context/domain/`, generátory do `toolkit/domain/` a aktualizujte "
         "je spolu se sledovanou změnou.",
+    ),
+    "project-documentation": (
+        "maintain-project-documentation",
+        "Aktuální dokumentaci klientské aplikace udržujte skillem "
+        "`maintain-project-documentation`. V Project Memory patří současný výklad do "
+        "`docs/`, zatímco zadání, evidence a historie změny zůstávají v `project/epics/`. "
+        "Generovanou FDT referenci pod `docs/reference/fdt/` ručně neupravujte a XDS, "
+        "intranetové settings ani COMEX nepřepisujte jen z dokumentačního nálezu.",
     ),
     "client-project": (
         "maintain-client-project-dimension",
@@ -274,6 +291,7 @@ CAPABILITY_RULES["authoring-repository"] = (
 
 CAPABILITY_SKILLS = {
     "client-project": "maintain-client-project-dimension",
+    "project-documentation": "maintain-project-documentation",
     "client-offers": "maintain-client-offers",
     "missions": "maintain-missions",
     "documentation-sync": "maintain-documentation-sync",
@@ -462,15 +480,23 @@ def command_install_capability(args: argparse.Namespace) -> int:
         return 2
     layout = project_memory_layout(target)
     if layout is not None:
-        if layout == "unknown" or args.name != "client-project":
-            print("ACTION: Project Memory supports only the client-project orientation bundle here. Check its versioned contract before installing other capabilities; no files changed.", file=sys.stderr)
+        if layout == "unknown" or args.name not in {"client-project", "project-documentation"}:
+            print("ACTION: Project Memory supports only explicitly reviewed portable capabilities here. Allowed: client-project orientation and project-documentation; no files changed.", file=sys.stderr)
             return 2
         # No docs/project, missions, ADR registry, definitions scaffold, AGENTS
         # rules or server metadata: the MCP template owns the target structure.
-        for rel in CAPABILITY_BUNDLES["client-project"]:
-            if rel.startswith(".agents/skills/maintain-client-project-dimension/"):
+        if args.name == "client-project":
+            for rel in CAPABILITY_BUNDLES["client-project"]:
+                if rel.startswith(".agents/skills/maintain-client-project-dimension/"):
+                    print(f"{write_file(target / rel, (HELPER_ROOT / rel).read_text(encoding='utf-8'), args.force):7} {rel}")
+            return sync_existing_claude_skill(target, "maintain-client-project-dimension")
+        for rel in CAPABILITY_BUNDLES["project-documentation"]:
+            if (
+                rel.startswith(".agents/skills/maintain-project-documentation/")
+                or rel.startswith("toolkit/skills/maintain-project-documentation/")
+            ):
                 print(f"{write_file(target / rel, (HELPER_ROOT / rel).read_text(encoding='utf-8'), args.force):7} {rel}")
-        return sync_existing_claude_skill(target, "maintain-client-project-dimension")
+        return sync_existing_claude_skill(target, "maintain-project-documentation")
     names = (*CAPABILITY_DEPENDENCIES.get(args.name, ()), args.name)
     status = 0
     for name in names:
@@ -701,6 +727,22 @@ def command_validate(args: argparse.Namespace) -> int:
                 warnings.append("definitions/ has no project *.xds file yet; supply it and notify the user.")
             if not any(definitions_dir.glob("*.xcf")):
                 warnings.append("definitions/ has no project *.xcf file yet; supply it and notify the user.")
+    project_docs_skill = root / ".agents/skills/maintain-project-documentation/SKILL.md"
+    if project_docs_skill.exists():
+        for rel in (
+            ".agents/skills/maintain-project-documentation/SKILL.md",
+            ".agents/skills/maintain-project-documentation/agents/openai.yaml",
+            ".agents/skills/maintain-project-documentation/references/project-documentation-model.md",
+            "toolkit/skills/maintain-project-documentation/README.md",
+            "toolkit/skills/maintain-project-documentation/project_documentation.py",
+        ):
+            if not (root / rel).is_file():
+                errors.append(f"Project-documentation capability is missing {rel}")
+        if project_memory_layout(root) is None:
+            if not (root / "docs/agent-context/project-documentation-capability.md").is_file():
+                errors.append("Project-documentation capability is missing docs/agent-context/project-documentation-capability.md")
+            if agents_path.is_file() and "maintain-project-documentation" not in agents_path.read_text(encoding="utf-8", errors="replace"):
+                errors.append("AGENTS.md does not make project-documentation handling explicit")
     offers_skill = root / ".agents/skills/maintain-client-offers/SKILL.md"
     offers_root = root / "docs/project/offers"
     if offers_skill.exists() or offers_root.exists():
