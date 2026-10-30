@@ -1,0 +1,4 @@
+interface:
+  display_name: "maintain-domain-knowledge"
+  short_description: "Přenositelná správa Markdown dokumentace"
+  default_prompt: "Použij $maintain-domain-knowledge v dokumentační oblasti tohoto repozitáře podle jeho místního profilu."

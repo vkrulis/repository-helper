@@ -34,3 +34,7 @@ add-platform-connector
         ↓
 validate-repository-architecture
 ```
+
+Volitelná capability `documentation-management` distribuuje `search-markdown-content`,
+`maintain-domain-knowledge` a `review-documentation-topology`. Obecné postupy jsou
+autoritativně zde; místní profil a obsah dokumentace patří cílovému repozitáři.

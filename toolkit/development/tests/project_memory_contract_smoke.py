@@ -34,13 +34,15 @@ def main():
             raise RuntimeError("Helper must distinguish orientation from semantic validation")
         run(helper, "audit", root)
         run(helper, "install-capability", root, "--name", "client-project")
+        run(helper, "install-capability", root, "--name", "documentation-management")
+        run(helper, "validate", root)
         run(owner, "validate", root)
         for relative, content in baseline.items():
             if (root / relative).read_bytes() != content:
                 raise RuntimeError(f"Template-owned file changed: {relative}")
         if (root / "docs/project").exists() or (root / "docs/missions").exists():
             raise RuntimeError("Unexpected second analytical tree")
-    print("PASS: real MCP template remains valid and unchanged after helper reader installation")
+    print("PASS: real MCP template remains valid and unchanged after helper reader and documentation installation")
 
 
 if __name__ == "__main__":

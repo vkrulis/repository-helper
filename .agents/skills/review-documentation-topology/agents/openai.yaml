@@ -1,0 +1,4 @@
+interface:
+  display_name: "review-documentation-topology"
+  short_description: "Přenositelná správa Markdown dokumentace"
+  default_prompt: "Použij $review-documentation-topology v dokumentační oblasti tohoto repozitáře podle jeho místního profilu."

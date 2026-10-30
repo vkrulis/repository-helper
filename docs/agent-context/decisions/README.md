@@ -20,3 +20,7 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 - Stavy: `proposed`, `accepted`, `rejected`, `superseded`.
 - Přijatý nebo odmítnutý záznam významově nepřepisujte.
 - Změnu rozhodnutí zachyťte novým ADR a oba záznamy vzájemně propojte poli `Nahrazuje` a `Nahrazeno`.
+
+## Dokumentační capability
+
+- [ADR-0010](0010-documentation-management-and-project-memory-installation.md) — accepted; obecné postupy vlastní helper, lokální instalace s digesty podporuje známou Memory bez změn jejího obsahu.

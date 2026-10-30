@@ -61,3 +61,10 @@ python toolkit/agent-infrastructure/validate_skill_collection.py .
 - `--force` používejte až po kontrole diffu.
 - Nástroje neukládají credentials ani nemění Git remote.
 - Automatické nástroje nesmějí provádět sémanticky nejasné přesuny.
+
+## Dokumentační capability
+
+`agent-infrastructure/documentation_capability.py` provádí lokální instalaci s
+předběžnou kontrolou konfliktů a evidencí digestů; spouští jej repository_architecture.py.
+`skills/search-markdown-content/search_markdown.py` vyhledává Markdown pomocí AND/OR.
+Podrobnosti jsou v [kontraktu capability](../docs/agent-context/documentation-management-capability.md).

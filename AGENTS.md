@@ -112,3 +112,11 @@ Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny a
 napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.
 Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`:
 stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.
+
+## Repository capability: documentation-management
+
+Helper vlastní obecné skills `search-markdown-content`, `maintain-domain-knowledge` a
+`review-documentation-topology`; jejich konfiguraci a spravovanou distribuci určuje
+`docs/agent-context/documentation-management-capability.md`. Projektové a platformní
+obsahy zůstávají jejich vlastníkům. Instalace do známé Project Memory přidává pouze
+allowlist nástrojů a profil/manifest v .agents; nemění AGENTS, analytiku ani granty.

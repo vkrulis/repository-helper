@@ -13,6 +13,8 @@ import subprocess
 import sys
 from typing import Iterable
 
+from documentation_capability import FILES as DOCUMENTATION_FILES, install as install_documentation, installation_errors as documentation_installation_errors
+
 REQUIRED_FILES = [
     "README.md",
     "AGENTS.md",
@@ -47,6 +49,7 @@ KNOWN_AGENT_PATHS = {
 
 HELPER_ROOT = Path(__file__).resolve().parents[2]
 CAPABILITY_BUNDLES = {
+    "documentation-management": list(DOCUMENTATION_FILES),
     "work-log": [
         ".logs/README.md",
         ".agents/skills/maintain-work-log/SKILL.md",
@@ -461,9 +464,11 @@ def command_install_capability(args: argparse.Namespace) -> int:
         print(f"Not a directory: {target}", file=sys.stderr)
         return 2
     layout = project_memory_layout(target)
+    if args.name == "documentation-management":
+        return install_documentation(target, HELPER_ROOT, layout)
     if layout is not None:
         if layout == "unknown" or args.name != "client-project":
-            print("ACTION: Project Memory supports only the client-project orientation bundle here. Check its versioned contract before installing other capabilities; no files changed.", file=sys.stderr)
+            print("ACTION: Project Memory supports only client-project orientation and documentation-management here. Check its versioned contract before installing other capabilities; no files changed.", file=sys.stderr)
             return 2
         # No docs/project, missions, ADR registry, definitions scaffold, AGENTS
         # rules or server metadata: the MCP template owns the target structure.
@@ -607,8 +612,8 @@ def command_audit(args: argparse.Namespace) -> int:
 
 
 def validate_project_memory_orientation(root: Path, layout: str) -> int:
-    """Check routing prerequisites only; MCP owns document/index/state validity."""
-    errors = []
+    """Check routing prerequisites and installed tools; MCP owns semantic validity."""
+    errors = documentation_installation_errors(root, layout)
     if layout == "unknown":
         errors.append("Unknown or missing Project Memory schema marker; consult the owning MCP/template, do not scaffold or migrate automatically")
     for rel in ("README.md", "project.yaml", ".project-memory/schema-version"):
@@ -630,7 +635,7 @@ def command_validate(args: argparse.Namespace) -> int:
     layout = project_memory_layout(root)
     if layout is not None:
         return validate_project_memory_orientation(root, layout)
-    errors: list[str] = []
+    errors: list[str] = documentation_installation_errors(root, None)
     warnings: list[str] = []
     for rel in REQUIRED_FILES:
         path = root / rel

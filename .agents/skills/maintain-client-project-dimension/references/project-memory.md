@@ -88,8 +88,13 @@ Migrace vyžaduje reviewed manifest, přesný head a blob SHA. Helper-native slu
 není automaticky `EPIC-NNNN` a mise není jeho alternativní analytický stav.
 
 `repository_architecture.py audit` poskytuje mechanickou mapu.
-`repository_architecture.py validate` kontroluje u Memory pouze orientační vstupy,
+`repository_architecture.py validate` kontroluje u Memory orientační vstupy a případnou
+spravovanou dokumentační instalaci (digesty a profil),
 výslovně ne sémantickou validitu. Tu ověřte odpovídajícím MCP nebo matching nástrojem
 `product/tools/project-memory/project_memory_repository.py validate <repository>`
 z Orchestrátoru; neinstalujte jeho kopii do projektu. Jeho případná omezení vůči
 návrhům `docs/`/`definitions/` hlaste vlastníkovi, neobcházejte přesunem souborů.
+
+Dokumentační capability se instaluje explicitně pomocí `install-capability <repository>
+--name documentation-management`. Nemění tuto Memory ani neimplementuje dokumentační
+MCP API či cloudový publisher; její profil je omezen na docs a neposkytuje zápisová práva.

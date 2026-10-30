@@ -19,6 +19,14 @@ respektuje její epiky, Current Truth a vlastnictví oblastí. Rozsah, instalaci
 skillu a vyhodnocení integračních návrhů popisuje
 [kompatibilita s Project Memory](docs/agent-context/client-project-memory-compatibility.md).
 
+## Dokumentační capability
+
+Obecná správa Markdownu je ve volitelné [documentation-management](docs/agent-context/documentation-management-capability.md).
+Obsah vlastní cílový projekt, helper skills a nástroje; Projects vlastní autorizovaný web.
+Instalace `repository_architecture.py install-capability <target> --name documentation-management`
+je offline, chrání lokální změny a podporuje známou Project Memory bez změn jejího stavu.
+Piloty a publikace zatím neproběhly; příprava zůstává na develop.
+
 ## Co sada obsahuje
 
 | Skill | Účel |

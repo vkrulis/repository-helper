@@ -29,3 +29,5 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 - `client-project-memory-compatibility.md` – návrh a realizované rozpoznání Project Memory, vlastnictví oblastí a hranice vůči MCP/šabloně.
 - `testing.md` – lokální regrese ochrany Project Memory a kompatibility helper-native layoutu.
 - `client-offers-capability.md` – volitelná vrstva klientských HTML nabídek a jejich izolované publikace.
+
+- [Správa dokumentace](documentation-management-capability.md) — obecné postupy, manifest instalace a oddělené vlastnictví projektového obsahu a Projects runtime.
