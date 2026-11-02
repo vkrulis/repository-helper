@@ -11,20 +11,36 @@ Přečtěte `project.yaml` a `.project-memory/schema-version`, pokud existují. 
 `.project-memory/` nebo Flexideo Project kontraktu znamená Project Memory či jeho neúplný
 stav; samotný obecný `project.yaml` nestačí. Nejasnou nebo budoucí verzi nereorganizujte.
 
-- **Project Memory 0.2 / Project 2 / template 2.0.0:** načtěte
-  [references/project-memory.md](references/project-memory.md) a pokračujte pouze podle ní.
-  Nevytvářejte `docs/project/`, mise ani druhou Current Truth; zakládá MCP a jeho šablona.
+- **Project Memory 0.2 / Project 2 / template 2.0.0:** jde o analytickou podmnožinu
+  klientského projektu. Načtěte [references/project-memory.md](references/project-memory.md),
+  zachovejte jeho `project/`, `context/` a `.project-memory/`, ale klientský implementační
+  obal udržujte mimo ně. Nevytvářejte `docs/project/`, mise ani druhou Current Truth.
 - **Project Memory 0.1:** stejná reference popisuje čtecí kompatibilitu; migrace je samostatná
   řízená operace vlastníka kontraktu.
 - **Helper-native:** níže uvedený postup zůstává pro dosavadní klientské implementace.
   Žádný projekt automaticky nepřevádějte na Project Memory.
 
-## Základní rozlišení — pouze helper-native
+## Společný klientský implementační obal
+
+Oba layouty jsou klientský projekt a sdílejí neanalytické implementační oblasti:
+
+- `definitions/` je jediný sdílený kořen zdrojových definic konkrétní aplikace;
+- `resources/` jsou převzaté nebo diagnostické technické vstupy s proveniencí;
+- odvozené implementační výstupy se ukládají podle kontraktu jejich producenta; kořenové
+  `artifacts/` používejte jen v helper-native layoutu, protože Project Memory je rezervuje;
+- `toolkit/` je jediný kořen exaktních projektových nástrojů.
+
+Project Memory je uvnitř tohoto celku analytickou podmnožinou. Její přítomnost neruší
+primární typ `client-project` ani společný `definitions/` strom. Skutečnou XDS a `*.xcf`
+neodhadujte; pokud ještě chybějí, strukturu založte a chybějící zdroje výslovně hlaste.
+
+## Analytické rozlišení
+
+Pouze v helper-native layoutu platí:
 
 - `docs/project/` je kurátorovaná stopa zadání, analýzy, návrhu, potvrzení a akceptace.
 - `docs/agent-context/` je aktuální technická a doménová pravda.
-- `resources/` jsou převzaté nebo diagnostické vstupy s původem.
-- `definitions/` je ručně spravovaný zdrojový definiční model projektu: přímo v ní projektová
+- `definitions/` je zdrojový definiční model projektu: přímo v ní projektová
   XDS a *.xcf s aplikačním nastavením, povinně s podsložkami `data/`, `temps/`, `print-temps/`
   a `site-files/`; `artifacts/` jsou odvozené výstupy.
 - `.logs/` je append-only chronologie a Git fyzická historie.
@@ -36,7 +52,7 @@ HTML nabídky, nainstalujte samostatnou capability `client-offers` a použijte
 Přečtěte `docs/agent-context/client-project-capability.md` z helperu nebo jeho přiloženou
 kopii v cílovém projektu před založením nové struktury.
 
-## Postup
+## Postup pro helper-native analytickou vrstvu
 
 ### Epiková vrstva
 
@@ -56,7 +72,8 @@ pevnou runtime cestou nedělte ani nekopírujte podle epiků.
    ověření. Odkazujte, nekopírujte.
 5. U návrhů layoutů evidujte zdroj, vlastníka, revizi a datum ověření. Do repozitáře ukládejte
    jen oprávněné exporty a vysvětlení jejich vztahu k implementaci.
-6. U zdrojového modelu zachovejte jednu ručně spravovanou větev. Generované výstupy nečistěte ani
+6. U zdrojového modelu zachovejte jednu autoritativní větev a evidujte jejího producenta.
+   Generované výstupy nečistěte ani
    nepřepisujte bez doloženého generátoru a rozhodnuté strategie verzování.
    Založte `definitions/` vždy povinně se všemi čtyřmi podsložkami `definitions/data/`,
    `definitions/temps/`, `definitions/print-temps/` a `definitions/site-files/` — a to i tehdy,

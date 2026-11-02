@@ -5,7 +5,7 @@
 - Vlastník: správci Repository-helper
 - Scope: shared
 - Nahrazuje: —
-- Nahrazeno: [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — částečně: další explicitně povolená dokumentační instalace; provisioning a sémantické hranice zůstávají platné.
+- Nahrazeno: [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — částečně: další explicitně povolená dokumentační instalace; [ADR-0013](0013-project-memory-as-client-project-subset.md) — částečně: Project Memory je analytická podmnožina klientského projektu, nikoli alternativní celý layout. Provisioning a sémantické hranice zůstávají platné.
 
 ## Kontext a problém
 

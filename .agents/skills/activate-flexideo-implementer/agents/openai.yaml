@@ -1,0 +1,4 @@
+interface:
+  display_name: "Activate Flexideo Implementer"
+  short_description: "Activate local Flexideo implementation skills"
+  default_prompt: "Use $activate-flexideo-implementer to load the verified local FCL bootstrap for this client project and implementation task."

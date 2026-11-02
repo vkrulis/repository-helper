@@ -14,6 +14,8 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 
 ## Obsah
 
+- [Aktivace Flexideo Implementátora](flexideo-implementer-capability.md) – přenosný projektový zavaděč, uživatelská registrace umístění a řízená instalace.
+
 - `repository-architecture.md` – cílový model repozitáře.
 - `repository-types.md` – autoritativní taxonomie development, authoring, client-project a documentation repozitářů.
 - `authoring-repository-capability.md` – produktová hranice a role specializovaného a orchestračního authoringu.
@@ -28,7 +30,7 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 - `client-project-capability.md` – struktura a udržování klientského implementačního projektu.
 - `client-project-memory-compatibility.md` – návrh a realizované rozpoznání Project Memory, vlastnictví oblastí a hranice vůči MCP/šabloně.
 - `project-documentation-capability.md` – hranice aktuální projektové dokumentace vůči epikům a propojení XDS/FDT/DAD, intranetu a COMEXu.
-- `testing.md` – lokální regrese ochrany Project Memory a kompatibility helper-native layoutu.
+- `testing.md` – lokální regrese klientského obalu, ochrany Project Memory a kompatibility helper-native analytické podmnožiny.
 - `client-offers-capability.md` – volitelná vrstva klientských HTML nabídek a jejich izolované publikace.
 
 - [Správa dokumentace](documentation-management-capability.md) — obecné postupy, manifest instalace a oddělené vlastnictví projektového obsahu a Projects runtime.

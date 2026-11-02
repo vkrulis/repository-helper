@@ -1,7 +1,9 @@
 # Orientace v existující Project Memory
 
 Ověřeno proti lokálnímu kontraktu Orchestrátoru a ADR-0065 dne 2026-10-19.
-Tato reference je čtecí interpretační pomůcka, nikoli šablona, schéma ani oprávnění k zápisu.
+Tato reference je interpretační pomůcka, nikoli šablona Project Memory, její schéma ani
+oprávnění k sémantickému zápisu. Project Memory je analytickou podmnožinou nadřazeného
+klientského implementačního repozitáře typu `client-project`.
 Autoritu drží `Flexideo-orchestrator/docs/agent-context/domain/project-memory-repository-contract.md`,
 `product/contracts/project-v2.schema.json`, `project-memory-v0.2.schema.json` a odpovídající MCP.
 Ve workspace používejte relativní sourozeneckou cestu `../Flexideo-orchestrator`.
@@ -34,9 +36,10 @@ Ve workspace používejte relativní sourozeneckou cestu `../Flexideo-orchestrat
 | `.logs/` | Append-only pracovní chronologie, odlišná od Session, Checkpoint a Milestone. |
 | `.agents/`, `toolkit/`, `AGENTS.md` | Provozní capability a pravidla šablony/správce, nikoli analytická paměť. |
 
-Sdílený kód a regresní scénáře zachovávají své projektové cesty. Povolená oblast nemusí
-být materializována; absence prázdné složky není chyba. Nevynucujte XDS/XCF ani čtyři
-podsložky definitions u projektu, který teprve prochází analýzou.
+Sdílený kód a regresní scénáře zachovávají své projektové cesty. Klientský obal materializuje
+`definitions/` s podsložkami `data/`, `temps/`, `print-temps/` a `site-files/`, i když skutečná
+XDS/XCF ještě chybí. Samotné soubory XDS/XCF nevynucujte ani nevytvářejte odhadem; jejich
+producenta, původ a autoritu je nutné ověřit. Ostatní volitelné oblasti nevytvářejte dekorativně.
 
 ## Zápisy a údržba
 

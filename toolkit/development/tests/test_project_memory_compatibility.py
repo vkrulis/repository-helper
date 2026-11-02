@@ -71,20 +71,37 @@ class ProjectMemoryCompatibility(unittest.TestCase):
             self.assertEqual(result.returncode, 2, result.stdout)
             self.assertEqual(snapshot(self.root), before)
 
-    def test_install_only_distributes_portable_reader_and_preserves_template(self):
+    def test_install_adds_client_shell_around_memory_and_preserves_semantics(self):
         self.memory()
         before = snapshot(self.root)
         result = run_cli(self.root, "install-capability", "--name", "client-project")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         after = snapshot(self.root)
         for relative, data in before.items():
-            self.assertEqual(after[relative], data, relative)
+            if relative != "AGENTS.md":
+                self.assertEqual(after[relative], data, relative)
         additions = set(after) - set(before)
         self.assertEqual(additions, {
+            "resources/README.md",
+            "resources/client-inputs/README.md",
+            "resources/diagnostics/README.md",
+            "definitions/README.md",
+            "definitions/data/README.md",
+            "definitions/temps/README.md",
+            "definitions/print-temps/README.md",
+            "definitions/site-files/README.md",
             ".agents/skills/maintain-client-project-dimension/SKILL.md",
             ".agents/skills/maintain-client-project-dimension/agents/openai.yaml",
             ".agents/skills/maintain-client-project-dimension/references/project-memory.md",
+            ".agents/skills/activate-flexideo-implementer/SKILL.md",
+            ".agents/skills/activate-flexideo-implementer/agents/openai.yaml",
+            ".agents/capabilities/flexideo-implementer.json",
+            "toolkit/skills/activate-flexideo-implementer/activate.py",
         })
+        self.assertIn("maintain-client-project-dimension", after["AGENTS.md"].decode("utf-8"))
+        self.assertFalse((self.root / "docs/project").exists())
+        self.assertFalse((self.root / "docs/missions").exists())
+        self.assertEqual(run_cli(self.root, "validate").returncode, 0)
         # A second install cannot overwrite a local reader customization by default.
         skill = self.root / ".agents/skills/maintain-client-project-dimension/SKILL.md"
         skill.write_text("Local customization\n", encoding="utf-8")
@@ -135,8 +152,11 @@ class ProjectMemoryCompatibility(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout)
         self.assertIn("Legacy Project Memory 0.1", result.stdout)
         self.assertEqual(run_cli(self.root, "install-capability", "--name", "client-project").returncode, 0)
+        after = snapshot(self.root)
         for relative, data in before.items():
-            self.assertEqual(snapshot(self.root)[relative], data, relative)
+            if relative != "AGENTS.md":
+                self.assertEqual(after[relative], data, relative)
+        self.assertTrue((self.root / "definitions/README.md").is_file())
 
     def test_unknown_and_incomplete_memory_never_fall_back_to_native(self):
         for marker in ("flexideo-project-memory/9.9\n", ""):

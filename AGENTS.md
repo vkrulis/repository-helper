@@ -30,12 +30,14 @@ Tento repozitář je kanonickým zdrojem přenositelných skills, profilů, doku
 
 ## Repository capability: client-project
 
-Nejprve rozlište helper-native layout a existující Flexideo Project Memory podle
-`project.yaml` a `.project-memory/`. Project Memory zakládá MCP a verzovaná šablona;
-helper poskytuje orientaci podle `docs/agent-context/client-project-memory-compatibility.md`.
-Nevytvářejte v ní druhé `docs/project/`, mise ani globální analytický ADR registr.
-Obecná pravidla znalostí v `docs/agent-context/` a klientské konvence níže platí pro
-helper-native repozitáře; Current Truth Project Memory zůstává v jejím kontraktu.
+Klientský projekt je nadřazený implementační celek. Existující Flexideo Project Memory
+rozpoznaná podle `project.yaml` a `.project-memory/` je pouze jeho analytickou podmnožinou,
+kterou zakládá MCP a verzovaná šablona. Helper doplňuje neanalytický klientský obal podle
+`docs/agent-context/client-project-memory-compatibility.md`: jeden `definitions/` strom,
+technické vstupy v `resources/` a provozní capability. Kořenové `artifacts/` v Project
+Memory nematerializujte; cestu výstupů určuje kontrakt jejich producenta. Nevytvářejte
+v ní druhé `docs/project/`, mise ani globální analytický ADR registr; Current Truth zůstává
+v kontraktu Project Memory.
 
 Helper-native klientský projekt vede epiky jako mise: jedna mise má `Epic: <epic-id>` a rozcestník
 `docs/project/epics/<epic-id>/README.md`. Zdroje, artefakty a nástroje specifické pro epik patří
@@ -48,7 +50,7 @@ ADR mají globální čtyřmístné číslo a povinné `Scope: shared|<epic-id>`
 vznikat souběžně pod dočasným názvem; konečné číslo se přiděluje při integraci a validátor odmítne
 duplicitní číslo.
 
-Pro klientský implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a trasovatelnost v `docs/project/`; aktuální technickou a doménovou pravdu v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční model (projektová XDS a *.xcf) v `definitions/`, povinně s podsložkami `definitions/data/`, `definitions/temps/`, `definitions/print-temps/` a `definitions/site-files/`. Pokud projektová XDS nebo *.xcf ještě nejsou k dispozici, upozorněte uživatele, že je třeba je dodat dodatečně. Použijte skill `maintain-client-project-dimension` při založení nebo materiální změně této struktury.
+Pro klientský implementační projekt udržujte zadání a analytiku v autoritě zvoleného layoutu: helper-native používá `docs/project/` a `docs/agent-context/`, Project Memory používá `project/epics/` a `context/`. Oba layouty mají vstupy v `resources/` a jediný sdílený definiční model (projektová XDS a *.xcf) v `definitions/`, povinně s podsložkami `definitions/data/`, `definitions/temps/`, `definitions/print-temps/` a `definitions/site-files/`. Pokud projektová XDS nebo *.xcf ještě nejsou k dispozici, upozorněte uživatele, že je třeba je dodat dodatečně. Použijte skill `maintain-client-project-dimension` při založení nebo materiální změně této struktury.
 
 Capability `domain-inventories` poskytuje skill `maintain-domain-inventories` pro
 repozitáře, které potřebují živé inventáře aktuálního stavu kódu. Instalujte jej
@@ -124,6 +126,14 @@ ale změnu nevykonává. Flexideo-orchestrator je platformní a projektový orch
 mapu ani authoring bootstrap neduplikuje.
 Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`:
 stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.
+
+## Repository capability: flexideo-implementer
+
+Pro lokální implementační úkol klientské aplikace použijte `activate-flexideo-implementer`.
+Helper instaluje pouze zavaděč a jeho nástroj, umístění externího produktu patří
+do uživatelského registru mimo repozitáře. FCL vlastní mapu a authoring resolution.
+Samostatná instalace do známé Project Memory nemění projektová pravidla ani sémantický obsah;
+aktivační výsledek vyžaduje explicitní načtení vrácených instrukcí a bootstrapu.
 
 ## Repository capability: documentation-management
 

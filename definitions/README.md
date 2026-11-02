@@ -1,11 +1,11 @@
 # Definice projektu
 
-Kořenová složka ručně spravovaného definičního modelu konkrétní klientské implementace.
+Jediný sdílený kořen zdrojového definičního modelu konkrétní klientské implementace.
 Přímo v této složce leží projektová zdrojová XDS (např. `<projekt>.xds`) a *.xcf soubory
 s aplikačním nastavením projektu (např. `<projekt>.xcf`, `<projekt>_PROD.xcf`).
 
-Tyto soubory nejsou generovány helperem — dodává je autor projektu nebo se přebírají z
-existující implementace. Pokud při založení klientského rozměru ještě nejsou k dispozici,
+Tyto soubory nejsou generovány helperem. Před jejich přidáním určete producenta a rozlište
+autoritativní zdroj od generovaného výstupu. Pokud při založení klientského rozměru ještě nejsou k dispozici,
 založte přesto tuto složku i všechny povinné podsložky níže a výslovně upozorněte uživatele,
 že projektovou XDS a *.xcf je třeba dodat dodatečně.
 
