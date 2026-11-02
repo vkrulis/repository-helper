@@ -33,10 +33,11 @@ Nad celým tokem stojí `AGENTS.md`, který stanoví společná pravidla prostř
 
 ## Normativní cílová struktura
 
-Tento obecný strom je helper-native základ. Pro existující klientskou Project Memory
-má přednost její verzovaný kontrakt Orchestrátoru a
-[kompatibilitní pravidla](client-project-memory-compatibility.md). Audit její oblasti
-rozpoznává; helper nevynucuje další agent-context ani analytický strom.
+Tento obecný strom je helper-native základ. Klientský projekt je nadřazený implementační
+celek; existující Project Memory je jeho analytická podmnožina s verzovaným kontraktem
+Orchestrátoru a [kompatibilitními pravidly](client-project-memory-compatibility.md).
+Helper k ní doplňuje `definitions/`, technické `resources/` a provozní
+capability, ale nevynucuje druhý agent-context ani analytický strom.
 
 ```text
 repository/
@@ -323,11 +324,13 @@ a resolver ověřuje SHA-256 digests do resolution locku.
 
 ## Rozšíření pro klientský implementační projekt
 
-Projekt, který zavádí konkrétní aplikaci pro jednoho klienta, potřebuje vedle
-základní architektury i čitelnou stopu zadání, analýzy, návrhu a akceptace.
-Tato vrstva nevytváří druhý zdroj technické nebo doménové pravdy: tu nadále drží
-`docs/agent-context/` v helper-native layoutu. Project Memory místo toho zachovává
-Current Truth a epiky podle svého kontraktu a vzniká výhradně přes MCP/šablonu.
+Projekt, který zavádí konkrétní aplikaci pro jednoho klienta, je nadřazený implementační
+celek s jediným `definitions/` stromem a technickými vstupy. Cestu odvozených výstupů
+určuje kontrakt jejich producenta; kořenové `artifacts/` se v Project Memory nepoužívá.
+Jeho analytickou podmnožinou je buď helper-native stopa zadání, analýzy, návrhu a akceptace, nebo Project
+Memory. Helper-native pravdu drží `docs/agent-context/`; Project Memory zachovává Current
+Truth a epiky podle svého kontraktu a vzniká výhradně přes MCP/šablonu. Obě varianty
+nesmějí vytvořit druhý analytický zdroj pravdy.
 Podrobný strom, pravidla zdrojů pravdy a instalační postup
 popisuje `client-project-capability.md`. Aktuální dokumentaci skutečné klientské aplikace
 lze přidat samostatnou capability `project-documentation`; ta v Project Memory respektuje

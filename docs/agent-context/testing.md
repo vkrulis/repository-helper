@@ -6,8 +6,10 @@ Runner: standardní Python 3 `unittest`, bez sítě, credentials a klientských 
 Regrese používají dočasné adresáře s minimálními syntetickými orientačními soubory;
 nejsou to plně validní FAAM projekty. Testy ověřují ochranu proti scaffoldingu,
 neměnnost sémantických souborů, klasifikaci, výslovné omezení orientační kontroly a
-bezpečnou instalaci `project-documentation` bez vzniku dokumentačního nebo analytického
-obsahu.
+instalaci neanalytického klientského obalu kolem Project Memory. Ověřují vznik
+`definitions/`, technických `resources/` a pravidla v `AGENTS.md`, současně
+se zákazem druhého `docs/project/` nebo misí. `project-documentation` se instaluje bez
+vzniku dokumentačního nebo analytického obsahu.
 Nativní klientský scaffold se testuje v odděleném dočasném repozitáři.
 
 ```bash

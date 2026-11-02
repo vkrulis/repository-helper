@@ -1,23 +1,27 @@
 # Klientský projekt s epiky
 
-## Dva podporované layouty
+## Nadřazený klientský projekt a dvě analytické podmnožiny
 
-Primární typ zůstává `client-project`. Níže popsaný strom je **helper-native** layout
-podle ADR-0003, zachovaný pro dosavadní implementace. Existující Flexideo **Project Memory**
-má jiný kontrakt: analytika Memory 0.2 patří do `project/epics/EPIC-NNNN/`, sdílená
-Current Truth do `context/`. Helper ji nezakládá ani nepřevádí na zdejší strom.
+Primární a nadřazený typ je vždy `client-project`. Sdílený implementační obal obsahuje
+zejména `definitions/`, `resources/`, `toolkit/` a Git historii. Kořenové `artifacts/` je
+součástí pouze helper-native varianty; v Project Memory je rezervováno jejím kontraktem.
+Níže popsaný
+strom `docs/project/` je **helper-native analytická podmnožina** podle ADR-0003. Flexideo
+**Project Memory** je druhá analytická podmnožina: její epiky patří do
+`project/epics/EPIC-NNNN/` a sdílená Current Truth do `context/`. Helper ji nezakládá ani
+nepřevádí na helper-native analytický strom.
 
 Před instalací, auditem nebo změnou přečtěte
 [kompatibilitu s Project Memory](client-project-memory-compatibility.md). Ta vyhodnocuje
 návrhy integrace Replicatoru, mapuje autority a popisuje hranice helperu.
-Přenositelnou čtecí pomůcku obsahuje
+Přenositelnou orientační pomůcku obsahuje
 [reference skillu](../../.agents/skills/maintain-client-project-dimension/references/project-memory.md).
 
 ## Model
 
 Klientský implementační projekt je jeden repozitář, jedna historie Git, jedna aplikace a jeden
-ručně spravovaný definiční model v `definitions/`. Dlouhodobé ucelené podtéma se vede jako epik;
-v klientském projektu je jedna mise právě jeden epik.
+sdílený zdrojový definiční model v `definitions/`. V helper-native analytické podmnožině se
+dlouhodobé ucelené podtéma vede jako mise/epik; v Project Memory jej vlastní její epic kontrakt.
 
 Společný obsah zůstává v projektových kořenech. Obsah specifický pro epik se odděluje jen tam,
 kde tím nevznikne druhý zdroj pravdy nebo se nezmění runtime/deployment cesta.

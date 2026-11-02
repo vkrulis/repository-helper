@@ -14,6 +14,7 @@ import sys
 from typing import Iterable
 
 from documentation_capability import FILES as DOCUMENTATION_FILES, install as install_documentation, installation_errors as documentation_installation_errors
+from flexideo_implementer_capability import FILES as IMPLEMENTER_FILES, install as install_implementer, installation_errors as implementer_installation_errors
 
 REQUIRED_FILES = [
     "README.md",
@@ -49,6 +50,7 @@ KNOWN_AGENT_PATHS = {
 
 HELPER_ROOT = Path(__file__).resolve().parents[2]
 CAPABILITY_BUNDLES = {
+    "flexideo-implementer": list(IMPLEMENTER_FILES),
     "documentation-management": list(DOCUMENTATION_FILES),
     "work-log": [
         ".logs/README.md",
@@ -148,6 +150,23 @@ CAPABILITY_BUNDLES = {
         ".agents/skills/maintain-authoring-repository/agents/openai.yaml",
     ],
 }
+
+# Project Memory is the analytical subset of a client-project repository.  Its
+# own project/, context/ and .project-memory/ areas remain template/MCP-owned;
+# the helper installs only the non-analytical client implementation shell.
+PROJECT_MEMORY_CLIENT_PROJECT_BUNDLE = [
+    "resources/README.md",
+    "resources/client-inputs/README.md",
+    "resources/diagnostics/README.md",
+    "definitions/README.md",
+    "definitions/data/README.md",
+    "definitions/temps/README.md",
+    "definitions/print-temps/README.md",
+    "definitions/site-files/README.md",
+    ".agents/skills/maintain-client-project-dimension/SKILL.md",
+    ".agents/skills/maintain-client-project-dimension/agents/openai.yaml",
+    ".agents/skills/maintain-client-project-dimension/references/project-memory.md",
+]
 
 CAPABILITY_DEPENDENCIES = {
     "authoring-repository": ("product-repository", "development-testing"),
@@ -260,13 +279,15 @@ CAPABILITY_RULES["decision-records"] = (
 
 CAPABILITY_RULES["client-project"] = (
     "maintain-client-project-dimension",
-    "Nejprve rozlište helper-native layout a Project Memory podle project.yaml a .project-memory/. "
-    "Memory zakládá MCP/šablona; její Current Truth a project/epics/EPIC-NNNN respektujte podle "
-    "reference skillu, nevytvářejte druhé docs/project ani mise. Pro helper-native klientský "
+    "Klientský projekt je nadřazený implementační celek. Nejprve rozlište jeho helper-native "
+    "analytickou podmnožinu a Project Memory podle project.yaml a .project-memory/. Memory "
+    "zakládá MCP/šablona; její Current Truth a project/epics/EPIC-NNNN respektujte podle "
+    "reference skillu a nevytvářejte druhé docs/project ani mise. V obou variantách udržujte "
+    "jeden sdílený definiční model v definitions/ a technické vstupy v resources/. Cestu "
+    "odvozených výstupů určujte podle kontraktu jejich producenta. Pro helper-native klientský "
     "implementační projekt udržujte zadání, analýzy, návrhy, potvrzené závěry a "
     "trasovatelnost v `docs/project/`; epiky v `docs/project/epics/<epic-id>/`; aktuální technickou "
-    "a doménovou pravdu v `docs/agent-context/`, vstupy v `resources/` a ručně spravovaný definiční "
-    "model v `definitions/`. `definitions/` je do přijatého rozhodnutí o jiné strategii jediný zdroj "
+    "a doménovou pravdu v `docs/agent-context/`. `definitions/` je do přijatého rozhodnutí o jiné strategii jediný zdroj "
     "pravdy. Obsah specifický pro epik patří do `resources/epics/<epic-id>/`, "
     "`artifacts/epics/<epic-id>/` nebo `toolkit/epics/<epic-id>/`; definiční soubory přesouvejte jen "
     "když se nezmění jejich runtime cesta. Použijte skill `maintain-client-project-dimension` při "
@@ -487,17 +508,26 @@ def command_install_capability(args: argparse.Namespace) -> int:
     layout = project_memory_layout(target)
     if args.name == "documentation-management":
         return install_documentation(target, HELPER_ROOT, layout)
+    if args.name == "flexideo-implementer":
+        return install_implementer(target, HELPER_ROOT, layout)
+    if args.name == "client-project":
+        status = install_implementer(target, HELPER_ROOT, layout)
+        if status:
+            return status
     if layout is not None:
         if layout == "unknown" or args.name not in {"client-project", "project-documentation"}:
             print("ACTION: Project Memory supports only explicitly reviewed portable capabilities here. Allowed: client-project orientation, project-documentation, and documentation-management; no files changed.", file=sys.stderr)
             return 2
-        # No docs/project, missions, ADR registry, definitions scaffold, AGENTS
-        # rules or server metadata: the MCP template owns the target structure.
+        # No docs/project, missions, ADR registry or server metadata: Project
+        # Memory owns the analytical subset.  The surrounding implementation
+        # repository still receives the client-project shell.
         if args.name == "client-project":
-            for rel in CAPABILITY_BUNDLES["client-project"]:
-                if rel.startswith(".agents/skills/maintain-client-project-dimension/"):
-                    print(f"{write_file(target / rel, (HELPER_ROOT / rel).read_text(encoding='utf-8'), args.force):7} {rel}")
-            return sync_existing_claude_skill(target, "maintain-client-project-dimension")
+            for rel in PROJECT_MEMORY_CLIENT_PROJECT_BUNDLE:
+                print(f"{write_file(target / rel, (HELPER_ROOT / rel).read_text(encoding='utf-8'), args.force):7} {rel}")
+            status = ensure_capability_rule(target, "client-project")
+            status = sync_existing_claude_skill(target, "maintain-client-project-dimension") or status
+            check_client_project_definitions(target)
+            return status
         for rel in CAPABILITY_BUNDLES["project-documentation"]:
             if (
                 rel.startswith(".agents/skills/maintain-project-documentation/")
@@ -508,6 +538,10 @@ def command_install_capability(args: argparse.Namespace) -> int:
     names = (*CAPABILITY_DEPENDENCIES.get(args.name, ()), args.name)
     status = 0
     for name in names:
+        if name == "client-project" and args.name != "client-project":
+            result = install_implementer(target, HELPER_ROOT, layout)
+            if result:
+                return result
         install_capability_bundle(target, name, args.force)
         status = ensure_capability_rule(target, name) or status
         status = sync_existing_claude_skill(
@@ -643,11 +677,27 @@ def command_audit(args: argparse.Namespace) -> int:
 def validate_project_memory_orientation(root: Path, layout: str) -> int:
     """Check routing prerequisites and installed tools; MCP owns semantic validity."""
     errors = documentation_installation_errors(root, layout)
+    errors.extend(implementer_installation_errors(root, layout))
     if layout == "unknown":
         errors.append("Unknown or missing Project Memory schema marker; consult the owning MCP/template, do not scaffold or migrate automatically")
     for rel in ("README.md", "project.yaml", ".project-memory/schema-version"):
         if not (root / rel).is_file() or (root / rel).stat().st_size == 0:
             errors.append(f"Missing or empty Project Memory orientation file: {rel}")
+    client_skill = root / ".agents/skills/maintain-client-project-dimension/SKILL.md"
+    client_surface = client_skill.exists() or (root / "definitions").exists()
+    if client_surface:
+        for rel in PROJECT_MEMORY_CLIENT_PROJECT_BUNDLE:
+            if not (root / rel).is_file():
+                errors.append(f"Project Memory client-project shell is missing {rel}")
+        agents = root / "AGENTS.md"
+        if not agents.is_file() or "maintain-client-project-dimension" not in agents.read_text(encoding="utf-8", errors="replace"):
+            errors.append("AGENTS.md does not make client-project handling explicit")
+        definitions = root / "definitions"
+        if definitions.is_dir():
+            if not any(definitions.glob("*.xds")):
+                print("WARN: definitions/ has no project *.xds file yet; supply it and notify the user.")
+            if not any(definitions.glob("*.xcf")):
+                print("WARN: definitions/ has no project *.xcf file yet; supply it and notify the user.")
     for message in errors:
         print(f"ERROR: {message}")
     print("INFO: Project Memory semantic validation NOT RUN; use the owning MCP or the matching Orchestrator project_memory_repository.py validate command.")
@@ -665,6 +715,7 @@ def command_validate(args: argparse.Namespace) -> int:
     if layout is not None:
         return validate_project_memory_orientation(root, layout)
     errors: list[str] = documentation_installation_errors(root, None)
+    errors.extend(implementer_installation_errors(root, None))
     warnings: list[str] = []
     for rel in REQUIRED_FILES:
         path = root / rel

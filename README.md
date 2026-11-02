@@ -15,10 +15,11 @@ resolution orchestrator; referenčním authoring orchestrátorem Flexideo je
 orchestrátor, nikoli autorita authoringového bootstrapu.
 Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
 
-U klientských projektů rozlišuje dosavadní helper-native layout a existující Flexideo
-Project Memory. Tu zakládá MCP s verzovanou šablonou; helper poskytuje orientaci a
-respektuje její epiky, Current Truth a vlastnictví oblastí. Rozsah, instalaci čtecího
-skillu a vyhodnocení integračních návrhů popisuje
+Klientský projekt je nadřazený implementační celek. Dosavadní helper-native analytická
+vrstva a Flexideo Project Memory jsou dvě varianty analytické podmnožiny; Project Memory
+zakládá MCP s verzovanou šablonou. Helper k ní doplňuje neanalytický klientský obal se
+sdíleným `definitions/` a technickými vstupy a respektuje její epiky, Current
+Truth a vlastnictví oblastí. Rozsah a instalační pravidla popisuje
 [kompatibilita s Project Memory](docs/agent-context/client-project-memory-compatibility.md).
 Pro aktuální dokumentaci aplikace lze do Project Memory bezpečně instalovat také
 `project-documentation`; tato capability nepřidává druhý analytický strom a nemění MCP
@@ -49,7 +50,7 @@ Piloty a publikace zatím neproběhly; příprava zůstává na develop.
 | `maintain-development-testing` | Zavádí bezpečný, vrstvený a frameworkově neutrální základ testování a diagnostiky. |
 | `manage-product-repository` | Zavádí bezpečnou hranici a volitelnou synchronizaci `product/` do Product repository. |
 | `maintain-authoring-repository` | Zakládá a udržuje specializovaný nebo orchestrační authoring repository s autoritativním produktem v `product/`. |
-| `maintain-client-project-dimension` | Rozpoznává helper-native klientský projekt nebo Project Memory a udržuje kontext podle vlastnictví jejich oblastí. |
+| `maintain-client-project-dimension` | Udržuje klientský implementační celek a rozpoznává jeho helper-native nebo Project Memory analytickou podmnožinu. |
 | `maintain-client-offers` | Volitelně zakládá a udržuje dohledatelné klientské HTML nabídky včetně validace a preview. |
 | `maintain-project-documentation` | Udržuje aktuální dokumentaci klientské aplikace, odděluje ji od epiků a propojuje XDS/FDT/DAD, intranet a COMEX. |
 

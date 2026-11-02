@@ -38,11 +38,15 @@ def main():
         run(helper, "validate", root)
         run(owner, "validate", root)
         for relative, content in baseline.items():
+            if relative.as_posix() == "AGENTS.md":
+                continue
             if (root / relative).read_bytes() != content:
                 raise RuntimeError(f"Template-owned file changed: {relative}")
+        if not (root / "definitions/README.md").is_file():
+            raise RuntimeError("Client-project shell is missing definitions/")
         if (root / "docs/project").exists() or (root / "docs/missions").exists():
             raise RuntimeError("Unexpected second analytical tree")
-    print("PASS: real MCP template remains valid and unchanged after helper reader and documentation installation")
+    print("PASS: real MCP semantics remain valid inside the installed client-project shell")
 
 
 if __name__ == "__main__":

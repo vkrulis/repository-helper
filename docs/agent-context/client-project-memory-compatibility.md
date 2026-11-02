@@ -1,15 +1,16 @@
 # Sladění klientských projektů s Project Memory
 
-- Ověřeno: 2026-10-19 proti lokálním zdrojům, bez změny klientského projektu nebo publikace.
-- Rozhodnutí: [ADR-0009](decisions/0009-project-memory-consumer-support.md), rozšířeno [ADR-0012](decisions/0012-documentation-management-and-project-memory-installation.md) dne 2026-10-29.
-- Primární typ: stále `client-project`; rozlišujeme dva layouty, nikoli nový typ repository.
+- Ověřeno: 2026-11-02 proti lokálním zdrojům a pilotu NPSG-project.
+- Rozhodnutí: [ADR-0009](decisions/0009-project-memory-consumer-support.md), rozšířeno [ADR-0012](decisions/0012-documentation-management-and-project-memory-installation.md) a zpřesněno [ADR-0013](decisions/0013-project-memory-as-client-project-subset.md).
+- Primární typ: `client-project`; Project Memory je jeho analytická podmnožina.
 
 ## Návrh a realizovaný rozsah
 
 Repository-helper rozumí existující Project Memory a respektuje její zdroje pravdy.
-Zakladatelem zůstává MCP s verzovanou šablonou Orchestrátoru. Helper nevlastní projektovou
-identitu, sémantické formáty ani přechody stavů. Dosavadní helper-native klientské projekty
-zůstávají podporované bez automatické migrace.
+Zakladatelem analytické podmnožiny zůstává MCP s verzovanou šablonou Orchestrátoru. Helper
+nevlastní projektovou identitu, sémantické formáty ani přechody stavů; spravuje pouze
+neanalytický klientský obal. Dosavadní helper-native analytické podmnožiny zůstávají
+podporované bez automatické migrace.
 
 Změna rozšiřuje stávající `maintain-client-project-dimension`, audit, inicializační,
 migrační a validační skill. Doplněné hranice misí, ADR, nabídek a logu brání tomu, aby
@@ -34,11 +35,11 @@ kopii soukromé přílohy nebo tvrzení o nezávislém ověření všech odkazov
 
 | Otázka | Helper-native | Project Memory 0.2 |
 | --- | --- | --- |
-| Kdo zakládá projekt? | Dosavadní init/capability helperu. | MCP a template; helper poskytuje orientaci v existujícím projektu. |
+| Kdo zakládá analytickou podmnožinu? | Dosavadní init/capability helperu. | MCP a template; helper doplňuje nadřazený klientský obal. |
 | Kde je analytický scope? | `docs/project/epics/<slug>/` a mise. | `project/epics/EPIC-NNNN/`, vlastní baseline, FAAM stav a historie. |
 | Kde je Current Truth? | `docs/agent-context/` podle místních pravidel. | Sdílený `context/`, řízená promotion; žádná kopie do agent-context. |
 | Kde jsou rozhodnutí? | Globální technické ADR se `Scope`. | Analytická `DEC-*` lokálně v epiku; technická aplikační ADR podle kontraktu vlastníka. |
-| Jsou definice povinné už při analýze? | Capability zakládá XDS/XCF strukturu a hlásí chybějící vstupy. | Oblasti mohou vznikat lazy; žádné povinné XDS/XCF a prázdné podstromy od helperu. |
+| Jsou definice povinné už při analýze? | Capability zakládá strukturu a hlásí chybějící XDS/XCF. | Klientský obal zakládá stejnou strukturu; skutečné XDS/XCF se nedoplňují bez ověřeného zdroje. |
 | Co znamená denní log? | Ruční append-only chronologie. | MCP mutace už loguje atomicky; mimo MCP se použije běžný log bez duplikace. |
 | Co znamená nabídka? | Volitelná samostatná HTML capability. | Připnutý import schváleného offer releasu přes promotion. |
 
@@ -79,9 +80,10 @@ bez těchto stop zůstává v obecném režimu.
   schema-version a rozpoznaný marker 0.1/0.2. Výslovně vypíše, že sémantická validace
   **neproběhla**. Neověřuje revize, ID, obsah rozhodnutí ani soulad kontraktu s markerem.
 - `init`: rozpoznanou i podezřelou Memory odmítne před prvním zápisem, včetně `--force`.
-- `install-capability --name client-project`: u rozpoznané Memory 0.1/0.2 instaluje pouze
-  klientský čtecí skill, UI metadata a jeho referenci, případně synchronizuje již používanou
-  označenou Claude kopii. Nemění AGENTS, analytiku, definitions ani metadata serveru.
+- `install-capability --name client-project`: u rozpoznané Memory 0.1/0.2 instaluje
+  neanalytický klientský obal (`definitions/`, technické `resources/`),
+  klientský skill a pravidlo v `AGENTS.md`. Nemění `project/`, `context/`, `.project-memory/`
+  ani jiné serverem vlastněné sémantické oblasti.
 - Capability `project-documentation` je po [ADR-0010](decisions/0010-project-documentation-capability.md)
   druhou explicitně povolenou instalací do rozpoznané Memory. Instaluje pouze
   `maintain-project-documentation`, jeho reference a read-only nástroj pod `toolkit/skills/`;
@@ -110,5 +112,5 @@ Samostatně použijte matching MCP nebo validátor vlastníka:
 python ../Flexideo-orchestrator/product/tools/project-memory/project_memory_repository.py validate <project-repository>
 ```
 
-Žádný klientský repozitář nebyl touto změnou založen, migrován ani aktualizován.
-Ověření zde popisuje [testing.md](testing.md); další instalace a publikace jsou samostatná práce.
+Ověření zde popisuje [testing.md](testing.md); sémantické změny Project Memory a publikace
+zůstávají samostatnou prací jejich vlastníků.

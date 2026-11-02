@@ -1,6 +1,8 @@
 # Resources
 
-Tato kolekce aktuálně neobsahuje projektové datové vstupy k analýze. Složka je připravena pro budoucí korpusy, schémata, snapshoty nebo cizí zdrojové kódy, které budou analyzovat zdejší skills či nástroje.
+Projektové vstupy určené ke čtení, vyhledávání nebo analýze, které nejsou běhovou logikou
+ani potvrzeným závěrem. Patří sem například oprávněné klientské podklady, sanitizovaná
+diagnostika, schémata a referenční snapshoty.
 
 Každý přidaný zdroj musí mít zdokumentovaný účel, formát, původ, licenci, autoritativnost a způsob aktualizace. Secrets, osobní produkční data a nezdokumentované velké binární soubory sem nepatří.
 
