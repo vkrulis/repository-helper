@@ -14,6 +14,8 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 
 ## Obsah
 
+- [Aktivace Flexideo Implementátora](flexideo-implementer-capability.md) – přenosný projektový zavaděč, uživatelská registrace umístění a řízená instalace.
+
 - `repository-architecture.md` – cílový model repozitáře.
 - `repository-types.md` – autoritativní taxonomie development, authoring, client-project a documentation repozitářů.
 - `authoring-repository-capability.md` – produktová hranice a role specializovaného a orchestračního authoringu.

@@ -184,6 +184,12 @@ CAPABILITY_TEMPLATES = {
 }
 
 CAPABILITY_RULES = {
+    "flexideo-implementer": (
+        "activate-flexideo-implementer",
+        "Pro implementační úkol klientské aplikace použijte `activate-flexideo-implementer`. "
+        "Umístění produktu patří do uživatelského registru mimo repozitář; "
+        "FCL vlastní klasifikaci a výběr odborných dovedností.",
+    ),
     "work-log": (
         ".logs/YYYY/MM/YYYY-MM-DD.md",
         "Po každé materiální změně použijte skill `maintain-work-log` a přidejte stručný "
@@ -317,6 +323,7 @@ CAPABILITY_RULES["authoring-repository"] = (
 )
 
 CAPABILITY_SKILLS = {
+    "flexideo-implementer": "activate-flexideo-implementer",
     "client-project": "maintain-client-project-dimension",
     "project-documentation": "maintain-project-documentation",
     "client-offers": "maintain-client-offers",
@@ -516,7 +523,7 @@ def command_install_capability(args: argparse.Namespace) -> int:
             return status
     if layout is not None:
         if layout == "unknown" or args.name not in {"client-project", "project-documentation"}:
-            print("ACTION: Project Memory supports only explicitly reviewed portable capabilities here. Allowed: client-project orientation, project-documentation, and documentation-management; no files changed.", file=sys.stderr)
+            print("ACTION: Project Memory supports only reviewed capabilities here: client-project, project-documentation, documentation-management, flexideo-implementer; no files changed.", file=sys.stderr)
             return 2
         # No docs/project, missions, ADR registry or server metadata: Project
         # Memory owns the analytical subset.  The surrounding implementation

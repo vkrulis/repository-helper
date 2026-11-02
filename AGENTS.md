@@ -127,6 +127,14 @@ mapu ani authoring bootstrap neduplikuje.
 Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`:
 stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.
 
+## Repository capability: flexideo-implementer
+
+Pro lokální implementační úkol klientské aplikace použijte `activate-flexideo-implementer`.
+Helper instaluje pouze zavaděč a jeho nástroj, umístění externího produktu patří
+do uživatelského registru mimo repozitáře. FCL vlastní mapu a authoring resolution.
+Samostatná instalace do známé Project Memory nemění projektová pravidla ani sémantický obsah;
+aktivační výsledek vyžaduje explicitní načtení vrácených instrukcí a bootstrapu.
+
 ## Repository capability: documentation-management
 
 Helper vlastní obecné skills `search-markdown-content`, `maintain-domain-knowledge` a

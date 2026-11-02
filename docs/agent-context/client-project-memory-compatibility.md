@@ -82,7 +82,8 @@ bez těchto stop zůstává v obecném režimu.
 - `init`: rozpoznanou i podezřelou Memory odmítne před prvním zápisem, včetně `--force`.
 - `install-capability --name client-project`: u rozpoznané Memory 0.1/0.2 instaluje
   neanalytický klientský obal (`definitions/`, technické `resources/`),
-  klientský skill a pravidlo v `AGENTS.md`. Nemění `project/`, `context/`, `.project-memory/`
+  klientský skill a pravidlo v `AGENTS.md`, nově také řízený zavaděč
+  `flexideo-implementer` podle ADR-0014. Nemění `project/`, `context/`, `.project-memory/`
   ani jiné serverem vlastněné sémantické oblasti.
 - Capability `project-documentation` je po [ADR-0010](decisions/0010-project-documentation-capability.md)
   druhou explicitně povolenou instalací do rozpoznané Memory. Instaluje pouze
@@ -92,6 +93,9 @@ bez těchto stop zůstává v obecném režimu.
   obecné dokumentační skills, vyhledávač a jejich profil/manifest. Nemění projektový obsah,
   AGENTS ani metadata serveru; lokální změny odmítá i s `--force`. Viz
   [kontrakt instalace](documentation-management-capability.md).
+- `install-capability --name flexideo-implementer`: přidá pouze projektovou skill,
+  přenositelný nástroj a instalační manifest. Samostatná instalace nemění AGENTS,
+  obsah projektu ani sémantická metadata. Lokální registr produktu je mimo projekt.
 - Ostatní instalace capability do Memory a instalace při neznámém markeru jsou odmítnuty
   bez zápisu; žádný fallback do helper-native layoutu. Jde o hranici kompatibility
   instalačního nástroje, ne o zákaz budoucích capability schválených vlastníkem.
@@ -104,6 +108,7 @@ python toolkit/agent-infrastructure/repository_architecture.py validate <project
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name client-project
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name project-documentation
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name documentation-management
+python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name flexideo-implementer
 ```
 
 Samostatně použijte matching MCP nebo validátor vlastníka:

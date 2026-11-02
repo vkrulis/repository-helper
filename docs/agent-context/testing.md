@@ -1,5 +1,29 @@
 # Testování helperu
 
+## Aktivace Flexideo Implementátora
+
+`test_flexideo_implementer.py` je součástí stejné offline unittest sady. Ověřuje
+izolovanou instalaci do běžného klientského repozitáře a obou verzí Memory,
+idempotenci, refresh z digestu, zachování lokálních úprav i s force, neznámé layouty,
+symlinky (pokud je host povolí), rollback instalace i aktualizace a veřejné CLI.
+Aktivační testy používají syntetický verifier pro kontrakt jeho volání; nejsou
+druhou implementací FCL integrity. Testují také cesty s mezerami, běh z jiného
+cwd bez helperu, registraci, zachování jiných produktů, atomický zápis a změnu sestavy.
+`client-project` regrese ověřují automatické přidání zavaděče.
+Skutečný MCP kontraktní smoke nadále ověřuje sémantiku po vybavení klientského projektu.
+Samostatný lokální smoke lze provést s reálnou instalací a explicitním dočasným
+`--registry`; nevyžaduje skutečné klientské credentials ani změnu uživatelského registru.
+
+```powershell
+python toolkit/development/tests/flexideo_implementer_contract_smoke.py --assembly ../../local-products/flexideo-implementer
+```
+
+Argument je cesta k instalaci vůči aktuálnímu cwd.
+Smoke všechen projektový zápis izoluje do vlastního TemporaryDirectory, registruje
+produkt do dočasného registru a z jiné složky ověří jeho skutečný FCL verifier
+a čitelné entrypointy. Ověření nezávislým VS Code agentem a živá instance nejsou
+součástí tohoto smoke.
+
 ## Project Memory kompatibilita
 
 Runner: standardní Python 3 `unittest`, bez sítě, credentials a klientských dat.

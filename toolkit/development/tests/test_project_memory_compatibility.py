@@ -93,6 +93,10 @@ class ProjectMemoryCompatibility(unittest.TestCase):
             ".agents/skills/maintain-client-project-dimension/SKILL.md",
             ".agents/skills/maintain-client-project-dimension/agents/openai.yaml",
             ".agents/skills/maintain-client-project-dimension/references/project-memory.md",
+            ".agents/skills/activate-flexideo-implementer/SKILL.md",
+            ".agents/skills/activate-flexideo-implementer/agents/openai.yaml",
+            ".agents/capabilities/flexideo-implementer.json",
+            "toolkit/skills/activate-flexideo-implementer/activate.py",
         })
         self.assertIn("maintain-client-project-dimension", after["AGENTS.md"].decode("utf-8"))
         self.assertFalse((self.root / "docs/project").exists())
