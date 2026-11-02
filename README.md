@@ -10,7 +10,9 @@ Balíček vychází z principů:
 
 Repository-helper rozlišuje čtyři primární typy repozitářů: `development`, `authoring`,
 `client-project` a `documentation`. Authoring dále rozlišuje specializovanou roli a
-nadřazený orchestrátor; referenčním orchestrátorem Flexideo je `Flexideo-orchestrator`.
+resolution orchestrator; referenčním authoring orchestrátorem Flexideo je
+`Flexideo-capability-library`. `Flexideo-orchestrator` je samostatný platformní a projektový
+orchestrátor, nikoli autorita authoringového bootstrapu.
 Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
 
 U klientských projektů rozlišuje dosavadní helper-native layout a existující Flexideo
@@ -21,6 +23,14 @@ skillu a vyhodnocení integračních návrhů popisuje
 Pro aktuální dokumentaci aplikace lze do Project Memory bezpečně instalovat také
 `project-documentation`; tato capability nepřidává druhý analytický strom a nemění MCP
 stavy ani provisioning.
+
+## Dokumentační capability
+
+Obecná správa Markdownu je ve volitelné [documentation-management](docs/agent-context/documentation-management-capability.md).
+Obsah vlastní cílový projekt, helper skills a nástroje; Projects vlastní autorizovaný web.
+Instalace `repository_architecture.py install-capability <target> --name documentation-management`
+je offline, chrání lokální změny a podporuje známou Project Memory bez změn jejího stavu.
+Piloty a publikace zatím neproběhly; příprava zůstává na develop.
 
 ## Co sada obsahuje
 

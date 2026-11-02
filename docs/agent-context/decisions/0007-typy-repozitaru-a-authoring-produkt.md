@@ -5,7 +5,7 @@
 - Scope: shared
 - Vlastník: Repository-helper maintainers
 - Nahrazuje: —
-- Nahrazeno: —
+- Nahrazeno: [ADR-0011](0011-fcl-referencni-authoring-resolution-orchestrator.md) — částečně v identitě a odpovědnosti referenčního orchestrátoru
 
 ## Kontext a problém
 

@@ -1,7 +1,7 @@
 # Sladění klientských projektů s Project Memory
 
 - Ověřeno: 2026-10-19 proti lokálním zdrojům, bez změny klientského projektu nebo publikace.
-- Rozhodnutí: [ADR-0009](decisions/0009-project-memory-consumer-support.md).
+- Rozhodnutí: [ADR-0009](decisions/0009-project-memory-consumer-support.md), rozšířeno [ADR-0012](decisions/0012-documentation-management-and-project-memory-installation.md) dne 2026-10-29.
 - Primární typ: stále `client-project`; rozlišujeme dva layouty, nikoli nový typ repository.
 
 ## Návrh a realizovaný rozsah
@@ -74,7 +74,8 @@ i neúplná či budoucí Memory má být chráněna před obecným scaffoldem. O
 bez těchto stop zůstává v obecném režimu.
 
 - `audit`: čtecí inventura označí verzi a oblasti, neaktivuje epik a neslibuje validitu.
-- `validate`: u Memory ověří jen neprázdné orientační soubory README, project.yaml a
+- `validate`: u Memory ověří také případnou spravovanou dokumentační instalaci a její profil;
+  dále neprázdné orientační soubory README, project.yaml a
   schema-version a rozpoznaný marker 0.1/0.2. Výslovně vypíše, že sémantická validace
   **neproběhla**. Neověřuje revize, ID, obsah rozhodnutí ani soulad kontraktu s markerem.
 - `init`: rozpoznanou i podezřelou Memory odmítne před prvním zápisem, včetně `--force`.
@@ -85,6 +86,10 @@ bez těchto stop zůstává v obecném režimu.
   druhou explicitně povolenou instalací do rozpoznané Memory. Instaluje pouze
   `maintain-project-documentation`, jeho reference a read-only nástroj pod `toolkit/skills/`;
   nevytváří `docs/` obsah, nemění AGENTS ani sémantické soubory.
+- `install-capability --name documentation-management`: u známé Memory 0.1/0.2 instaluje
+  obecné dokumentační skills, vyhledávač a jejich profil/manifest. Nemění projektový obsah,
+  AGENTS ani metadata serveru; lokální změny odmítá i s `--force`. Viz
+  [kontrakt instalace](documentation-management-capability.md).
 - Ostatní instalace capability do Memory a instalace při neznámém markeru jsou odmítnuty
   bez zápisu; žádný fallback do helper-native layoutu. Jde o hranici kompatibility
   instalačního nástroje, ne o zákaz budoucích capability schválených vlastníkem.
@@ -96,6 +101,7 @@ python toolkit/agent-infrastructure/repository_architecture.py audit <project-re
 python toolkit/agent-infrastructure/repository_architecture.py validate <project-repository>
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name client-project
 python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name project-documentation
+python toolkit/agent-infrastructure/repository_architecture.py install-capability <project-repository> --name documentation-management
 ```
 
 Samostatně použijte matching MCP nebo validátor vlastníka:

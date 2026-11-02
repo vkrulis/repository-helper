@@ -24,7 +24,6 @@ python toolkit/development/tests/project_memory_contract_smoke.py ../Flexideo-or
 Oba scénáře odstraňují pouze vlastní `TemporaryDirectory`, žádný klientský ani pracovní
 repozitář. CI zde nepřibývá. Povinné kontroly kolekce, architektury a logu jsou v AGENTS.md.
 
-
 ## Project documentation capability
 
 Samostatný read-only validátor a inventura mají regresi v
@@ -44,3 +43,11 @@ Regrese `test_project_documentation_tool.py` nově pokrývá:
 
 Project Memory instalační regrese zároveň ověřuje distribuci obou přenositelných referencí
 skillu bez vytvoření `docs/` nebo zásahu do analytické struktury.
+
+## Dokumentační instalace
+
+Stejný unittest runner zahrnuje `test_documentation_management.py`: neměnnost
+projektového obsahu a šablony, idempotenci, aktualizaci z připnutého digestu, lokální
+konflikt i s force, neznámé layouty, omezení profilu, poškozený manifest, odmítnutí
+symlinků a rollback po chybě zápisu. Syntetické fixture nejsou projektové piloty.
+Test vyhledávání zachovává AND/OR a normalizaci diakritiky. Žádný test nevolá cloud.

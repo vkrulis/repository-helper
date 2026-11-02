@@ -24,13 +24,14 @@ Authoring má dvě role:
 
 - `specialist` vlastní authoring jedné vrstvy nebo vymezené oblasti a vydává její
   samostatně verzovaný produkt;
-- `orchestrator` je nadřazená authoring entita. Překládá záměr na koordinovanou změnu
-  aplikace, vybírá specialisty, řídí handoff, pořadí, lock a trasovatelnost napříč
-  vrstvami. Nekopíruje jejich detailní znalost ani produkty.
+- `orchestrator` je authoring-resolution entita. Klasifikuje záměr, vybírá specialisty
+  a sestavuje minimální připnutý bundle s handoffem, lockem a trasovatelností napříč
+  vrstvami. Nekopíruje jejich detailní znalost ani produkty a fyzickou změnu nevykonává.
 
-`Flexideo-orchestrator` je referenční orchestration-authoring repository ekosystému.
-Načítá registry produktů specializovaných authoring repozitářů, sestavuje z nich své
-aktuální schopnosti a koordinuje finální tvorbu a úpravy aplikací napříč vrstvami.
+`Flexideo-capability-library` je referenční orchestration-authoring repository ekosystému.
+Vlastní capability mapu, načítá registry produktů specializovaných authoring repozitářů a
+sestavuje nejmenší reprodukovatelný resolution bundle. `Flexideo-orchestrator` vlastní
+platformní a projektovou koordinaci; authoringovou klasifikaci ani bootstrap nekopíruje.
 
 ## Client-project repository
 

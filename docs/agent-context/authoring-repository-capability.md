@@ -37,15 +37,16 @@ zadání, akceptace a výsledných projektových definic.
 
 ## Orchestrační authoring
 
-Orchestrátor je nadřazená authoring entita pro změny celé aplikace. Jeho produkt vlastní:
+Authoring-resolution orchestrator je nadřazená klasifikační entita, nikoli vykonavatel změn. Jeho produkt vlastní:
 
-- interpretaci záměru a plán napříč vrstvami;
+- interpretaci záměru a klasifikaci napříč vrstvami;
 - discovery a resolver registrů specializovaných authoring produktů;
-- handoff kontrakty, pořadí kroků, zámky, trace a vyhodnocení výsledku.
+- handoff kontrakty, resolution lock a dohledatelnost výběru.
 
-Nevlastní a nekopíruje produktové skills specialistů. `Flexideo-orchestrator` je
-referenční orchestrátor: z registrovaných authoring produktů jednotlivých vrstev si
-aktualizuje dostupné schopnosti a sestavuje vlastní orchestrační produkt.
+Nevlastní a nekopíruje produktové skills specialistů a neprovádí cílové změny.
+`Flexideo-capability-library` je referenční authoring orchestrator: z registrovaných
+authoring produktů jednotlivých vrstev sestavuje minimální připnutý capability bundle.
+`Flexideo-orchestrator` je jeho platformní a projektový konzument.
 
 Orchestrátor čte descriptory specialistů podle current-state kontraktu, stahuje pouze
 změněné artefakty, ověřuje jejich digesty a zapisuje je do resolution locku.

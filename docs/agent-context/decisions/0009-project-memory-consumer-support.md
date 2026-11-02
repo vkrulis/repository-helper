@@ -5,7 +5,7 @@
 - Vlastník: správci Repository-helper
 - Scope: shared
 - Nahrazuje: —
-- Nahrazeno: —
+- Nahrazeno: [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — částečně: další explicitně povolená dokumentační instalace; provisioning a sémantické hranice zůstávají platné.
 
 ## Kontext a problém
 

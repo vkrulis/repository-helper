@@ -3,7 +3,7 @@
 - Epic: authoring-repository
 - Stav: in-progress
 - Priorita: vysoká
-- ADR: [ADR-0007](../agent-context/decisions/0007-typy-repozitaru-a-authoring-produkt.md)
+- ADR: [ADR-0007](../agent-context/decisions/0007-typy-repozitaru-a-authoring-produkt.md), [ADR-0011](../agent-context/decisions/0011-fcl-referencni-authoring-resolution-orchestrator.md)
 
 ## Cíl
 
@@ -20,16 +20,16 @@ vrstev bez kopírování nebo driftu.
 ## Co už víme
 
 - Základní typy a authoring role jsou přijaty v ADR-0007.
-- Flexideo-orchestrator je nadřazená authoring entita.
+- Flexideo-capability-library je referenční authoring-resolution entita; Flexideo-orchestrator vlastní platformní a projektovou koordinaci.
 - XDS authoring bude první specializovaný repozitář sjednocený stejným postupem.
 - Product Repository Sync přenáší ověřený strom, ale není jeho buildem ani zdrojem.
 
 ## Navrhovaný přístup
 
 1. Udržovat capability, skill, šablony a validaci v Repository-helperu.
-2. Pilotně ji ověřit v Orchestrátoru.
+2. Pilotně ji ověřovat v FCL a specializovaných authoring repozitářích.
 3. Přes Helper postupně migrovat XDS a ostatní authoring repozitáře.
-4. Standardizovat registry, resolver a release evidence pro skládání orchestrátoru.
+4. Standardizovat registry, resolver a release evidence pro resolution produktu FCL.
 
 ## Závislosti
 
@@ -45,7 +45,7 @@ vrstev bez kopírování nebo driftu.
 
 ## Definice hotovo (návrh)
 
-- Orchestrátor a všechny aktivní authoring repozitáře používají instalovanou capability.
+- FCL a všechny aktivní authoring repozitáře používají instalovanou capability.
 - Registry a kontrakty jsou validované a verzované.
-- Orchestrátor umí bezpečně objevit a aktualizovat dostupné specializované schopnosti.
+- FCL umí bezpečně objevit a připnout dostupné specializované schopnosti bez jejich vykonání.
 - Dokumentační větev modelu má potvrzený publikační a synchronizační kontrakt.

@@ -20,3 +20,11 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 - Stavy: `proposed`, `accepted`, `rejected`, `superseded`.
 - Přijatý nebo odmítnutý záznam významově nepřepisujte.
 - Změnu rozhodnutí zachyťte novým ADR a oba záznamy vzájemně propojte poli `Nahrazuje` a `Nahrazeno`.
+
+## Dokumentační capability
+
+- [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — accepted; obecné postupy vlastní helper, lokální instalace s digesty podporuje známou Memory bez změn jejího obsahu.
+
+## Authoring orchestrator
+
+- [ADR-0011](0011-fcl-referencni-authoring-resolution-orchestrator.md) — accepted; FCL je referenční authoring-resolution produkt, Flexideo Orchestrator zůstává platformním a projektovým orchestrátorem.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "search-markdown-content"
+  short_description: "Přenositelná správa Markdown dokumentace"
+  default_prompt: "Použij $search-markdown-content v dokumentační oblasti tohoto repozitáře podle jeho místního profilu."
