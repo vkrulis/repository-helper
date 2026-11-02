@@ -33,7 +33,16 @@ neanalytický obal podle ADR-0013; tento rozsah se novou capability nerozšiřuj
 
 ## Umístění produktu na počítači
 
-Jednou pro uživatele na počítači, z helperu nebo ze zkopírovaného projektového nástroje:
+Při prvním požadavku na Implementátor bez existující registrace se projektová
+dovednost zeptá na cestu přímo v chatu VS Code. Použije dostupný dialogový nástroj
+agenta, nebo běžnou textovou otázku. Zeptá se na složku obsahující `fcl/` a
+`assembly.lock.json` a oznámí, že ji po ověření uloží pro další projekty na počítači.
+Po odpovědi sama provede registraci a zopakuje aktivaci; uživatel nemusí psát
+registrační příkaz. Již výslovně zadanou cestu nevyžaduje podruhé. Bez odpovědi
+nepokračuje odhadem a neprochází disk.
+
+Registrace je jednorázová pro uživatele na počítači. Pro ruční nebo automatizované
+nastavení je nadále dostupný příkaz z helperu i ze zkopírovaného projektového nástroje:
 
 ```powershell
 python toolkit/skills/activate-flexideo-implementer/activate.py register --root "C:/flexideo/local-products/flexideo-implementer"

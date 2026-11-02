@@ -32,9 +32,16 @@ dovedností vlastní FCL; nekopíruj sem jeho mapu ani katalogy vrstev.
 
 ## Chybějící instalace nebo přístup
 
-- `NOT_CONFIGURED`: vyžádej pouze umístění instalace. Pro výslovnou registraci
-  použij stejný nástroj: `register --root <instalační-složka>`. Registrace ověří
-  produkt a zapíše jeho umístění do uživatelské konfigurace mimo projekt.
+- `NOT_CONFIGURED`: při prvním požadavku se zeptej **přímo v chatu**, například:
+  „Ve které složce máte lokální Flexideo Implementátor (obsahuje `fcl/` a
+  `assembly.lock.json`)? Po ověření cestu uložím pro další projekty na tomto počítači.“
+  Použij dialogový nástroj hosta, pokud je dostupný; jinak polož běžnou chatovou
+  otázku na textovou cestu. Umístění již výslovně zadané v úloze znovu nevyžaduj.
+  Na odpověď vyčkej; cestu neodhaduj ani uživateli nepředávej registraci jako ruční úkol.
+  Získanou cestu předej stejnému nástroji: `register --root <instalační-složka>`.
+  Po úspěšné registraci znovu spusť `activate` a pokračuj bodem 2. Registrace
+  ověří produkt a uloží umístění do uživatelské konfigurace mimo projekt; další
+  projekty stejného uživatele na tomto počítači tuto otázku již nepotřebují.
 - Pro jednorázově určené umístění použij `activate --assembly <instalační-složka>`.
   Absolutní cestu nezapisuj do verzovaných projektových instrukcí.
 - Neplatnou sestavu, chybějící host přístup nebo jinou chybu oznam podle výsledku.

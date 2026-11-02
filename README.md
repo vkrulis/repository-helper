@@ -34,11 +34,12 @@ automaticky s `client-project`, samostatně jej lze doplnit do existujícího re
 
 ```powershell
 python toolkit/agent-infrastructure/repository_architecture.py install-capability "<projekt>" --name flexideo-implementer
-python toolkit/skills/activate-flexideo-implementer/activate.py register --root "C:/flexideo/local-products/flexideo-implementer"
 ```
 
 V klientském projektu pak použijte `activate-flexideo-implementer`. Instalace
 neobsahuje produktové skills ani strojovou cestu a podporuje také známou Project Memory.
+Při prvním požadavku si agent vyžádá cestu dialogem v chatu, ověří ji a uloží;
+v dalších projektech stejného uživatele na počítači už ji zadávat nemusíte.
 
 ## Dokumentační capability
 
