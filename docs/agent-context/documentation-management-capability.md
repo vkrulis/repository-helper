@@ -1,9 +1,9 @@
 # Přenositelná správa dokumentace
 
-- Rozhodnutí: [ADR-0012](decisions/0012-documentation-management-and-project-memory-installation.md).
+- Rozhodnutí: [ADR-0015](decisions/0015-project-documentation-runtime-ownership.md).
 - Stav: lokálně implementovaná capability; Projects MVP publisher existuje v Orchestratoru,
-  cílový společný Docusaurus builder a živé piloty nejsou dokončené.
-- Integrační architektura: [Orchestrator ADR-0071](../../../Flexideo-orchestrator/docs/agent-context/decisions/0071-projektova-dokumentace-pres-http-api-a-zmrazeny-mcp.md).
+  cílový Docusaurus builder v Orchestrátoru a živé piloty nejsou dokončené.
+- Integrační architektura: [Orchestrator ADR-0079](../../../Flexideo-orchestrator/docs/agent-context/decisions/0079-project-documentation-platform-ownership.md).
 
 Repository-helper vlastní obecné skills `search-markdown-content`,
 `maintain-domain-knowledge`, `review-documentation-topology` a deterministický
@@ -23,10 +23,10 @@ v Documentation. Původní obecný vyhledávač byl převzat bez změny jeho AND
 | Integrační mise a koordinace | Orchestrator |
 | Discovery, resolver a federovaná metadata | FCL; zdrojové skills zůstávají jejich vlastníkům |
 
-Sdílený Docusaurus builder patří do obecné dokumentační capability jako volitelný
-nástroj bez Clerk/D1/R2 vazeb. Má vytvářet statický web, route-to-source manifest,
-izolovaný fulltext a strojový build report pro jeden projekt. V tomto řezu se builder
-neimplementuje; veřejný Docusaurus publisher se nepřesouvá. Podrobnou realizační práci řídí
+Projektový Docusaurus builder, theme, search a build report jsou součástí produktového
+Orchestrátoru. Helper distribuuje pouze skills, reference a read-only nástroje do
+projektového repozitáře; neinstaluje runtime ani nepřipravuje publikační artefakt.
+Podrobnou realizační práci řídí
 [mise 31 Orchestratoru](../../../Flexideo-orchestrator/docs/orchestrator/missions/31-project-documentation.md).
 
 ## Instalace a aktualizace
@@ -70,7 +70,7 @@ Validátor helperu kontroluje instalované bajty a profil, nikoli sémantický s
 Tyto příkazy nevolají GitHub ani cloudové API a nic nenasazují. Změna zůstává na
 `develop`. Případný pozdější pilot může použít pouze `projects-dev.flexideo.cloud`
 a vyžaduje společné vyhodnocení s vlastníkem. Produkční `projects.flexideo.cloud`
-se tímto nemění. FCL a cílový Docusaurus builder zůstávají navazující prací.
+se tímto nemění. FCL resolution a cílový Docusaurus builder v Orchestrátoru zůstávají navazující prací.
 Orchestrator nyní obsahuje lokálně otestované Documentation HTTP API, online editor a
 omezený bezpečný MVP publisher; jejich přítomnost v produktové projekci ještě nedokládá
 DEV nasazení. Přítomnost tohoto skill balíku žádnou runtime schopnost nezpřístupňuje.

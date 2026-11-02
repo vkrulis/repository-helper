@@ -23,7 +23,8 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 
 ## Dokumentační capability
 
-- [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — accepted; obecné postupy vlastní helper, lokální instalace s digesty podporuje známou Memory bez změn jejího obsahu.
+- [ADR-0015](0015-project-documentation-runtime-ownership.md) — accepted; projektový Docusaurus runtime a builder vlastní Orchestrátor, Helper distribuuje jen projektové skills a read-only nástroje.
+- [ADR-0012](0012-documentation-management-and-project-memory-installation.md) — superseded ADR-0015; historické rozhodnutí o lokální instalaci do známé Memory.
 
 ## Authoring orchestrator
 

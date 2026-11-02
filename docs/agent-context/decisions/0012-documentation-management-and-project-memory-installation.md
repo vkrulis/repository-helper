@@ -1,11 +1,11 @@
 # ADR-0012: Přenositelná dokumentační capability a instalace do Project Memory
 
-- Stav: accepted
+- Stav: superseded
 - Datum: 2026-10-29
 - Scope: shared
 - Vlastník: správci Repository-helper
 - Nahrazuje: [ADR-0009](0009-project-memory-consumer-support.md) — částečně: rozšiřuje allowlist instalací o documentation-management.
-- Nahrazeno: —
+- Nahrazeno: [ADR-0015](0015-project-documentation-runtime-ownership.md)
 
 ## Kontext a problém
 
