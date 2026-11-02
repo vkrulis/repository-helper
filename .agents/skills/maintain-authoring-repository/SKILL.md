@@ -1,6 +1,6 @@
 ---
 name: maintain-authoring-repository
-description: Zakládá, klasifikuje, migruje a udržuje authoring repozitáře, jejich autoritativní product/ strom a hranice vůči runtime, klientským projektům, dokumentaci a nadřazenému orchestrátoru. Použijte pro specializovaný authoring jedné vrstvy i pro orchestrační authoring napříč vrstvami; nepoužívejte pro běžný vývoj runtime produktu ani pro klientský implementační projekt.
+description: Zakládá, klasifikuje, migruje a udržuje authoring repozitáře, jejich autoritativní product/ strom a hranice vůči runtime, klientským projektům, dokumentaci a authoring-resolution orchestrátoru. Použijte pro specializovaný authoring jedné vrstvy i pro resolution napříč vrstvami; nepoužívejte pro běžný vývoj runtime produktu, platformní orchestraci ani klientský implementační projekt.
 ---
 
 # Authoring repository
@@ -17,8 +17,8 @@ description: Zakládá, klasifikuje, migruje a udržuje authoring repozitáře, 
    implementací ani jednou klientskou aplikací.
 3. Určete authoring roli:
    - `specialist` vlastní jednu vymezenou vrstvu nebo oblast;
-   - `orchestrator` analyzuje záměr, vybírá specialisty a koordinuje změnu napříč
-     vrstvami, ale nekopíruje jejich detailní znalost.
+   - `orchestrator` analyzuje záměr, vybírá specialisty a sestavuje připnuté resolution
+     napříč vrstvami, ale nekopíruje jejich detailní znalost ani změnu nevykonává.
 4. U existujícího obsahově rozvinutého repozitáře nejprve použijte
    `audit-repository-structure`. Nejasné přesuny nebo změny zdroje pravdy vyžadují
    schválenou migrační mapu a případně ADR.
@@ -62,12 +62,12 @@ cloudový adresář. Odchylku od current-state kontraktu doložte samostatným A
 
 ### Orchestration authoring
 
-- Je nadřazenou authoring entitou pro koordinovanou tvorbu a úpravy celé aplikace.
-- Udržuje analýzu záměru, routing, handoff kontrakty, discovery, lock a trace.
+- Je authoring-resolution entitou pro klasifikaci implementačních záměrů napříč vrstvami.
+- Udržuje analýzu záměru, routing, handoff kontrakty, discovery, lock a trace výběru.
 - Načítá registry produktů specializovaných authoring repozitářů podle vrstvy, role,
   verze a zralosti.
 - Nevkládá do svého produktu kopie specializovaných skills ani doménové implementace;
-  drží pouze orchestrační metodiku, kontrakty a resolver.
+  drží pouze resolution metodiku, kontrakty a resolver a nikdy nevydává bundle za zahájení práce.
 
 ## Documentation vztah
 

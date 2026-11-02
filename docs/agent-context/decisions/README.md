@@ -24,3 +24,7 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 ## Dokumentační capability
 
 - [ADR-0010](0010-documentation-management-and-project-memory-installation.md) — accepted; obecné postupy vlastní helper, lokální instalace s digesty podporuje známou Memory bez změn jejího obsahu.
+
+## Authoring orchestrator
+
+- [ADR-0011](0011-fcl-referencni-authoring-resolution-orchestrator.md) — accepted; FCL je referenční authoring-resolution produkt, Flexideo Orchestrator zůstává platformním a projektovým orchestrátorem.

@@ -10,7 +10,9 @@ Balíček vychází z principů:
 
 Repository-helper rozlišuje čtyři primární typy repozitářů: `development`, `authoring`,
 `client-project` a `documentation`. Authoring dále rozlišuje specializovanou roli a
-nadřazený orchestrátor; referenčním orchestrátorem Flexideo je `Flexideo-orchestrator`.
+resolution orchestrator; referenčním authoring orchestrátorem Flexideo je
+`Flexideo-capability-library`. `Flexideo-orchestrator` je samostatný platformní a projektový
+orchestrátor, nikoli autorita authoringového bootstrapu.
 Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
 
 U klientských projektů rozlišuje dosavadní helper-native layout a existující Flexideo

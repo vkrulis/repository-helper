@@ -108,8 +108,10 @@ Pro repozitář typu `authoring` používejte skill `maintain-authoring-reposito
 roli `specialist` nebo `orchestrator`; publikovatelný authoring produkt vytvářejte
 autoritativně přímo v `product/`, zatímco kořenové `.agents/skills/` slouží pouze údržbě
 workspace. Produktové skills neduplikujte mezi `product/skills/` a `.agents/skills/`.
-Flexideo-orchestrator je nadřazená authoring entita pro koordinované změny aplikace
-napříč vrstvami a specializované produkty načítá z jejich registrů, nekopíruje je.
+Flexideo-capability-library je authoring-resolution orchestrator: klasifikuje záměr,
+načítá specializované produkty z jejich registrů a sestavuje minimální připnutý bundle,
+ale změnu nevykonává. Flexideo-orchestrator je platformní a projektový orchestrátor a
+mapu ani authoring bootstrap neduplikuje.
 Cloudové registry používají `docs/agent-context/authoring-registry-current-state-contract.md`:
 stabilní cesty, Git jako historii a SHA-256 jako kontrolu obsahu, nikoli adresu.
 

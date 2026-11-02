@@ -312,9 +312,10 @@ Capability `authoring-repository` podporuje roli `specialist` pro jednu vrstvu i
 `orchestrator` pro koordinaci napříč vrstvami a zahrnuje produktovou hranici i vývojové
 testování. Podrobný kontrakt je v `authoring-repository-capability.md`.
 
-Flexideo-orchestrator je nadřazená authoring entita ekosystému: načítá registry
-specializovaných authoring produktů a koordinuje finální tvorbu a úpravy aplikací, aniž
-by kopíroval jejich detailní skills nebo implementaci.
+Flexideo-capability-library je authoring-resolution entita ekosystému: načítá registry
+specializovaných authoring produktů a sestavuje minimální připnutý bundle, aniž by
+kopírovala jejich detailní skills, prováděla implementaci nebo přebírala projektovou pravdu.
+Flexideo-orchestrator je oddělený platformní a projektový orchestrátor.
 Specialisté i orchestrátor používají společný
 [current-state distribuční kontrakt](authoring-registry-current-state-contract.md):
 Git uchovává historii, cloud vystavuje aktuální validovaný obsah na stabilních cestách
