@@ -152,6 +152,20 @@ Základ projektové dokumentace je proto propojená mapa:
 
 ## 6. Generovaná FDT reference
 
+`docs/reference/**` je pro webový editor celé pouze ke čtení. Stejné omezení platí
+i pro existující `docs/references/**`. Markdown obou sekcí se publikuje spolu
+s ostatními projektovými stránkami, ale změny provádí jen
+Replicator nebo jiný určený producent přes projektový Git a následný build.
+Obnova reference se řídí release nebo výslovným refreshem jejího producenta;
+běžná editace autorské stránky ji nespouští. Replicator již při FDT používá
+selektivní tvorbu změněných Markdownů s úplným indexem a manifestem.
+`docs/datovy-model/**` je autorský, editovatelný výklad, který na tuto referenci
+odkazuje. Výchozí publikační výběr šablony tvoří `docs/index.md` a sekce
+`aplikace`, `datovy-model`, `procesy`, `integrace`, `provoz`, `reference`.
+Projekt může výběr výslovně upravit v `docs/_meta/publication.json` pomocí
+kontraktu `flexideo-project-documentation-publication/1` a pole `sections`.
+Jiné oblasti `docs/` se bez této volby nevydávají.
+
 Replicator vlastní současný balík pod:
 
 ~~~text

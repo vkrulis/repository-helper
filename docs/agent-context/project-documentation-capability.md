@@ -58,7 +58,28 @@ docs/
 
 Složky se materializují až tehdy, když mají skutečný obsah.
 
+Výchozí publikační výběr projektové šablony tvoří `docs/index.md` a sekce
+`aplikace`, `datovy-model`, `procesy`, `integrace`, `provoz`, `reference`.
+Projekt jej může výslovně upravit v `docs/_meta/publication.json` kontraktu
+`flexideo-project-documentation-publication/1` se seznamem `sections`.
+Ostatní oblasti `docs/` (například `docs/project/` nebo `docs/agent-context/`)
+se bez výslovného zařazení do dokumentačního webu nepřenášejí.
+
 ## Generované reference
+
+Celý strom `docs/reference/**` je určen pro výstupy Replicatoru nebo jiného určeného
+producenta. Ve starších projektech se vyskytuje také `docs/references/**`; pro webovou
+editaci platí stejná ochrana obou názvů, zatímco kanonická nová cesta zůstává `docs/reference/`.
+Publikované Markdown stránky se v dokumentačním webu zobrazují, ale
+webový editor zde nesmí vytvářet, upravovat, přejmenovávat ani přesouvat soubory.
+Změna reference prochází výhradně producentem, projektovým Gitem a novým buildem.
+Producent má při vydání verze předat konzistentní balík; u FDT již Replicator podle
+svého ADR-0045 tvoří změněné Markdowny selektivně a sestavuje úplné indexy a manifest.
+Webová editace běžných stránek ani každý jejich Git commit nesmí spouštět regeneraci
+technických referencí. Přesný release okamžik a pravidla dalších producentů vlastní
+jejich kontrakty.
+Ostatní Markdown stránky v `docs/` jsou při odpovídajícím projektovém grantu
+editovatelné; `docs/datovy-model/` je autorský výklad s odkazy na FDT referenci.
 
 Současně potvrzená produkovaná rodina:
 
