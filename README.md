@@ -1,6 +1,11 @@
-# Repository Skills
+# Repository Helper / Repository Foundation
 
-Přenositelná sada Agent Skills pro zakládání, audit, citlivou reorganizaci a dlouhodobou údržbu repozitářů připravených pro práci lidí i AI agentů.
+Authoring workspace a publikovatelný produkt pro zakládání, audit, citlivou reorganizaci
+a dlouhodobou údržbu repozitářů připravených pro práci lidí i AI agentů.
+
+Jediným zdrojem publikovatelného produktu je [`product/`](product/README.md). Kořen
+repozitáře drží interní kontext, ADR, mise, zdrojové podklady a build/release údržbu.
+Kořenový `public/` se nepoužívá.
 
 Balíček vychází z principů:
 
@@ -13,27 +18,27 @@ Repository-helper rozlišuje čtyři primární typy repozitářů: `development
 resolution orchestrator; referenčním authoring orchestrátorem Flexideo je
 `Flexideo-capability-library`. `Flexideo-orchestrator` je samostatný platformní a projektový
 orchestrátor, nikoli autorita authoringového bootstrapu.
-Autoritativní pravidla jsou v `docs/agent-context/repository-types.md`.
+Autoritativní produktová pravidla jsou v `product/references/repository-types.md`.
 
 Klientský projekt je nadřazený implementační celek. Dosavadní helper-native analytická
 vrstva a Flexideo Project Memory jsou dvě varianty analytické podmnožiny; Project Memory
 zakládá MCP s verzovanou šablonou. Helper k ní doplňuje neanalytický klientský obal se
 sdíleným `definitions/` a technickými vstupy a respektuje její epiky, Current
 Truth a vlastnictví oblastí. Rozsah a instalační pravidla popisuje
-[kompatibilita s Project Memory](docs/agent-context/client-project-memory-compatibility.md).
+[kompatibilita s Project Memory](product/references/client-project-memory-compatibility.md).
 Pro aktuální dokumentaci aplikace lze do Project Memory bezpečně instalovat také
 `project-documentation`; tato capability nepřidává druhý analytický strom a nemění MCP
 stavy ani provisioning.
 
 ## Lokální Flexideo Implementátor
 
-[Capability `flexideo-implementer`](docs/agent-context/flexideo-implementer-capability.md)
+[Capability `flexideo-implementer`](product/references/flexideo-implementer-capability.md)
 instaluje do klientského projektu tenký zavaděč externího produktu FCL + A–E.
 Umístění produktu se registruje jednou pro počítač, mimo Git. Zavaděč se přidává
 automaticky s `client-project`, samostatně jej lze doplnit do existujícího repozitáře:
 
 ```powershell
-python toolkit/agent-infrastructure/repository_architecture.py install-capability "<projekt>" --name flexideo-implementer
+python product/tools/agent-infrastructure/repository_architecture.py install-capability "<projekt>" --name flexideo-implementer
 ```
 
 V klientském projektu pak použijte `activate-flexideo-implementer`. Instalace
@@ -43,7 +48,7 @@ v dalších projektech stejného uživatele na počítači už ji zadávat nemus
 
 ## Dokumentační capability
 
-Obecná správa Markdownu je ve volitelné [documentation-management](docs/agent-context/documentation-management-capability.md).
+Obecná správa Markdownu je ve volitelné [documentation-management](product/references/documentation-management-capability.md).
 Obsah vlastní cílový projekt, helper skills a nástroje; Projects vlastní autorizovaný web.
 Instalace `repository_architecture.py install-capability <target> --name documentation-management`
 je offline, chrání lokální změny a podporuje známou Project Memory bez změn jejího stavu.
@@ -142,27 +147,27 @@ nebo jednotlivé skills nainstalovat podle možností konkrétního klienta.
 
 ## Nástroje
 
-Balíček obsahuje pomocné skripty v `toolkit/agent-infrastructure/`:
+Produkt obsahuje pomocné skripty v `product/tools/agent-infrastructure/`:
 
 ```bash
-python toolkit/agent-infrastructure/repository_architecture.py audit /path/to/repository
-python toolkit/agent-infrastructure/repository_architecture.py init /path/to/new-repository --name "Project Name"
-python toolkit/agent-infrastructure/repository_architecture.py validate /path/to/repository
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name work-log
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name decision-records
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-project
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name project-documentation
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-offers
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name documentation-sync
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name development-testing
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name product-repository
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name authoring-repository
+python product/tools/agent-infrastructure/repository_architecture.py audit /path/to/repository
+python product/tools/agent-infrastructure/repository_architecture.py init /path/to/new-repository --name "Project Name"
+python product/tools/agent-infrastructure/repository_architecture.py validate /path/to/repository
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name work-log
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name decision-records
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-project
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name project-documentation
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name client-offers
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name documentation-sync
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name development-testing
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name product-repository
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name authoring-repository
 # aktualizace již instalované capability po kontrole lokálních změn:
-python toolkit/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories --force
-python toolkit/agent-infrastructure/render_platform_connectors.py /path/to/repository --platform codex
-python toolkit/agent-infrastructure/validate_skill_collection.py .
-python toolkit/work-log/work-log.py validate .
+python product/tools/agent-infrastructure/repository_architecture.py install-capability /path/to/repository --name domain-inventories --force
+python product/tools/agent-infrastructure/render_platform_connectors.py /path/to/repository --platform codex
+python product/tools/agent-infrastructure/validate_skill_collection.py product
+python product/tools/work-log/work-log.py validate .
 ```
 
 Pokud cílový repozitář už obsahuje `.claude/skills/`, instalace capability
@@ -183,7 +188,7 @@ Další podporované scénáře:
 - Gemini CLI: `GEMINI.md`, volitelná `.gemini/settings.json`; `.agents/skills/` je podporovaná interoperabilní cesta.
 - GitHub Copilot: `.github/copilot-instructions.md` a `.github/agents/*.agent.md`.
 
-Podrobnosti jsou v `docs/agent-context/platform-connector-scenarios.md`.
+Podrobnosti jsou v `product/references/platform-connector-scenarios.md`.
 
 ## Důležité zásady
 

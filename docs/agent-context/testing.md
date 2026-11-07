@@ -15,7 +15,7 @@ Samostatný lokální smoke lze provést s reálnou instalací a explicitním do
 `--registry`; nevyžaduje skutečné klientské credentials ani změnu uživatelského registru.
 
 ```powershell
-python toolkit/development/tests/flexideo_implementer_contract_smoke.py --assembly ../../local-products/flexideo-implementer
+python product/tests/flexideo_implementer_contract_smoke.py --assembly ../../local-products/flexideo-implementer
 ```
 
 Argument je cesta k instalaci vůči aktuálnímu cwd.
@@ -37,14 +37,14 @@ vzniku dokumentačního nebo analytického obsahu.
 Nativní klientský scaffold se testuje v odděleném dočasném repozitáři.
 
 ```bash
-python -m unittest discover -s toolkit/development/tests -v
+python -m unittest discover -s product/tests -v
 ```
 
 Volitelný kontraktní smoke používá přímo aktuální generátor a validátor Orchestrátoru
 v dočasném adresáři, nikoli jejich zkopírovanou implementaci. Dostupný je s parametrem:
 
 ```bash
-python toolkit/development/tests/project_memory_contract_smoke.py ../Flexideo-orchestrator
+python product/tests/project_memory_contract_smoke.py ../Flexideo-orchestrator
 ```
 
 Oba scénáře odstraňují pouze vlastní `TemporaryDirectory`, žádný klientský ani pracovní
@@ -53,7 +53,7 @@ repozitář. CI zde nepřibývá. Povinné kontroly kolekce, architektury a logu
 ## Project documentation capability
 
 Samostatný read-only validátor a inventura mají regresi v
-`toolkit/development/tests/test_project_documentation_tool.py`. Testuje prázdný repozitář,
+`product/tests/test_project_documentation_tool.py`. Testuje prázdný repozitář,
 syntetickou Project Memory s FDT referencí, volitelnou explicitní klasifikaci
 `data/view/pseudo`, neplatnou klasifikaci a zákaz helper-native `docs/project/` uvnitř
 Project Memory.

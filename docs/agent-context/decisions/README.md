@@ -28,6 +28,12 @@ Použijte skill `maintain-decision-records`. Každý vznik nebo změnu stavu ADR
 
 ## Authoring orchestrator
 
+- [ADR-0016](0016-repository-foundation-jako-produkt-helperu.md) — accepted; `product/`
+  je jediný zdroj Repository Foundation a klientské struktury jsou pouze instalační šablony.
+
+- [ADR-0016](0016-repository-foundation-jako-produkt-helperu.md) — accepted; `product/`
+  je jediný zdroj Repository Foundation a klientské struktury jsou pouze instalační šablony.
+
 - [ADR-0014](0014-flexideo-implementer-project-activation.md) — accepted; projektový zavaděč lokálního produktu FCL + A–E a registr umístění mimo klientské repozitáře.
 
 - [ADR-0011](0011-fcl-referencni-authoring-resolution-orchestrator.md) — accepted; FCL je referenční authoring-resolution produkt, Flexideo Orchestrator zůstává platformním a projektovým orchestrátorem.

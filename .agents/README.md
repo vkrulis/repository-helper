@@ -1,10 +1,11 @@
 # `.agents`
 
-Kanonická platformně nezávislá agentní vrstva.
+Interní platformně nezávislá agentní vrstva workspace.
 
-- `profiles/` – definice konkrétních pracovníků.
-- `skills/` – opakovatelné schopnosti ve formátu Agent Skills.
+- `profiles/` a `skills/` jsou pouze kompatibilní vstupy workspace;
+- publikovatelná autorita je v `product/profiles/` a `product/skills/`.
 
-Spustitelné a deterministické nástroje sem nepatří. Jejich jediným kořenem je `toolkit/`; nástroje agentní infrastruktury jsou v `toolkit/agent-infrastructure/`.
+Produktové nástroje patří do `product/tools/`; interní build/release automatizace workspace
+zůstává pod kořenovým `toolkit/`.
 
 Platformní kopie nebo překlady patří do `.codex/`, `.claude/`, `.gemini/` nebo `.github/` a nesmějí se stát zdrojem pravdy.

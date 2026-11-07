@@ -16,7 +16,7 @@ Použijte skill `maintain-missions`. Misi navrhněte, jakmile cíl přesahuje je
 
 ## Formát
 
-Použijte `.agents/skills/maintain-missions/references/mission-template.md`. Název souboru: `NN-strucny-nazev.md` (dvoumístné, monotónní číslo v rámci této složky, čísla se znovu nepoužívají). Sdílený kontext využívaný více misemi (např. doménový model) může mít vlastní číslo ve stejné číselné řadě, i když sám nemá formát jednotlivé mise.
+Použijte `product/skills/maintain-missions/references/mission-template.md`. Název souboru: `NN-strucny-nazev.md` (dvoumístné, monotónní číslo v rámci této složky, čísla se znovu nepoužívají). Sdílený kontext využívaný více misemi (např. doménový model) může mít vlastní číslo ve stejné číselné řadě, i když sám nemá formát jednotlivé mise.
 
 ## Mise
 

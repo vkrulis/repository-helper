@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "product": "flexideo-repository-foundation",
+  "product_version": "0.1.0-local.1",
+  "status": "development",
+  "capabilities": [
+    {
+      "id": "bootstrap-repository-foundation",
+      "kind": "skill",
+      "path": "skills/bootstrap-repository-foundation/SKILL.md",
+      "scope": "repository-lifecycle"
+    },
+    {
+      "id": "client-project",
+      "kind": "capability-bundle",
+      "entry_skill": "skills/maintain-client-project-dimension/SKILL.md",
+      "scope": "client-project-and-project-memory-shell"
+    },
+    {
+      "id": "agent-ready-repository",
+      "kind": "capability-catalog",
+      "entry_skill": "skills/initialize-agent-ready-repository/SKILL.md",
+      "scope": "development-authoring-client-project-documentation"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 - Epic: authoring-repository
 - Stav: in-progress
 - Priorita: vysoká
-- ADR: [ADR-0007](../agent-context/decisions/0007-typy-repozitaru-a-authoring-produkt.md), [ADR-0011](../agent-context/decisions/0011-fcl-referencni-authoring-resolution-orchestrator.md)
+- ADR: [ADR-0007](../agent-context/decisions/0007-typy-repozitaru-a-authoring-produkt.md), [ADR-0011](../agent-context/decisions/0011-fcl-referencni-authoring-resolution-orchestrator.md), [ADR-0016](../agent-context/decisions/0016-repository-foundation-jako-produkt-helperu.md)
 
 ## Cíl
 

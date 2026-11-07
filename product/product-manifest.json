@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "product": "flexideo-repository-foundation",
+  "display_name": "Flexideo Repository Foundation",
+  "version": "0.1.0-local.1",
+  "role": "repository-foundation",
+  "description": "Zakládá, audituje, migruje, validuje a bezpečně rozšiřuje agent-ready repozitáře.",
+  "entry_skills": [
+    "skills/bootstrap-repository-foundation/SKILL.md"
+  ],
+  "execution_boundary": "TARGET_REPOSITORY_EXPLICIT"
+}
