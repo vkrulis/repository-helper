@@ -1,5 +1,12 @@
 # Testování helperu
 
+## Authoring feedback
+
+`product/tests/test_authoring_feedback.py` používá pouze standardní knihovnu a dočasný
+repozitář. Ověřuje strukturální validaci eventu, append-only zápis do denního logu,
+odmítnutí duplicitního `event_id`, oddělení `loaded` od `executed`, recovery metriky,
+neplatné usage reference a zákaz citlivých klíčů. Scanner je read-only a síť nepoužívá.
+
 ## Aktivace Flexideo Implementátora
 
 `test_flexideo_implementer.py` je součástí stejné offline unittest sady. Ověřuje
@@ -21,7 +28,9 @@ python product/tests/flexideo_implementer_contract_smoke.py --assembly ../../loc
 Argument je cesta k instalaci vůči aktuálnímu cwd.
 Smoke všechen projektový zápis izoluje do vlastního TemporaryDirectory, registruje
 produkt do dočasného registru a z jiné složky ověří jeho skutečný FCL verifier
-a čitelné entrypointy. Ověření nezávislým VS Code agentem a živá instance nejsou
+nad povinným `repository-foundation`, FCL a pěti vrstvami A–E. Unit regrese
+samostatně odmítá starší šestiproduktový lock bez Repository Foundation.
+Smoke současně ověřuje čitelné entrypointy. Ověření nezávislým VS Code agentem a živá instance nejsou
 součástí tohoto smoke.
 
 ## Project Memory kompatibilita

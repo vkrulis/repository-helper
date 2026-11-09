@@ -1,0 +1,4 @@
+interface:
+  display_name: "Record authoring feedback"
+  short_description: "Zapíše validovaný feedback skutečného použití FCL capability."
+  default_prompt: "Use $record-authoring-feedback to record this completed FCL authoring run in the client project's daily log."

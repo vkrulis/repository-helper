@@ -209,6 +209,19 @@ class Activation(unittest.TestCase):
             self.assertTrue(activation.default_registry().is_absolute())
             self.assertTrue(activation.default_registry().is_relative_to(Path.home()))
 
+    def test_current_assembly_contract_requires_repository_foundation_and_all_layers(self):
+        self.assertEqual({
+            "repository-foundation", "fcl", "xds-authoring", "intranet-authoring",
+            "comex-authoring", "authoring-tools", "server-solving",
+        }, activation.SLOTS)
+        lock = self.assembly / "assembly.lock.json"
+        value = json.loads(lock.read_text(encoding="utf-8"))
+        del value["products"]["repository-foundation"]
+        lock.write_text(json.dumps(value), encoding="utf-8")
+        with self.assertRaises(activation.ActivationError) as caught:
+            activation.verify(self.assembly)
+        self.assertEqual("INVALID_ASSEMBLY", caught.exception.status)
+
     def test_registration_is_verified_and_preserves_other_products(self):
         self.registry.parent.mkdir()
         self.registry.write_text(json.dumps({"schema_version": 1, "products": {"other": {"root": "keep"}}}), encoding="utf-8")

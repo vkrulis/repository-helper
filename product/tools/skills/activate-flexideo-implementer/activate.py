@@ -11,7 +11,7 @@ import sys
 import tempfile
 
 PRODUCT = "flexideo-implementer"
-SLOTS = {"fcl", "xds-authoring", "intranet-authoring", "comex-authoring", "authoring-tools", "server-solving"}
+SLOTS = {"repository-foundation", "fcl", "xds-authoring", "intranet-authoring", "comex-authoring", "authoring-tools", "server-solving"}
 BOOTSTRAP = "fcl/skills/resolve-flexideo-authoring-request/SKILL.md"
 VERIFIER = "fcl/tools/local-library/library.py"
 
@@ -63,7 +63,7 @@ def verify(root: Path) -> dict:
     if (not isinstance(lock, dict) or lock.get("schema_version") != 1
             or not isinstance(lock.get("assembly_id"), str)
             or not isinstance(lock.get("products"), dict) or set(lock["products"]) != SLOTS):
-        raise ActivationError("INVALID_ASSEMBLY", "Expected a locked FCL assembly with all five layer slots")
+        raise ActivationError("INVALID_ASSEMBLY", "Expected locked Repository Foundation, FCL and all five layer slots")
     for relative in ("AGENTS.md", BOOTSTRAP, VERIFIER):
         if not (root / relative).is_file():
             raise ActivationError("INVALID_ASSEMBLY", f"Missing entrypoint: {relative}")

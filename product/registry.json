@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "product": "flexideo-repository-foundation",
-  "product_version": "0.1.0-local.1",
+  "product_version": "0.1.0-local.2",
   "status": "development",
   "capabilities": [
     {
@@ -21,6 +21,13 @@
       "kind": "capability-catalog",
       "entry_skill": "skills/initialize-agent-ready-repository/SKILL.md",
       "scope": "development-authoring-client-project-documentation"
+    },
+    {
+      "id": "authoring-feedback",
+      "kind": "capability-bundle",
+      "entry_skill": "skills/record-authoring-feedback/SKILL.md",
+      "tool": "tools/authoring-feedback/authoring_feedback.py",
+      "scope": "client-project-authoring-run-feedback"
     }
   ]
 }

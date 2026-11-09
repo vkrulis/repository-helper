@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "product_id": "flexideo-repository-foundation",
-  "version": "0.1.0-local.1",
+  "version": "0.1.0-local.2",
   "namespace": "repository-foundation",
   "entrypoint": "skills/bootstrap-repository-foundation/SKILL.md",
   "agent_map": "AGENTS.md",

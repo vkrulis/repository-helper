@@ -19,6 +19,10 @@ description: Vstupní skill produktu Repository Foundation. Rozpozná typ a stav
    a validaci. Před aktualizací spravovaných souborů zkontroluj jejich manifest a lokální
    změny; neznámý stav nepřepisuj.
 7. Po materiální změně spusť projektové validace a přidej append-only pracovní log.
+8. Pokud běh skutečně použil capability z FCL, načti `record-authoring-feedback` a před
+   označením smysluplného checkpointu nebo úkolu za dokončený zapiš jeden validní
+   Authoring Feedback Event do klientského denního logu. Pouhé načtení capability
+   není použití; neodpovězené lidské hodnocení dokončení neblokuje.
 
 Výstupem je rozpoznaný repository typ, zvolená capability, seznam změn, skutečně
 provedené validace a otevřené vstupy. Authoringovou klasifikaci A–E předává FCL.

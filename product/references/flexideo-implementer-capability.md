@@ -6,6 +6,11 @@ Memory 0.1/0.2. Helper vlastní pouze zavaděč a jeho instalaci; FCL vlastní m
 bootstrap a resolution, Orchestrátor sestavení produktů. Rozhodnutí:
 workspace ADR-0014.
 
+Aktivátor přijímá pouze úplnou sedmiproduktovou sestavu: podpůrný
+`repository-foundation`, `fcl` a všech pět vrstev A–E. Přesnou integritu a
+hostitelské instrukční soubory následně ověřuje runtime FCL z dané sestavy;
+aktivátor tento kontrakt neduplikuje ani neoslabuje.
+
 ## Instalace do klientského projektu
 
 Z kořene helperu:
@@ -87,6 +92,11 @@ produktovému `AGENTS.md` a `fcl/skills/resolve-flexideo-authoring-request/SKILL
 **Agent musí oba produktové soubory skutečně přečíst.** Nástroj pouze ověří sestavu
 jejím FCL `verify`; sám neklasifikuje úkol, nenačítá všechny skills a nic neimplementuje.
 Vrací `execution: NOT_STARTED` a nemění klientský projekt ani instalaci.
+
+Po skutečném použití authoring capability vyžaduje produktový bootstrap vrstvový
+feedback handler A.6–E.6 a obecný Repository Foundation zapisovač. Ten ukládá
+verzovaný event do existujícího denního logu klientského projektu; neinstaluje do
+projektu druhý log ani nepočítá pouhé selection/load jako použití.
 
 Ve VS Code zpřístupní kanonickou projektovou skill použitý agent/konektor. Pro
 hosta s jiným discovery mechanismem použijte příslušný explicitně zvolený renderer
