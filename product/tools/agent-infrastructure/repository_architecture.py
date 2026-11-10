@@ -298,7 +298,12 @@ CAPABILITY_RULES["client-project"] = (
     "pravdy. Obsah specifický pro epik patří do `resources/epics/<epic-id>/`, "
     "`artifacts/epics/<epic-id>/` nebo `toolkit/epics/<epic-id>/`; definiční soubory přesouvejte jen "
     "když se nezmění jejich runtime cesta. Použijte skill `maintain-client-project-dimension` při "
-    "založení nebo materiální změně této struktury.",
+    "založení nebo materiální změně této struktury. Flexideo profily vybírejte jako "
+    "credentials/<DEV|TEST|CODE|PROD>/<account>.env a skutečné /credentials/**/*.env "
+    "ignorujte Gitem. Kontrakt authoring-tools určuje FLEXIDEO_AUTH_MODE "
+    "(http-basic|http-form|http-oauth), FLEXIDEO_SOLVE_AUTH_MODE (http-basic|oauth-bearer) "
+    "a volitelnou FLEXIDEO_LOGIN_URL; OAuth vyžaduje explicitní transport. "
+    "Bezpečnou /login URL zachovejte; mechanismy automaticky nepřevádějte.",
 )
 
 CAPABILITY_RULES["missions"] = (

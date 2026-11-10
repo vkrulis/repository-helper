@@ -88,6 +88,27 @@ pevnou runtime cestou nedělte ani nekopírujte podle epiků.
 
 ## Bezpečnost a předání
 
+### Projektové přihlašovací profily Flexideo
+
+Pokud projekt používá Flexideo klienta, profil vybírejte přesně jako
+`credentials/<DEV|TEST|CODE|PROD>/<account>.env` a předávejte přes
+`--credentials-file`. Prostředí je uppercase, alias lowercase slug; role, principal
+a instance jsou metadata uvnitř profilu. Jiné účty neprocházejte ani nepoužívejte
+jako náhradu. Skutečné `.env` musí ignorovat Git (`/credentials/**/*.env`);
+commitovat lze pouze anonymizované `.env.example` a dokumentaci.
+
+Autoritou formátu a validace je `authoring-tools/contracts/flexideo-client-credentials.md`
+z připnuté FCL sestavy. Konvence v2.2 rozlišuje `FLEXIDEO_AUTH_MODE`
+(`http-basic`, `http-form`, `http-oauth`), `FLEXIDEO_SOLVE_AUTH_MODE`
+(`http-basic`, `oauth-bearer`) a volitelnou `FLEXIDEO_LOGIN_URL`.
+OAuth profil vyžaduje explicitní transport; existující Basic/Form profily zachovávají
+výchozí Basic. Webová `/login` vynutí Basic i při OAuth defaultu, `/login/form`
+formulář a `/login/oauth` OAuth; `/logon` použije serverový default.
+Login URL patří ke stejnému originu/prefixu instance a neobsahuje secrets.
+Její zobrazení/otevření provádí klient vrstvy D pomocí `--show-login`/`--open-login`.
+Basic transport používá username/password, Bearer používá access token. Profily
+automaticky nepřevádějte mezi mechanismy a neduplikujte jejich parser v helperu.
+
 - Neukládejte osobní, produkční ani přístupová data bez výslovného oprávnění a odpovídajícího
   technického vynucení.
 - Klientské potvrzení shrňte s odkazem na zdroj; nepoužívejte repozitář jako archiv komunikace.

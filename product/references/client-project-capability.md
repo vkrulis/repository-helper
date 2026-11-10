@@ -66,6 +66,17 @@ definitions/                   # jedna XDS/XCF větev; neklonuje se podle epiků
 - `definitions/` je do přijatého ADR o jiné strategii jediný ručně spravovaný zdroj pravdy pro
   projektovou XDS, XCF a jejich definiční obsah.
 
+## Přístup k instancím
+
+Projektové Flexideo profily používají `credentials/<DEV|TEST|CODE|PROD>/<account>.env`;
+skutečné `.env` zůstávají mimo Git. Účet vybírejte explicitně, nikoli procházením
+profilů. Kanonický formát v2.2 vlastní vrstva D, soubor
+`authoring-tools/contracts/flexideo-client-credentials.md` připnuté FCL sestavy.
+Helper distribuuje pravidlo výběru a odkaz na autoritu; parser a síťový klient
+zůstávají v D. Webový Basic/Form/OAuth typ je oddělen od Basic/Bearer XML transportu
+a explicitní webové login URL. OAuth web s Basic technickým účtem není důvod
+automaticky přepisovat typ profilu nebo odstraňovat bezpečnou `/login` URL.
+
 ## Pravidla epiků
 
 1. Založte epik jen pro cíl přesahující jednu materiální změnu; drobné úkoly zůstávají v logu

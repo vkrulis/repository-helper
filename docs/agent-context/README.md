@@ -28,6 +28,7 @@ Neobsahuje definice konkrétních agentů ani podrobné provozní postupy. Ty pa
 - `documentation-sync-capability.md` – pořadí revize doménové a obecné Docusaurus dokumentace a metadata revizí.
 - `development-testing-capability.md` – volitelný, frameworkově neutrální základ vývojových testů a diagnostiky.
 - `client-project-capability.md` – struktura a udržování klientského implementačního projektu.
+- [Projektové přihlašovací profily Flexideo](flexideo-client-profiles.md) – výběr `.env`, autorita kontraktu D a oddělení webového přihlášení od XML transportu.
 - `client-project-memory-compatibility.md` – návrh a realizované rozpoznání Project Memory, vlastnictví oblastí a hranice vůči MCP/šabloně.
 - `project-documentation-capability.md` – hranice aktuální projektové dokumentace vůči epikům a propojení XDS/FDT/DAD, intranetu a COMEXu.
 - `testing.md` – lokální regrese klientského obalu, ochrany Project Memory a kompatibility helper-native analytické podmnožiny.
